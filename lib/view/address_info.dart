@@ -5,6 +5,7 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/checkout_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AddressView extends StatelessWidget {
@@ -415,6 +416,10 @@ class AddressView extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
       return Scaffold(
         backgroundColor: AppColors.main2,
             body: Obx(()=> SafeArea(

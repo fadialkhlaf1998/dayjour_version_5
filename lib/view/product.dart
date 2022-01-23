@@ -13,6 +13,7 @@ import 'package:dayjour_version_3/my_model/product_info.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -50,6 +51,10 @@ class ProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
       backgroundColor: AppColors.main2,
       body: Obx(() => SafeArea(
@@ -379,6 +384,7 @@ class ProductView extends StatelessWidget {
             children: [
               Container(
                 child: RatingBar.builder(
+                  glowColor: AppColors.main2,
                   allowHalfRating: true,
                   initialRating: product_rating,
                   minRating: 0,
@@ -795,9 +801,9 @@ class ProductView extends StatelessWidget {
 
   _recently_product(BuildContext context){
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 0, right: 0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Global.recentlyProduct.isEmpty ? Center() : Text(App_Localization.of(context).translate("recently_products"),style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
           SizedBox(height: 15,),
@@ -817,7 +823,6 @@ class ProductView extends StatelessWidget {
                         Expanded(
                             flex: 3,
                             child: Container(
-
                           decoration: BoxDecoration(
                               color: Colors.white,
                             image: DecorationImage(

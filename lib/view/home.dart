@@ -18,6 +18,7 @@ import 'package:dayjour_version_3/view/profile.dart';
 import 'package:dayjour_version_3/view/wishlist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -40,6 +41,10 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Obx((){
       return  Scaffold(
         backgroundColor: App.main2,
@@ -425,14 +430,14 @@ class Home extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        SizedBox(width: 20),
+                        SizedBox(width: 15),
                         GestureDetector(
                           onTap: () {
                             _key.currentState!.openDrawer();
                           },
                           child: Icon(
                             Icons.list,
-                            size: 25,
+                            size: 30,
                             color: Colors.white,
                           ),
                         ),

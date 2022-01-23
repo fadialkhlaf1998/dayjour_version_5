@@ -13,6 +13,7 @@ import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class MyOrderView extends StatefulWidget {
@@ -38,6 +39,10 @@ class _MyOrderViewState extends State<MyOrderView> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
       backgroundColor: AppColors.main2,
       body: SafeArea(
@@ -46,7 +51,7 @@ class _MyOrderViewState extends State<MyOrderView> {
           _header(context),
           Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.879,
+            height: MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom+MediaQuery.of(context).padding.top+ MediaQuery.of(context).size.height * 0.09),
             color: AppColors.main,
             child: SingleChildScrollView(
               child: Column(

@@ -10,6 +10,7 @@ import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class CategoryView extends StatelessWidget {
@@ -30,6 +31,10 @@ class CategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     Future.delayed(Duration(milliseconds: 200)).then((value) {
       scrollController.animateTo(
         (MediaQuery.of(context).size.height * 0.1 + 20) * selected,

@@ -7,6 +7,7 @@ import 'package:dayjour_version_3/controler/intro_controller.dart';
 // import 'package:dayjour_version_2/view/sign_up.dart';
 import 'package:dayjour_version_3/controler/intro_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 
@@ -16,6 +17,10 @@ class Intro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
       backgroundColor: AppColors.main2,
       body: SafeArea(

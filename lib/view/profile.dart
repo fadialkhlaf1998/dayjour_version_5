@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/view/my_order.dart';
 import 'package:dayjour_version_3/view/reset_password.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 
@@ -278,6 +279,10 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Builder(
         builder: (context) {
           return SafeArea(

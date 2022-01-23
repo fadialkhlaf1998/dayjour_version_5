@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
@@ -960,6 +961,10 @@ class _Checkout2State extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
         backgroundColor: AppColors.main2,
       key: _key,

@@ -4,6 +4,7 @@ import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -121,8 +122,8 @@ class Wishlist extends StatelessWidget {
                                 //backgroundColor: AppColors.main2,
                               ),
                             );
-                            wishlistController.delete_from_wishlist(wishlistController.wishlist[index]);
                             cartController.add_to_cart(wishlistController.wishlist[index],1);
+                            wishlistController.delete_from_wishlist(wishlistController.wishlist[index]);
                             // showTopSnackBar(
                             //   context,
                             //   CustomSnackBar.success(
@@ -181,6 +182,10 @@ class Wishlist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
       backgroundColor: AppColors.main2,
       body: SafeArea(
