@@ -67,7 +67,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/introduction/DAYJOUR.png"
+  image_path: "assets/introduction/icon_logo.png"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

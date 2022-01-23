@@ -41,9 +41,10 @@ class Intro extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    height: MediaQuery.of(context).size.width * 0.2,
                     child: Center(
-                      child: Image.asset("assets/introduction/logo.png",
+                      child: Image.asset("assets/introduction/DAYJOUR_logo.png",
                           fit: BoxFit.cover),
                     ),
                   ),
