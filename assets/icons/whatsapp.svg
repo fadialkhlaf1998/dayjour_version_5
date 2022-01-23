@@ -1,0 +1,26 @@
+<svg id="Component_30_1" data-name="Component 30 – 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38" viewBox="0 0 38 38">
+  <defs>
+    <filter id="Ellipse_16" x="0.5" y="0.5" width="37" height="37" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="0.5" result="blur"/>
+      <feFlood flood-opacity="0.659"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Component_32_20" data-name="Component 32 – 20" transform="translate(2 2)">
+    <g transform="matrix(1, 0, 0, 1, -2, -2)" filter="url(#Ellipse_16)">
+      <g id="Ellipse_16-2" data-name="Ellipse 16" transform="translate(2 2)" fill="#aa002a" stroke="#aa002a" stroke-width="2">
+        <circle cx="17" cy="17" r="17" stroke="none"/>
+        <circle cx="17" cy="17" r="16" fill="none"/>
+      </g>
+    </g>
+  </g>
+  <path id="icons8-whatsapp" d="M10.569,3a7.557,7.557,0,0,0-6.49,11.448l-1.011,3.69,3.768-.989A7.567,7.567,0,1,0,10.569,3ZM7.978,7.038c.123,0,.249,0,.358,0,.135,0,.282.013.423.324.167.37.531,1.3.578,1.391a.338.338,0,0,1,.015.328,1.374,1.374,0,0,1-.185.314c-.094.108-.2.243-.282.325s-.191.2-.083.384a5.608,5.608,0,0,0,1.042,1.3,5.089,5.089,0,0,0,1.508.93c.188.094.3.079.405-.047s.469-.545.595-.733.249-.155.419-.094,1.094.516,1.282.61.311.14.359.217a1.548,1.548,0,0,1-.107.892,1.885,1.885,0,0,1-1.264.889c-.346.032-.669.156-2.251-.467a7.684,7.684,0,0,1-3.2-2.831,3.634,3.634,0,0,1-.764-1.937,2.111,2.111,0,0,1,.654-1.565A.689.689,0,0,1,7.978,7.038Z" transform="translate(8.431 8.431)" fill="#fff"/>
+  <g id="Component_32_21" data-name="Component 32 – 21">
+    <g id="Ellipse_16-3" data-name="Ellipse 16" fill="none" stroke="#aa002a" stroke-width="0.5" opacity="0.42">
+      <circle cx="19" cy="19" r="19" stroke="none"/>
+      <circle cx="19" cy="19" r="18.75" fill="none"/>
+    </g>
+  </g>
+</svg>
