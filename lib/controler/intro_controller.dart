@@ -63,13 +63,12 @@ class IntroController extends GetxController{
         print(internet);
         print(category.isEmpty);
         if(internet){
-          if(category.isEmpty)
-          {
+
             MyApi.getCategory().then((value) {
               print(value.length);
               if(value.isNotEmpty){
-                category.clear();
-                category.addAll(value);
+                // category.clear();
+                category=value;
                 MyApi.getTopCategory().then((value) {
                   topCategory.clear();
                   topCategory.addAll(value);
@@ -83,7 +82,9 @@ class IntroController extends GetxController{
                   newArrivals.addAll(value);
                 });
                 MyApi.getSlider().then((value) {
-                  sliders.clear();
+                  print('******---');
+                  print(value.length);
+                sliders.clear();
                   sliders.addAll(value);
                 });
                 MyApi.getBestSellers(wishListController.wishlist).then((value) {
@@ -108,16 +109,13 @@ class IntroController extends GetxController{
               category=<Category>[];
               sub_Category=<SubCategory>[];
             });
-          }
-
-        }else{
-          Future.delayed(Duration(milliseconds: 1000),(){
-            //  Get.to(()=>NoInternet())!.then((value) {
-            //   get_data();
-            // });
+          }else{
+          Get.to(()=>NoInternet())!.then((value) {
+            get_data();
           });
-
         }
+
+
       });
     });
 
