@@ -532,18 +532,32 @@ class Home extends StatelessWidget {
                   },
                   child: Container(
                     //width: MediaQuery.of(context).size.width * 0.2,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                       image: CachedNetworkImageProvider(
-                           collection.image == null
-                               ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                               : collection.image.toString().replaceAll("localhost", "10.0.2.2"),
-                       ),
-                       /* image: NetworkImage(collection.image == null
-                            ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                            : collection.image.toString().replaceAll("localhost", "10.0.2.2")),*/
+                    // decoration: BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   image: DecorationImage(
+                    //     fit: BoxFit.cover,
+                    //    image: CachedNetworkImageProvider(
+                    //        collection.image == null
+                    //            ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                    //            : collection.image.toString().replaceAll("localhost", "10.0.2.2"),
+                    //    ),
+                    //    /* image: NetworkImage(collection.image == null
+                    //         ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                    //         : collection.image.toString().replaceAll("localhost", "10.0.2.2")),*/
+                    //   ),
+                    // ),
+                    child: CachedNetworkImage(
+                      imageUrl: collection.image == null
+                          ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                          : collection.image.toString().replaceAll("localhost", "10.0.2.2"),
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -604,7 +618,7 @@ class Home extends StatelessWidget {
                       viewportFraction: 1,
                       enlargeCenterPage: true,
                       enlargeStrategy: CenterPageEnlargeStrategy.height,
-                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayInterval: Duration(seconds: 2),
                       onPageChanged: (index, reason) {
                         homeController.selder_selected.value=index;
                         // homeController.set_index(index);
@@ -619,16 +633,30 @@ class Home extends StatelessWidget {
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.2,
                         width: MediaQuery.of(context).size.width,
-                        decoration:BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(40)),
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                homeController.slider[index].image
+                        // decoration:BoxDecoration(
+                        //     borderRadius: BorderRadius.only(
+                        //         bottomLeft: Radius.circular(40)),
+                        //   /*  image: DecorationImage(
+                        //       image: CachedNetworkImageProvider(
+                        //         homeController.slider[index].image
+                        //       ),
+                        //       //image: NetworkImage(homeController.slider[index].image.replaceAll("localhost", "10.0.2.2")),
+                        //       fit: BoxFit.fill,
+                        //     )*/),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          imageUrl: homeController.slider[index].image,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(40)),
+                              image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
                               ),
-                              //image: NetworkImage(homeController.slider[index].image.replaceAll("localhost", "10.0.2.2")),
-                              fit: BoxFit.fill,
-                            )),
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -756,14 +784,29 @@ class Home extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width * 0.44,
                     height: height - 40,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.only(bottomLeft: Radius.circular(40)),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: CachedNetworkImageProvider(collection.mainImage == null
-                            ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                            : collection.mainImage.replaceAll("localhost", "10.0.2.2")),
+                    // decoration: BoxDecoration(
+                    //   borderRadius:
+                    //   BorderRadius.only(bottomLeft: Radius.circular(40)),
+                    //   image: DecorationImage(
+                    //     fit: BoxFit.cover,
+                    //     image: CachedNetworkImageProvider(collection.mainImage == null
+                    //         ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                    //         : collection.mainImage.replaceAll("localhost", "10.0.2.2")),
+                    //   ),
+                    // ),
+                    child: CachedNetworkImage(
+                      imageUrl: collection.mainImage == null
+                          ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                          : collection.mainImage.replaceAll("localhost", "10.0.2.2"),
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(40)),
+                          image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),
