@@ -192,28 +192,28 @@ class HomeController extends GetxController{
               topCategory.addAll(introController.topCategory);
               loading.value=false;
             }else{
-             // introController.get_data();
+             introController.get_data();
               get_data();
             }
             if(introController.bestSellers.isNotEmpty){
               bestSellers.clear();
               bestSellers.addAll(introController.bestSellers);
             }else{
-              //introController.get_data();
+              introController.get_data();
               get_data();
             }
             if(introController.newArrivals.isNotEmpty){
               newArrivals.clear();
               newArrivals.addAll(introController.newArrivals);
             }else{
-              //introController.get_data();
+              introController.get_data();
               get_data();
             }
             if(introController.specialDeals.isNotEmpty){
               specialDeals.clear();
               specialDeals.addAll(introController.specialDeals);
             }else{
-              //introController.get_data();
+              introController.get_data();
               get_data();
             }
 
@@ -221,21 +221,18 @@ class HomeController extends GetxController{
               brands.clear();
               brands.addAll(introController.brands);
             }else{
-              //introController.get_data();
+              introController.get_data();
               get_data();
             }
             if(introController.sliders.isNotEmpty){
               slider.clear();
-
               slider.addAll(introController.sliders);
-              print('/////////////////////');
-              print('/////////////////////');
             }else{
-              //introController.get_data();
+              introController.get_data();
               get_data();
             }
           }else{
-            //introController.get_data();
+            introController.get_data();
             get_data();
           }
 

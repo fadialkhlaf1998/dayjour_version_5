@@ -43,11 +43,11 @@ class IntroController extends GetxController{
   @override
   Future<void> onInit() async {
     super.onInit();
-    // get_data();
+    get_data();
     await Store.load_address();
   }
 
-  get_data(BuildContext context){
+  get_data(){
     Store.load_order().then((my_order) {
       cartController.my_order.value = my_order;
     });
@@ -66,65 +66,66 @@ class IntroController extends GetxController{
         print(category.isEmpty);
 
         if(internet){
-          App.sucss_msg(context, "internet");
+          // App.sucss_msg(context, "internet");
             MyApi.getCategory().then((value) {
               print(value.length);
               if(value.isNotEmpty){
-                App.sucss_msg(context, "category");
+                // App.sucss_msg(context, "category");
                 // category.clear();
                 category=value;
                 MyApi.getTopCategory().then((value) {
-                  App.sucss_msg(context, "top category");
+                  // App.sucss_msg(context, "top category");
                   topCategory.clear();
                   topCategory.addAll(value);
                 });
                 MyApi.getSpecialDeals(wishListController.wishlist).then((value) {
-                  App.sucss_msg(context, "s d");
+                  // App.sucss_msg(context, "s d");
                   specialDeals.clear();
                   specialDeals.addAll(value);
                 });
                 MyApi.getProductsNewArrivals(wishListController.wishlist).then((value) {
-                  App.sucss_msg(context, "new arr");
+                  // App.sucss_msg(context, "new arr");
                   newArrivals.clear();
                   newArrivals.addAll(value);
                 });
                 MyApi.getSlider().then((value) {
-                  App.sucss_msg(context, "slider");
+                  // App.sucss_msg(context, "slider");
                   print('******---');
                   print(value.length);
                 sliders.clear();
                   sliders.addAll(value);
                 });
                 MyApi.getBestSellers(wishListController.wishlist).then((value) {
-                  App.sucss_msg(context, "best");
+                  // App.sucss_msg(context, "best");
                   bestSellers.clear();
                   bestSellers.addAll(value);
                 });
                 MyApi.getBrands().then((value) {
-                  App.sucss_msg(context, "brand");
+                  // App.sucss_msg(context, "brand");
                   brands.clear();
                   brands.addAll(value);
                 });
 
 
-                Future.delayed(Duration(milliseconds: 2500),(){
-                  App.sucss_msg(context, "nav");
+               // Future.delayed(Duration(milliseconds: 2500),(){
+               //    App.sucss_msg(context, "nav");
                   get_nav();
-                });
+                //});
               }else{
-                Future.delayed(Duration(milliseconds: 2500),(){
+                //Future.delayed(Duration(milliseconds: 2500),(){
                   get_nav();
-                });
+                //});
               }
             }).catchError((err){
-              App.error_msg(context, "err");
+              // App.error_msg(context, "err");
               category=<Category>[];
               sub_Category=<SubCategory>[];
-              get_data(context);
+              get_data();
             });
           }else{
+          // App.error_msg(context, "err");
           Get.to(()=>NoInternet())!.then((value) {
-            get_data(context);
+            get_data();
           });
         }
 
