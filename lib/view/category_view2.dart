@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/app_localization.dart';
@@ -194,15 +195,28 @@ class CategoryView2 extends StatelessWidget {
                     children: [
                       Container(
                         height: MediaQuery.of(context).size.height * 0.15,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.contain,
-                            image: NetworkImage(homeController
-                                .slider[index].image ==
-                                null
-                                ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                                : homeController.slider[index].image
-                                .replaceAll("localhost", "10.0.2.2")),
+                        // decoration: BoxDecoration(
+                        //   image: DecorationImage(
+                        //     fit: BoxFit.contain,
+                        //     image: NetworkImage(homeController
+                        //         .slider[index].image ==
+                        //         null
+                        //         ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                        //         : homeController.slider[index].image
+                        //         .replaceAll("localhost", "10.0.2.2")),
+                        //   ),
+                        // ),
+                        child: CachedNetworkImage(
+                          imageUrl: homeController.slider[index].image == null
+                              ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                              : homeController.slider[index].image,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -291,15 +305,28 @@ class CategoryView2 extends StatelessWidget {
                     children: [
                       Container(
                         height: MediaQuery.of(context).size.height * 0.2,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(homeController
-                                .specialDeals[index].image ==
-                                null
-                                ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                                : homeController.specialDeals[index].image
-                                .replaceAll("localhost", "10.0.2.2")),
+                        // decoration: BoxDecoration(
+                        //   image: DecorationImage(
+                        //     fit: BoxFit.cover,
+                        //     image: NetworkImage(homeController
+                        //         .specialDeals[index].image ==
+                        //         null
+                        //         ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                        //         : homeController.specialDeals[index].image
+                        //         .replaceAll("localhost", "10.0.2.2")),
+                        //   ),
+                        // ),
+                        child: CachedNetworkImage(
+                          imageUrl: homeController
+                              .specialDeals[index].image == null ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                              : homeController.specialDeals[index].image,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       ),
