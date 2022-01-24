@@ -804,7 +804,7 @@ class Home extends StatelessWidget {
                           BorderRadius.only(bottomLeft: Radius.circular(40)),
                           image: DecorationImage(
                               image: imageProvider,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                           ),
                         ),
                       ),

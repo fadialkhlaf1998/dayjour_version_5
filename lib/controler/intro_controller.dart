@@ -1,3 +1,4 @@
+import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/checkout_controller.dart';
@@ -14,6 +15,7 @@ import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/recovery_code.dart';
 import 'package:dayjour_version_3/view/welcome.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:albassel_version_1/view/home.dart';
 // import 'package:albassel_version_1/view/no_internet.dart';
 // import 'package:albassel_version_1/view/verification_code.dart';
@@ -41,11 +43,11 @@ class IntroController extends GetxController{
   @override
   Future<void> onInit() async {
     super.onInit();
-    get_data();
+    // get_data();
     await Store.load_address();
   }
 
-  get_data(){
+  get_data(BuildContext context){
     Store.load_order().then((my_order) {
       cartController.my_order.value = my_order;
     });
@@ -62,42 +64,51 @@ class IntroController extends GetxController{
         print('********');
         print(internet);
         print(category.isEmpty);
-        if(internet){
 
+        if(internet){
+          App.sucss_msg(context, "internet");
             MyApi.getCategory().then((value) {
               print(value.length);
               if(value.isNotEmpty){
+                App.sucss_msg(context, "category");
                 // category.clear();
                 category=value;
                 MyApi.getTopCategory().then((value) {
+                  App.sucss_msg(context, "top category");
                   topCategory.clear();
                   topCategory.addAll(value);
                 });
                 MyApi.getSpecialDeals(wishListController.wishlist).then((value) {
+                  App.sucss_msg(context, "s d");
                   specialDeals.clear();
                   specialDeals.addAll(value);
                 });
                 MyApi.getProductsNewArrivals(wishListController.wishlist).then((value) {
+                  App.sucss_msg(context, "new arr");
                   newArrivals.clear();
                   newArrivals.addAll(value);
                 });
                 MyApi.getSlider().then((value) {
+                  App.sucss_msg(context, "slider");
                   print('******---');
                   print(value.length);
                 sliders.clear();
                   sliders.addAll(value);
                 });
                 MyApi.getBestSellers(wishListController.wishlist).then((value) {
+                  App.sucss_msg(context, "best");
                   bestSellers.clear();
                   bestSellers.addAll(value);
                 });
                 MyApi.getBrands().then((value) {
+                  App.sucss_msg(context, "brand");
                   brands.clear();
                   brands.addAll(value);
                 });
 
 
                 Future.delayed(Duration(milliseconds: 2500),(){
+                  App.sucss_msg(context, "nav");
                   get_nav();
                 });
               }else{
@@ -106,12 +117,14 @@ class IntroController extends GetxController{
                 });
               }
             }).catchError((err){
+              App.error_msg(context, "err");
               category=<Category>[];
               sub_Category=<SubCategory>[];
+              get_data(context);
             });
           }else{
           Get.to(()=>NoInternet())!.then((value) {
-            get_data();
+            get_data(context);
           });
         }
 
