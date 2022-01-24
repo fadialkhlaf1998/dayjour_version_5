@@ -169,6 +169,7 @@ class IntroController extends GetxController{
   // }
 
   get_nav(){
+    printError(info: "**************");
     Store.loadLogInInfo().then((info) {
       if(info.email=="non"){
         Get.offAll(()=>Welcome());

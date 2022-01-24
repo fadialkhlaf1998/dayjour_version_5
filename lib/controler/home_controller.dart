@@ -237,12 +237,13 @@ class HomeController extends GetxController{
           }
 
         }else{
-          // Get.to(NoInternet())!.then((value) {
-          //   get_data();
-          // });
+          Get.to(NoInternet())!.then((value) {
+            get_data();
+          });
         }
       });
     }catch (e){
+      print(e);
       get_data();
     }
   }
