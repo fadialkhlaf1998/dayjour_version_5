@@ -59,10 +59,14 @@ class IntroController extends GetxController{
       wishListController.wishlist=wishlist.obs;
 
       MyApi.check_internet().then((internet) {
+        print('********');
+        print(internet);
+        print(category.isEmpty);
         if(internet){
           if(category.isEmpty)
           {
             MyApi.getCategory().then((value) {
+              print(value.length);
               if(value.isNotEmpty){
                 category.clear();
                 category.addAll(value);

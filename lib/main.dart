@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/global.dart';
+import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:dayjour_version_3/view/introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

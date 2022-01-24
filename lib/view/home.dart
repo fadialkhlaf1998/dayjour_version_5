@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dayjour_version_3/app_localization.dart';
@@ -535,9 +536,14 @@ class Home extends StatelessWidget {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(collection.image == null
+                       image: CachedNetworkImageProvider(
+                           collection.image == null
+                               ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                               : collection.image.toString().replaceAll("localhost", "10.0.2.2"),
+                       ),
+                       /* image: NetworkImage(collection.image == null
                             ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                            : collection.image.toString().replaceAll("localhost", "10.0.2.2")),
+                            : collection.image.toString().replaceAll("localhost", "10.0.2.2")),*/
                       ),
                     ),
                   ),
@@ -593,25 +599,17 @@ class Home extends StatelessWidget {
                 CarouselSlider.builder(
                   carouselController: controller,
                   options: CarouselOptions(
-                      height:
-                      MediaQuery.of(context).size.height *
-                          0.3,
-                      autoPlay: homeController
-                          .slider.length ==
-                          1
-                          ? false
-                          : true,
+                      height: MediaQuery.of(context).size.height *0.3,
+                      autoPlay: homeController.slider.length == 1 ? false : true,
                       viewportFraction: 1,
                       enlargeCenterPage: true,
-                      enlargeStrategy:
-                      CenterPageEnlargeStrategy.height,
-                      autoPlayInterval: Duration(seconds: 2),
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                      autoPlayInterval: Duration(seconds: 3),
                       onPageChanged: (index, reason) {
                         homeController.selder_selected.value=index;
                         // homeController.set_index(index);
                       }),
-                  itemCount: homeController
-                      .slider.length,
+                  itemCount: homeController.slider.length,
                   itemBuilder: (BuildContext context,
                       int index, int realIndex) {
                     return GestureDetector(
@@ -619,18 +617,16 @@ class Home extends StatelessWidget {
                         homeController.go_to_product_slider(index);
                       },
                       child: Container(
-                        height:
-                        MediaQuery.of(context).size.height *
-                            0.2,
-                        width:
-                        MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width,
                         decoration:BoxDecoration(
                             borderRadius: BorderRadius.only(
-                                bottomLeft:
-                                Radius.circular(40)),
+                                bottomLeft: Radius.circular(40)),
                             image: DecorationImage(
-                              image: NetworkImage(
-                                  homeController.slider[index].image.replaceAll("localhost", "10.0.2.2")),
+                              image: CachedNetworkImageProvider(
+                                homeController.slider[index].image
+                              ),
+                              //image: NetworkImage(homeController.slider[index].image.replaceAll("localhost", "10.0.2.2")),
                               fit: BoxFit.fill,
                             )),
                       ),
@@ -647,10 +643,8 @@ class Home extends StatelessWidget {
                           0.5,
                       child: Center(
                         child: AnimatedSmoothIndicator(
-                          activeIndex: homeController
-                              .selder_selected.value,
-                          count: homeController
-                              .slider.length,
+                          activeIndex: homeController.selder_selected.value,
+                          count: homeController.slider.length,
                           effect: SlideEffect(
                             dotWidth: 10,
                             dotHeight: 10,
@@ -767,7 +761,7 @@ class Home extends StatelessWidget {
                       BorderRadius.only(bottomLeft: Radius.circular(40)),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(collection.mainImage == null
+                        image: CachedNetworkImageProvider(collection.mainImage == null
                             ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
                             : collection.mainImage.replaceAll("localhost", "10.0.2.2")),
                       ),

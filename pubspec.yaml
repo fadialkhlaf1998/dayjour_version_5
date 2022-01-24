@@ -54,7 +54,7 @@ dependencies:
   expansion_tile_card: ^2.0.0
   animated_text_kit: ^4.2.1
   html: ^0.15.0
-
+  cached_network_image: ^3.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -226,7 +226,10 @@ class HomeController extends GetxController{
             }
             if(introController.sliders.isNotEmpty){
               slider.clear();
+
               slider.addAll(introController.sliders);
+              print('/////////////////////');
+              print('/////////////////////');
             }else{
               introController.get_data();
               get_data();

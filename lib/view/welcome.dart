@@ -36,9 +36,9 @@ class Welcome extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Image.asset("assets/introduction/logo.png",
-                        fit: BoxFit.cover),
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: MediaQuery.of(context).size.width * 0.3,
+                    child: Image.asset("assets/introduction/DAYJOUR_logo.png"),
                   ),
                 ],
               ),
