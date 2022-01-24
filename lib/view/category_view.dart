@@ -9,6 +9,7 @@ import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -270,6 +271,7 @@ class CategoryView extends StatelessWidget {
           )
         : Container(
             color: AppColors.main,
+            padding: EdgeInsets.only(bottom: 30),
             child: Column(
               children: [
                 Container(
@@ -288,7 +290,7 @@ class CategoryView extends StatelessWidget {
                       return Column(
                         children: [
                           _products(productsController.my_products[index],
-                              context, index)
+                              context, index),
                         ],
                       );
                     },
