@@ -281,18 +281,15 @@ class CategoryView extends StatelessWidget {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 3/4,
-                        crossAxisSpacing: 7,
+                        crossAxisSpacing: 15,
                         mainAxisSpacing: 15,
                     ),
                     padding: EdgeInsets.only(left: 10,right: 10),
                     itemCount:  productsController.my_products.length,
                     itemBuilder: (context, index){
-                      return Column(
-                        children: [
+                      return
                           _products(productsController.my_products[index],
-                              context, index),
-                        ],
-                      );
+                              context, index);
                     },
                     ),
                   ),
@@ -312,8 +309,6 @@ class CategoryView extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width * 0.44,
-              height: MediaQuery.of(context).size.height * 0.3,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(

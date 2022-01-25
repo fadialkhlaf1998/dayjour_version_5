@@ -10,6 +10,7 @@ import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/product_info.dart';
+import 'package:dayjour_version_3/view/Archive/no_internet.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,7 @@ class ProductView extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               color: AppColors.main,
-              child: SingleChildScrollView(
+              child: productController.loading.value?Center(child: CircularProgressIndicator(color: App.main2,),):SingleChildScrollView(
                 child: Column(
                   children: [
                     _header(context),
@@ -137,6 +138,26 @@ class ProductView extends StatelessWidget {
     );
   }
 
+  go_to_product(MyProduct product){
+    productController.loading.value=true;
+    MyApi.check_internet().then((internet) {
+      if (internet) {
+        MyApi.getProductsInfo(productController.wishListController.wishlist,product.id).then((value) {
+          productController.loading.value=false;
+          //todo add favorite
+         //Get.to(ProductView(value!,product));
+          productController.selected_slider.value=0;
+          products=value!;
+          old_init_products=product;
+        });
+      }else{
+        Get.to(()=>NoInternet())!.then((value) {
+          go_to_product(product);
+        });
+      }
+    });
+  }
+
   _slider_images(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.3,
@@ -203,7 +224,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _products(String path, BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.2,
@@ -219,7 +239,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _title(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -359,7 +378,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _review(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -446,7 +464,6 @@ class ProductView extends StatelessWidget {
       ],
     );
   }
-
   _description(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(20),
@@ -474,7 +491,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _add_to_cart(BuildContext context) {
     return Column(
       children: [
@@ -635,7 +651,6 @@ class ProductView extends StatelessWidget {
       ],
     );
   }
-
   _getCloseButton(context) {
     return Container(
       alignment: FractionalOffset.topRight,
@@ -650,7 +665,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _alertDialogBox() {
     return AlertDialog(
       contentPadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -749,7 +763,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _show_review(context){
     return Container(
       color: AppColors.main,
@@ -798,7 +811,6 @@ class ProductView extends StatelessWidget {
       ),
     );
   }
-
   _recently_product(BuildContext context){
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0),
@@ -816,31 +828,49 @@ class ProductView extends StatelessWidget {
                 itemBuilder: (context,index){
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Container(
-                    width: MediaQuery.of(context).size.height*0.15,
-                    child: Column(
-                      children: [
-                        Expanded(
-                            flex: 3,
-                            child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                            image: DecorationImage(
-                              image: NetworkImage(Global.recentlyProduct[index].image),
-                            )
-                          ),
-                        )),
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(Global.recentlyProduct[index].title,style: TextStyle(fontSize: 9),maxLines: 2,textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ))
-                      ],
+                  child: GestureDetector(
+                    onTap: (){
+                      print('***');
+                      go_to_product(MyProduct(
+                          description: Global.recentlyProduct[index].description,
+                          id: Global.recentlyProduct[index].id,
+                          image: Global.recentlyProduct[index].image,
+                          availability: Global.recentlyProduct[index].availability,
+                          title: Global.recentlyProduct[index].title,
+                          brandId: Global.recentlyProduct[index].brandId,
+                          price: Global.recentlyProduct[index].price,
+                          rate: Global.recentlyProduct[index].rate,
+                          ratingCount: Global.recentlyProduct[index].ratingCount,
+                          subCategoryId: Global.recentlyProduct[index].subCategoryId,
+                          subTitle: Global.recentlyProduct[index].subTitle
+                      ));
+                      },
+                    child: Container(
+                      width: MediaQuery.of(context).size.height*0.15,
+                      child: Column(
+                        children: [
+                          Expanded(
+                              flex: 3,
+                              child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                              image: DecorationImage(
+                                image: NetworkImage(Global.recentlyProduct[index].image),
+                              )
+                            ),
+                          )),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(Global.recentlyProduct[index].title,style: TextStyle(fontSize: 9),maxLines: 2,textAlign: TextAlign.center),
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ),
                     ),
                   ),
                 );

@@ -88,13 +88,16 @@ class IntroController extends GetxController{
                   newArrivals.clear();
                   newArrivals.addAll(value);
                 });
-                MyApi.getSlider().then((value) {
-                  // App.sucss_msg(context, "slider");
-                  print('******---');
-                  print(value.length);
-                sliders.clear();
-                  sliders.addAll(value);
-                });
+              //if(sliders.isEmpty){
+                  MyApi.getSlider().then((value) {
+                    // App.sucss_msg(context, "slider");
+                    print('******-fadi--');
+                    print(value.length);
+                    sliders.clear();
+                    sliders.addAll(value);
+                  });
+                //}
+
                 MyApi.getBestSellers(wishListController.wishlist).then((value) {
                   // App.sucss_msg(context, "best");
                   bestSellers.clear();
@@ -104,13 +107,14 @@ class IntroController extends GetxController{
                   // App.sucss_msg(context, "brand");
                   brands.clear();
                   brands.addAll(value);
+
                 });
 
 
-               // Future.delayed(Duration(milliseconds: 2500),(){
+                Future.delayed(Duration(milliseconds: 2500),(){
                //    App.sucss_msg(context, "nav");
                   get_nav();
-                //});
+                });
               }else{
                 //Future.delayed(Duration(milliseconds: 2500),(){
                   get_nav();
