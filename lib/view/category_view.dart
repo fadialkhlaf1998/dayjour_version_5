@@ -43,6 +43,7 @@ class CategoryView extends StatelessWidget {
         duration: const Duration(milliseconds: 800),
       );
     });
+
     return Scaffold(
       backgroundColor: AppColors.main2,
       body: SafeArea(
@@ -55,9 +56,9 @@ class CategoryView extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        _header(context),
-                        const SizedBox(
-                          height: 20,
+
+                        SizedBox(
+                          height: 20 + MediaQuery.of(context).size.height * 0.09,
                         ),
                         _sub_category(context),
                         Divider(
@@ -69,11 +70,13 @@ class CategoryView extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        _body(context)
+                        _body(context),
+
                       ],
                     ),
                   ),
                 ),
+                Positioned(top: 0,child:_header(context),),
                 Positioned(
                     child: productsController.loading.value ||
                             homeController.loading.value
@@ -306,7 +309,7 @@ class CategoryView extends StatelessWidget {
 
   _products(MyProduct product, BuildContext context, int index) {
     return Padding(
-      padding: const EdgeInsets.only(right: 0),
+      padding: EdgeInsets.only(right: 0,bottom: index>=productsController.my_products.length-2?20:0),
       child: GestureDetector(
         onTap: () {
           //todo go to product

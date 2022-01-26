@@ -50,13 +50,13 @@ class ProductSearch extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _header(context),
-                    const SizedBox(height: 20,),
+                    SizedBox(height: 20 + MediaQuery.of(context).size.height*0.09,),
                     _body(context)
                   ],
                 ),
               ),
             ),
+            Positioned(top: 0,child:_header(context),),
             Positioned(child: productsController.loading.value?Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
