@@ -385,7 +385,43 @@ class Home extends StatelessWidget {
               child: Column(
                 children: [
 
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.27,),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.09,),
+                  homeController.category.isEmpty ?
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.25-45,
+                    width: MediaQuery.of(context).size.width,
+                    color: App.main2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          App_Localization.of(context).translate("no_category_with_this_name"),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),),
+                      ],
+                    ),
+                  ) :
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.25-45,
+                    width: MediaQuery.of(context).size.width,
+                    color: App.main2,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount:
+                        homeController.category.length,
+                        itemBuilder: (context, index) {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _categories(homeController.category[index], context, index),
+                            ],
+                          );
+                        }),
+                  ),
                   // _header(context),
                   _body(context),
                   _best_sellers(context),
@@ -418,7 +454,7 @@ class Home extends StatelessWidget {
   _header(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.27,
+      height: MediaQuery.of(context).size.height * 0.09,
       color: AppColors.main2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -483,39 +519,7 @@ class Home extends StatelessWidget {
             ),
           ),
           SizedBox(height: 7),
-          homeController.category.isEmpty ?
-          Container(
-            height: MediaQuery.of(context).size.height * 0.25-45,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  App_Localization.of(context).translate("no_category_with_this_name"),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),),
-              ],
-            ),
-          ) :
-          Container(
-            margin:  EdgeInsets.only(right: 10),
-            height: MediaQuery.of(context).size.height * 0.25-45,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount:
-                homeController.category.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _categories(homeController.category[index], context, index),
-                    ],
-                  );
-                }),
-          ),
+
         ],
       ),
     );
