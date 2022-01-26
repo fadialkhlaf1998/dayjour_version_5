@@ -43,12 +43,15 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Container(
+                width: 200,
                 child: GestureDetector(
                   onTap: () {
                     homeController.go_to_my_order(context);
                   },
-                  child: Column(
+                  child: Row(
                     children: [
+                      Icon(Icons.shopping_cart_outlined,color: Colors.white,),
+                      SizedBox(width: 15,),
                       Text(
                         App_Localization.of(context).translate("my_orders"),
                         style: TextStyle(
@@ -61,12 +64,15 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Container(
+                width: 200,
                 child: GestureDetector(
                   onTap: () {
                    Get.to(() => Settings());
                   },
-                  child: Column(
+                  child: Row(
                     children: [
+                      Icon(Icons.settings,color: Colors.white,),
+                      SizedBox(width: 15,),
                       Text(
                         App_Localization.of(context).translate("settings"),
                         style: TextStyle(
@@ -79,12 +85,15 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Container(
+                width: 200,
                 child: GestureDetector(
                   onTap: () {
                     //todo something
                   },
-                  child: Column(
+                  child: Row(
                     children: [
+                      Icon(Icons.info_outline,color: Colors.white,),
+                      SizedBox(width: 15,),
                       Text(
                         App_Localization.of(context).translate("about_us"),
                         style: TextStyle(
@@ -97,13 +106,16 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Container(
+                width: 200,
                 child: GestureDetector(
                   onTap: () {
                     //todo something
                     App.openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));
                   },
-                  child: Column(
+                  child: Row(
                     children: [
+                      SvgPicture.asset("assets/icons/whatsapp.svg",width: 21,),
+                      SizedBox(width: 15,),
                       Text(
                         App_Localization.of(context).translate("whatsapp"),
                         style: TextStyle(
@@ -116,12 +128,15 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Container(
+                width: 200,
                 child: GestureDetector(
                   onTap: () {
                     //todo something
                   },
-                  child: Column(
+                  child: Row(
                     children: [
+                      Icon(Icons.question_answer_outlined,color: Colors.white,),
+                      SizedBox(width: 15,),
                       Text(
                         App_Localization.of(context).translate("faq"),
                         style: TextStyle(
@@ -134,6 +149,7 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Global.customer==null?Center():Container(
+                width: 200,
                 child: GestureDetector(
                   onTap: () async {
                     Global.customer=null;
@@ -144,7 +160,7 @@ class DrawerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.logout, color: Colors.white,),
-                      SizedBox(width: 5),
+                      SizedBox(width: 15),
                       Text(
                         App_Localization.of(context).translate("log_out"),
                         style: TextStyle(
