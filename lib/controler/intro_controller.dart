@@ -122,7 +122,8 @@ class IntroController extends GetxController{
               }
             }).catchError((err){
               // App.error_msg(context, "err");
-              category=<Category>[];
+              print(err);
+            category=<Category>[];
               sub_Category=<SubCategory>[];
               get_data();
             });

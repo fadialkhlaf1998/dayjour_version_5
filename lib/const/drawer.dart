@@ -100,6 +100,25 @@ class DrawerWidget {
                 child: GestureDetector(
                   onTap: () {
                     //todo something
+                    App.openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        App_Localization.of(context).translate("whatsapp"),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    //todo something
                   },
                   child: Column(
                     children: [

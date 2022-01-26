@@ -11,7 +11,7 @@ import 'package:dayjour_version_3/my_model/customer.dart';
 class Global{
   static String lang_code="en";
   static LogInInfo? logInInfo;
-  static List<String> suggestion_list=["fanola","makeup","powder"];
+  static List<String> suggestion_list=["Loreal","viva","mira","Kerastase","Mariani","Fanola","Maybelline","Roial","Ozone","MIM","Redone","Beauty","Make up","Men car","Salon & spa equipment","Salon & spa furniture","Tools & accessories","Conditioner","Facial Cleanser","Facial Mask","Facial cream & lotion","Facial Scrub","Foot & Body Care","Rose Water","Hair Coloring","Hair Mask","Face Mask","Hair Serum","Shampoo","Hair Treatment","Waxing & Hair Removal","Fragrance","Hairstyling Spray","Hand Sanitizer","Nail Extension","Nail Art Tools","Compact Powder","Nail Polish","Contact Lenses","Concealer","Mascara","Makeup Sponge","Eyebrows","Eyelashes","Eyeliner","Highlighters","Eyeshadow","Primer","Foundation","Lipstick","After Shave","Beard Brush","Grooming Tool","Hairstyling Wax","Facial Machine","Hair Steamer","Hairstyling Equipment","Wax Equipment","Trimmers & Clippers","Other Equipment","Nail Equipment","Gents Chair","Hair Washing Chair","Ladies Chair","Kids Chair","Salon Mirror","Salon Trolley","Other Furniture","Spa Bed","Manicure Pedicure Chair","Reception Sofa","Reception Counter","Barber Cape","Clips & Pins","Bed Roll","Comb & Brush","Hair Removal tools","Scissors","Spray Bottles","Other Tools","Spa Towels","Manicure Pedicure Tools"];
   static Address? my_address;
   static MyCustomer? customer;
   static List<ProductInfo> recentlyProduct = <ProductInfo>[];

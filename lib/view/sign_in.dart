@@ -46,7 +46,7 @@ class SignIn extends StatelessWidget {
   }
   _body(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height:200,
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
@@ -118,7 +118,8 @@ class SignIn extends StatelessWidget {
             ],
           ),
           SizedBox(height: 15),
-          Container(
+          Container
+            (
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,

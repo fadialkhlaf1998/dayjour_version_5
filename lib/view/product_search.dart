@@ -103,6 +103,11 @@ class ProductSearch extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
+
+                  ],
+                ),
+                Row(
+                  children: [
                     Container(
                       width: 25,
                       height: MediaQuery.of(context).size.height * 0.07,
@@ -121,24 +126,25 @@ class ProductSearch extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    homeController.selected_bottom_nav_bar.value = 0;
-                    Get.off(Home());
-                  },
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                            "assets/introduction/logo.png"),
-                        fit: BoxFit.cover,
+                    SizedBox(width: 20,),
+                    GestureDetector(
+                      onTap: () {
+                        homeController.selected_bottom_nav_bar.value = 0;
+                        Get.off(Home());
+                      },
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                "assets/introduction/logo.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),

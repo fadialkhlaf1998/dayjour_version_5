@@ -369,6 +369,7 @@ class CategoryView2 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Spacer(),
                   Container(
                     child: IconButton(
                       onPressed: () async {

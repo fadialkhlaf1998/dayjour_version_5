@@ -189,45 +189,51 @@ class CategoryView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          child: IconButton(
-                            onPressed: () async {
-                              final result = await showSearch(
-                                  context: context,
-                                  delegate: SearchTextField(
-                                      suggestion_list: Global.suggestion_list,
-                                      homeController: homeController));
-                              homeController.get_products_by_search(result!, context);
-                              print(result);
-                            },
-                            icon: Icon(
-                              Icons.search,
-                              color: Colors.white,
-                              size: 25,
-                            ),
-                          ),
-                        ),
+
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(right: 10,left: 10),
-                    child: GestureDetector(
-                      onTap: (){
-                        Get.back();
-                      },
-                      child: Container(
-                        width: 25,
-                        height: 25,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                            AssetImage("assets/introduction/logo.png"),
-                            fit: BoxFit.cover,
+
+                  Row(
+                    children: [
+                      Container(
+                        child: IconButton(
+                          onPressed: () async {
+                            final result = await showSearch(
+                                context: context,
+                                delegate: SearchTextField(
+                                    suggestion_list: Global.suggestion_list,
+                                    homeController: homeController));
+                            homeController.get_products_by_search(result!, context);
+                            print(result);
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                            size: 25,
                           ),
                         ),
                       ),
-                    ),
+                      Container(
+                        margin: EdgeInsets.only(right: 10,left: 10),
+                        child: GestureDetector(
+                          onTap: (){
+                            Get.back();
+                          },
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                AssetImage("assets/introduction/logo.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

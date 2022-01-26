@@ -384,7 +384,9 @@ class Home extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  _header(context),
+
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.27,),
+                  // _header(context),
                   _body(context),
                   _best_sellers(context),
                   SizedBox(height: 30),
@@ -396,6 +398,7 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
+          Positioned(top: 0,child: _header(context),),
           Positioned(child: homeController.loading.value?Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,

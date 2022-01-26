@@ -21,7 +21,8 @@ import 'my_order.dart';
 class MyApi {
 
   // static String url = "http://10.0.2.2:3000/";
-  static String url = "https://phpstack-548447-2377428.cloudwaysapps.com/";
+  // static String url = "https://phpstack-548447-2377428.cloudwaysapps.com/";
+  static String url = "https://app.dayjour.net/";
   static Future<List<Brand>> getBrands()async{
 
     var request = http.Request('GET', Uri.parse(url+'api/brand'));
@@ -62,7 +63,6 @@ class MyApi {
     }
 
   }
-
   static Future<List<MyProduct>> getBestSellers(List<MyProduct> wishlist)async{
 
     var request = http.Request('GET', Uri.parse(url+'api/best_sellers_mobile'));
@@ -85,7 +85,6 @@ class MyApi {
     }
 
   }
-
   static Future<List<Category>> getCategory()async{
 
     var request = http.Request('GET', Uri.parse(url+'api/category'));

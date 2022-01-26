@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/app_localization.dart';
@@ -12,6 +13,16 @@ import 'package:get/get.dart';
 void main() {
   runApp(MyApp());
 }
+
+//todo remove not secure
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
 class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
 
@@ -50,6 +61,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    //todo remove not secure
+    HttpOverrides.global = MyHttpOverrides();
     return GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,

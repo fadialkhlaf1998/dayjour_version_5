@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class App{
   static Color main2 = Color(0xffc01d2d);
@@ -58,6 +61,35 @@ class App{
 
   static box_shadow(){
     return  BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10);
+  }
+
+  static openwhatsapp(BuildContext context,String msg) async{
+    var whatsapp ="00971526924018";
+    var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
+    var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
+    if(Platform.isIOS){
+      // for iOS phone only
+      if( await canLaunch(whatappURL_ios)){
+        await launch(whatappURL_ios, forceSafariVC: false);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp no installed")));
+
+      }
+
+    }else{
+      // android , web
+      if( await canLaunch(whatsappURl_android)){
+        await launch(whatsappURl_android);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp no installed")));
+
+      }
+
+
+    }
+
   }
 
   static Drawer get_drawer(BuildContext context,HomeController homeController){
