@@ -19,15 +19,17 @@ class MyProduct {
     required this.image,
     required this.ratingCount,
     required this.availability,
+    this.count
   });
 
   int id;
+  int? count;
   int subCategoryId;
   int brandId;
   String title;
   String subTitle;
   String description;
-  double price;
+  int price;
   double rate;
   String image;
   int ratingCount;
@@ -45,11 +47,12 @@ class MyProduct {
     title: json["title"],
     subTitle: json["sub_title"],
     description: json["description"],
-    price: double.parse(json["price"].toString()),
+    price: double.parse(json["price"].toString()).round(),
     rate: double.parse(json["rate"].toString()),
     image: json["image"],
     ratingCount: json["rating_count"],
     availability: json["availability"]==null?0:json["availability"],
+    count: json["count"]
   );
 
   Map<String, dynamic> toMap() => {

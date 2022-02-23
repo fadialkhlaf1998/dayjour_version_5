@@ -174,23 +174,25 @@ class IntroController extends GetxController{
   // }
 
   get_nav(){
-    printError(info: "**************");
     Store.loadLogInInfo().then((info) {
       if(info.email=="non"){
-        Get.offAll(()=>Welcome());
+        Get.offAll(()=>Home());
       }else{
         Store.load_verificat().then((verify){
           if(verify){
             MyApi.check_internet().then((internet) {
               if(internet){
                 MyApi.login(info.email,info.pass).then((value) {
+                  print('*****--*******');
                   print(value.message);
                   if(value.state==200){
                     Get.offAll(()=>Home());
                   }else{
-                    Get.offAll(()=>Welcome());
+                    Get.offAll(()=>Home());
                   }
-
+                }).catchError((err){
+                  print('*********--******');
+                  print(err.toString());
                 });
 
               }else{

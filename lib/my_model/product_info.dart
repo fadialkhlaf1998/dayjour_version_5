@@ -29,7 +29,7 @@ class ProductInfo {
   String title;
   String subTitle;
   String description;
-  double price;
+  int price;
   double rate;
   String image;
   int ratingCount;
@@ -49,7 +49,7 @@ class ProductInfo {
     title: json["title"],
     subTitle: json["sub_title"],
     description: json["description"],
-    price: double.parse(json["price"].toString()),
+    price: double.parse(json["price"].toString()).round(),
     rate:double.parse(json["rate"].toString()),
     image: json["image"],
     ratingCount: json["rating_count"],

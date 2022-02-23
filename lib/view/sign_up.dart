@@ -33,19 +33,29 @@ class SignUp extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.17,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children:  [
-              Text(App_Localization.of(context).translate("sign_up2"),
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35),
-              ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IconButton(onPressed: (){
+                Get.back();
+              }, icon: Icon(Icons.arrow_back_ios,size: 22,color: Colors.white,))
             ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:  [
+                Text(App_Localization.of(context).translate("sign_up2"),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -168,7 +178,7 @@ class SignUp extends StatelessWidget {
                 suffixIcon: InkWell(
                   onTap: signUpController.change_visibilty,
                   child: Icon(
-                    signUpController.hide_passeord.value
+                    !signUpController.hide_passeord.value
                         ? Icons.visibility
                         : Icons.visibility_off,
                     color: Colors.black45,
@@ -208,7 +218,6 @@ class SignUp extends StatelessWidget {
   _sign_in(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.3,
       child: Column(
         children: [
           Padding(

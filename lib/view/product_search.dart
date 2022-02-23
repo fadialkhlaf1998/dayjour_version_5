@@ -5,9 +5,11 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
-import 'package:dayjour_version_3/view/Archive/home.dart';
+import 'package:dayjour_version_3/view/home.dart';
+import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -103,30 +105,7 @@ class ProductSearch extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-
-                  ],
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 25,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      child: IconButton(
-                        onPressed: () async {
-                          final result = await showSearch(
-                              context: context,
-                              delegate: SearchTextField(
-                                  suggestion_list: Global.suggestion_list, homeController: homeController));
-                          homeController.get_products_by_search(result!, context);
-                          print(result);
-                        },
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20,),
+                    SizedBox(width: 10,),
                     GestureDetector(
                       onTap: () {
                         homeController.selected_bottom_nav_bar.value = 0;
@@ -146,12 +125,57 @@ class ProductSearch extends StatelessWidget {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    Container(
+                      width: 25,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: IconButton(
+                        onPressed: () async {
+                          final result = await showSearch(
+                              context: context,
+                              delegate: SearchTextField(
+                                  suggestion_list: Global.suggestion_list, homeController: homeController));
+                          get_result(result!, context);
+                          print(result);
+                        },
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  get_result(String query,BuildContext context){
+    MyApi.check_internet().then((internet) {
+      if (internet) {
+        productsController.loading.value=true;
+        MyApi.getProductsSearch(homeController.wishListController.wishlist,query).then((value) {
+          productsController.loading.value=false;
+          if(value.isNotEmpty){
+            productsController.my_products=this.products=value;
+          }else{
+            App.error_msg(context, App_Localization.of(context).translate("fail_search"));
+          }
+
+        }).catchError((err){
+          productsController.loading.value=false;
+        });
+      }else{
+        Get.to(NoInternet())!.then((value) {
+          // get_products_by_search(query,context);
+        });
+      }
+    });
   }
 
   _body(BuildContext context) {
@@ -402,7 +426,7 @@ class SearchTextField extends SearchDelegate<String> {
     });
     return Container(
       color: AppColors.main,
-      child: ListView.builder(
+      child: query.isEmpty?Center():ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(

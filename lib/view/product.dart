@@ -10,8 +10,9 @@ import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/product_info.dart';
-import 'package:dayjour_version_3/view/Archive/no_internet.dart';
 import 'package:dayjour_version_3/view/home.dart';
+import 'package:dayjour_version_3/view/image_show.dart';
+import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -95,7 +96,7 @@ class ProductView extends StatelessWidget {
             child: Align(
               alignment: Alignment.topRight,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     margin: EdgeInsets.only(right: 10,left: 10),
@@ -111,7 +112,7 @@ class ProductView extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(right: 10,left: 10),
+                    margin: EdgeInsets.only(right: 0,left: 0),
                     child: GestureDetector(
                       onTap: () {
                         Get.offAll(() => Home());
@@ -148,6 +149,7 @@ class ProductView extends StatelessWidget {
          //Get.to(ProductView(value!,product));
           productController.selected_slider.value=0;
           products=value!;
+          productController.myProduct=value;
           old_init_products=product;
         });
       }else{
@@ -160,9 +162,9 @@ class ProductView extends StatelessWidget {
 
   _slider_images(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.width,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.3,
+        height: MediaQuery.of(context).size.width,
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
@@ -172,7 +174,7 @@ class ProductView extends StatelessWidget {
                       CarouselSlider.builder(
                         carouselController: controller,
                         options: CarouselOptions(
-                            height: MediaQuery.of(context).size.height * 0.3,
+                            height: MediaQuery.of(context).size.width,
                             autoPlay:
                                 products.images.length <= 1 ? false : true,
                             viewportFraction: 1,
@@ -225,16 +227,22 @@ class ProductView extends StatelessWidget {
     );
   }
   _products(String path, BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.2,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        image: DecorationImage(
-          fit: BoxFit.contain,
-          image: NetworkImage(path == null
-              ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-              : path),
+    return GestureDetector(
+      onTap: (){
+        Get.to(()=>ImageShow(path));
+      },
+      child: Hero(
+        tag: path,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: NetworkImage(path == null
+                  ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
+                  : path),
+            ),
+          ),
         ),
       ),
     );
@@ -468,6 +476,7 @@ class ProductView extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(20),
       child: Container(
+        width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
             Row(
@@ -482,7 +491,7 @@ class ProductView extends StatelessWidget {
             Row(
               children: [
                 Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 1-40,
                     child: Html(data: products.description)),
               ],
             ),
@@ -518,10 +527,10 @@ class ProductView extends StatelessWidget {
                       children: [
                         IconButton(
                             onPressed: () {
-                              productController.increase();
+                              productController.decrease();
                             },
                             icon: Icon(
-                              Icons.add,
+                              Icons.remove,
                             )),
                         Text(
                           productController.cart_count.toString(),
@@ -529,11 +538,12 @@ class ProductView extends StatelessWidget {
                         ),
                         IconButton(
                             onPressed: () {
-                              productController.decrease();
+                              productController.increase();
                             },
                             icon: Icon(
-                              Icons.remove,
-                            ))
+                              Icons.add,
+                            )),
+
                       ],
                     ),
                   ),
@@ -820,7 +830,7 @@ class ProductView extends StatelessWidget {
           Global.recentlyProduct.isEmpty ? Center() : Text(App_Localization.of(context).translate("recently_products"),style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
           SizedBox(height: 15,),
           Container(
-            height: MediaQuery.of(context).size.height*0.15,
+            height: MediaQuery.of(context).size.height*0.2,
             child: ListView.builder(
                 itemCount: Global.recentlyProduct.length,
                 shrinkWrap: true,

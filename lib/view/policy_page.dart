@@ -91,7 +91,19 @@ class PolicyPage extends StatelessWidget {
                 topRight: Radius.circular(25),
                 topLeft: Radius.circular(25),
               )),
-          child: Html(data: App_Localization.of(context).translate(content),),
+          child: Html(data: App_Localization.of(context).translate(content),style: content=="about_us_content"?{
+
+            "*": Style(
+             textAlign: TextAlign.center
+            ),
+            "p": Style(
+                textAlign: TextAlign.left
+            ),
+          }:{
+            "table": Style(
+              backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
+            ),
+          },),
         ),
       ],
     );

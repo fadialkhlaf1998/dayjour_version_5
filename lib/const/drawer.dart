@@ -3,12 +3,12 @@ import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
-import 'package:dayjour_version_3/view/Archive/welcome.dart';
 import 'package:dayjour_version_3/view/policy_page.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
 import 'package:dayjour_version_3/view/cart.dart';
 import 'package:dayjour_version_3/view/introduction.dart';
 import 'package:dayjour_version_3/view/settings.dart';
+import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -38,10 +38,18 @@ class DrawerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: 80,
+              SizedBox(height: 35,),
+              GestureDetector(
+                onTap: (){
+                  Get.back();
+                },
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  child: Image.asset("assets/introduction/logo.png"),
+                ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 00),
               Container(
                 width: 200,
                 child: GestureDetector(
@@ -62,7 +70,7 @@ class DrawerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               Container(
                 width: 200,
                 child: GestureDetector(
@@ -83,12 +91,12 @@ class DrawerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               Container(
                 width: 200,
                 child: GestureDetector(
                   onTap: () {
-                    //todo something
+                    Get.to(()=>PolicyPage("about_us","about_us_content" ));
                   },
                   child: Row(
                     children: [
@@ -104,7 +112,7 @@ class DrawerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               Container(
                 width: 200,
                 child: GestureDetector(
@@ -126,12 +134,12 @@ class DrawerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               Container(
                 width: 200,
                 child: GestureDetector(
                   onTap: () {
-                    //todo something
+                    Get.to(()=>PolicyPage( "faq","faq_content"));
                   },
                   child: Row(
                     children: [
@@ -147,7 +155,7 @@ class DrawerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               Global.customer==null?Center():Container(
                 width: 200,
                 child: GestureDetector(
@@ -157,7 +165,7 @@ class DrawerWidget {
                     Get.offAll(Welcome());
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.logout, color: Colors.white,),
                       SizedBox(width: 15),
@@ -173,7 +181,7 @@ class DrawerWidget {
               ),
               const SizedBox(height: 30),
               Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -211,7 +219,7 @@ class DrawerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50),
+                padding: const EdgeInsets.only(top: 30),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: Row(
@@ -289,14 +297,31 @@ class DrawerWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 10,),
+              GestureDetector(
+                onTap: () {
+                  Get.to(PolicyPage('shipping_policy','shipping_policy_content'));
+                  //_launchURL("https://www.dayjour.net/pages/privacy-policy",context);
+                },
+                child: Column(
+                  children: [
+                    Text(
+                      App_Localization.of(context).translate("shipping_policy"),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.25,
                 width: MediaQuery.of(context).size.width,
                 color: Colors.transparent,
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 50),
+                      padding: const EdgeInsets.only(top: 30),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

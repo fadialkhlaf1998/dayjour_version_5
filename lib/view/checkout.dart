@@ -54,7 +54,7 @@ class _Checkout2State extends State<Checkout> {
           Padding(
             padding: const EdgeInsets.only(left: 10 , right: 10, top: 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -72,6 +72,7 @@ class _Checkout2State extends State<Checkout> {
                     color: Colors.white,
                   ),
                 ),
+                SizedBox(width: 5,),
                 GestureDetector(
                   onTap: (){
                     homeController.selected_bottom_nav_bar.value = 0;
@@ -189,7 +190,9 @@ class _Checkout2State extends State<Checkout> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  App_Localization.of(context).translate("continue_to_payment"),
+                  checkoutController.selected_operation.value==0?
+                  App_Localization.of(context).translate("continue_to_payment_main")
+                  :App_Localization.of(context).translate("continue_to_payment"),
                   style: TextStyle(
                     fontSize: 17,
                       color: Colors.white,
@@ -544,26 +547,27 @@ class _Checkout2State extends State<Checkout> {
         const SizedBox(height: 5),
         Container(
           width: MediaQuery.of(context).size.width * 0.92,
+          height:  MediaQuery.of(context).size.height*0.1,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Stack(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.92,
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: 70,
                     child: TextField(
                       keyboardType: TextInputType.number,
                       controller: checkoutController.phone,
                       cursorColor: AppColors.main2,
+                      maxLength: 9,
                       decoration: InputDecoration(
-                        prefixStyle: TextStyle(color: AppColors.main2),
-                        prefixText: '+971  ',
+                        prefixStyle: TextStyle(color: Colors.transparent),
+                        prefixText: '+971 |   ',
                         fillColor: Colors.white,
                         filled: true,
                         errorText:
-                        checkoutController.address_err.value && checkoutController.phone.text.isEmpty ? App_Localization.of(context).translate("phone_is_required") : null,
+                        checkoutController.address_err.value && (checkoutController.phone.text.isEmpty||checkoutController.phone.value.text.length<9) ? App_Localization.of(context).translate("phone_is_required") : null,
                         border: InputBorder.none,
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -572,13 +576,14 @@ class _Checkout2State extends State<Checkout> {
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.black45)
                         ),
-                        hintText: App_Localization.of(context).translate("phone"),
+                        // hintText: App_Localization.of(context).translate("phone"),
                         hintStyle: TextStyle(color: Colors.black),
                         contentPadding: EdgeInsets.all(5),
 
                       ),
                     ),
                   ),
+                  Positioned(left: 5,top:12.5,child: Container(height: 20,color: Colors.transparent,child: Text("+971 - " , style: TextStyle(color: Colors.black,fontSize: 16),)),)
                 ],
               ),
             ],
@@ -699,7 +704,7 @@ class _Checkout2State extends State<Checkout> {
         Container(
           padding: EdgeInsets.only(right: 20),
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.32,
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -878,6 +883,7 @@ class _Checkout2State extends State<Checkout> {
             ),
             child: ListTile(
               onTap: (){
+                checkoutController.my_order.clear();
                 checkoutController.my_order.addAll(cartController.my_order);
                 checkoutController.selected.value=true;
                 checkoutController.is_paid.value=false;
@@ -923,6 +929,7 @@ class _Checkout2State extends State<Checkout> {
       child:MyFatoorah(
         onResult:(response){
           if(response.status==PaymentStatus.Success){
+            checkoutController.my_order.clear();
             checkoutController.my_order.addAll(cartController.my_order);
             checkoutController.add_order_payment(context);
             checkoutController.next(context);

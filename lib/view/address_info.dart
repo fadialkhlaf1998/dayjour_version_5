@@ -19,8 +19,8 @@ class AddressView extends StatelessWidget {
   TextEditingController phone = TextEditingController();
   Rx<String> country="non".obs;
   Rx<String> emirate="non".obs;
-  List<String> countries=["united arab emirates"];
-  List<String> emirates=["abu dhabi","ajman","dubai","fujairah","ras al Khaimah","sharjah","umm al Quwain"];
+  List<String> countries=["United Arab Emirates"];
+  List<String> emirates=["Abu Dhabi","Ajman","Dubai","Fujairah","Ras Al Khaimah","Sharjah","Umm Al Quwain"];
 
   AddressView(){
     if(Global.my_address!=null){

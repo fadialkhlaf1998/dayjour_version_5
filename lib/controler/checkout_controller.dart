@@ -30,14 +30,15 @@ class CheckoutController extends GetxController{
   TextEditingController phone = TextEditingController();
   Rx<String> country="non".obs;
   Rx<String> emirate="non".obs;
-  List<String> countries=["united arab emirates"];
-  List<String> emirates=["abu dhabi","ajman","dubai","fujairah","ras al Khaimah","sharjah","umm al Quwain"];
+  List<String> countries=["United Arab Emirates"];
+  List<String> emirates=["Abu Dhabi","Ajman","Dubai","Fujairah","Ras Al Khaimah","Sharjah","Umm Al Quwain"];
 
 
   next(BuildContext context) async{
+    get_details();
     if(selected_operation==0){
       if(firstName.value.text.isEmpty||lastName.value.text.isEmpty||address.value.text.isEmpty||
-          apartment.value.text.isEmpty||city.value.text.isEmpty||phone.value.text.isEmpty||country=="non"||emirate=="non"){
+          apartment.value.text.isEmpty||city.value.text.isEmpty||phone.value.text.isEmpty||country=="non"||emirate=="non"||phone.value.text.length<9){
         address_err.value=true;
         // selected_operation++;
       }else{
@@ -53,7 +54,7 @@ class CheckoutController extends GetxController{
         selected_operation.value = 0;
         selected.value = false;
         await add_order_payment(context);
-        Get.off(Accepted_order());
+        Get.off(Accepted_order(cartController.sub_total.value,cartController.shipping.value,cartController.total.value));
       }
     }
   }
@@ -89,12 +90,14 @@ class CheckoutController extends GetxController{
     });
   }
   add_order_payment(BuildContext context){
+    cartController.get_total();
     //todo add order to shpify
     MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
     cartController.clear_cart();
    // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
   add_order_shopyfi(BuildContext context){
+    cartController.get_total();
     if(is_paid.value){
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
@@ -110,8 +113,13 @@ class CheckoutController extends GetxController{
 
   String get_details(){
     String text="";
-    lineItems = <LineItem>[];
+    lineItems.clear();
     for(int i=0;i<my_order.length;i++){
+      print(my_order.length);
+      print('*****************************');
+      print( my_order[i].product.value.id);
+      print( my_order[i].quantity);
+      print('*****************************');
       lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
       text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
     }

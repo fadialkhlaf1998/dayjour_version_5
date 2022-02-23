@@ -1,4 +1,3 @@
-
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
@@ -79,8 +78,8 @@ class _CartState extends State<Cart> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 5,top: 5),
                                   child: Icon(
-                                    Icons.close,
-                                    color: Colors.black,
+                                    Icons.delete,
+                                    color: AppColors.main2,
                                     size: 20,
                                   ),
                                 ),
@@ -130,10 +129,10 @@ class _CartState extends State<Cart> {
                                       children: [
                                         IconButton(
                                             onPressed: () {
-                                              cartController.increase(cartController.my_order[index], index);
+                                              cartController.decrease(cartController.my_order[index], index);
                                             },
                                             icon: Icon(
-                                              Icons.add,
+                                              Icons.remove,
                                               size: 20,
                                             )),
                                         Text(
@@ -142,12 +141,13 @@ class _CartState extends State<Cart> {
                                         ),
                                         IconButton(
                                             onPressed: () {
-                                              cartController.decrease(cartController.my_order[index], index);
+                                              cartController.increase(cartController.my_order[index], index);
                                             },
                                             icon: Icon(
-                                              Icons.remove,
+                                              Icons.add,
                                               size: 20,
-                                            ))
+                                            )),
+
                                       ],
                                     ),
                                   ),
@@ -316,7 +316,7 @@ class _CartState extends State<Cart> {
   }
   _checkout() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.65,
       height: MediaQuery.of(context).size.height * 0.06,
       child: FloatingActionButton.extended(
         backgroundColor: AppColors.main2,
@@ -355,9 +355,11 @@ class _CartState extends State<Cart> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 50),
-              Icon(Icons.info, color: AppColors.main2,size: 30,),
+              Icon(Icons.remove_shopping_cart, color: AppColors.main2,size: 30,),
               SizedBox(height: 10),
-              Text(App_Localization.of(context).translate('dont_have_product'), style: TextStyle(color: AppColors.main2,fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              Text(App_Localization.of(context).translate('dont_have_product'), style: TextStyle(color: Colors.black,fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+              SizedBox(height: 3),
+              Text(App_Localization.of(context).translate('cart_no_data'), style: TextStyle(color: Colors.grey,fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
             ],
           )
       ),

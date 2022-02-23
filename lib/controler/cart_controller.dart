@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class CartController extends GetxController{
   // Rx<Order> order=Order(lineItems: <OrderLineItem>[]).obs;
-  Rx<String> total="0.00".obs,sub_total="0.00".obs,shipping="15.00".obs;
+  Rx<String> total="0.00".obs,sub_total="0.00".obs,shipping="10.00".obs;
   var my_order = <MyOrder>[].obs;
   var fake = true.obs;
 
@@ -56,7 +56,7 @@ class CartController extends GetxController{
   }
 
   get_total(){
-    double x=0,y=0;
+    double x=0,y=10;
       for (var elm in my_order) {
         x += double.parse(elm.price.value);
         // y += double.parse(elm.shipping.value);

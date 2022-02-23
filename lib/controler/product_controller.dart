@@ -6,8 +6,6 @@ import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/product_info.dart';
-import 'package:dayjour_version_3/view/Archive/no_internet.dart';
-import 'package:dayjour_version_3/view/Archive/product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

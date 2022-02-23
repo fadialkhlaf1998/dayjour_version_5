@@ -92,16 +92,19 @@ class CategoryView2 extends StatelessWidget {
                           width: MediaQuery.of(context).size.width *0.6,
                           height: MediaQuery.of(context).size.height * 0.77,
                           child: Obx(() {
-                            return ListView.builder(
+                            return GridView.builder(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 6/8,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 0
+                              ),
                               shrinkWrap: true,
                               itemCount: homeController
                                   .sub_Category.length,
                               itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    _products(homeController.sub_Category[index],context,index),
-                                  ],
-                                );
+                                return
+                                    _products(homeController.sub_Category[index],context,index);
                               },
                             );
                           }),
@@ -155,15 +158,22 @@ class CategoryView2 extends StatelessWidget {
               width: MediaQuery.of(context).size.width/ 3.2,
               height: 40,
 
-              child: Center(
-                child: Text(
-                  "Promotions",
-                  style: TextStyle(
-                      color: homeController.selected_category.value == index
-                          ? AppColors.main2
-                          : Colors.black45,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Promotions",
+                      style: TextStyle(
+                          color: homeController.selected_category.value == index
+                              ? AppColors.main2
+                              : Colors.black45,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -189,7 +199,7 @@ class CategoryView2 extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // homeController.get_products(subCategory.id,index,context);
-                    homeController.go_to_product_slider(index);
+                    homeController.go_to_product_slider(index,context);
                   },
                   child: Column(
                     children: [
@@ -248,15 +258,22 @@ class CategoryView2 extends StatelessWidget {
                     : Colors.grey.withOpacity(0.2),
                 //  border: Border.all(color: Colors.grey, width: 0.5)
               ),
-              child: Center(
-                child: Text(
-                  "Sales",
-                  style: TextStyle(
-                      color: homeController.selected_category.value == index
-                          ? AppColors.main2
-                          : Colors.black45,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Sales",
+                      style: TextStyle(
+                          color: homeController.selected_category.value == index
+                              ? AppColors.main2
+                              : Colors.black45,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -369,26 +386,8 @@ class CategoryView2 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Spacer(),
                   Container(
-                    child: IconButton(
-                      onPressed: () async {
-                        final result = await showSearch(
-                            context: context,
-                            delegate: SearchTextField(
-                                suggestion_list: Global.suggestion_list,
-                                homeController: homeController));
-                        homeController.get_products_by_search(result!, context);
-                        print(result);
-                      },
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 10,left: 10),
+                    margin: EdgeInsets.only(right: 15,left: 15),
                     child: GestureDetector(
                       onTap: (){
                         homeController.selected_bottom_nav_bar.value = 0;
@@ -406,6 +405,24 @@ class CategoryView2 extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Container(
+                    child: IconButton(
+                      onPressed: () async {
+                        final result = await showSearch(
+                            context: context,
+                            delegate: SearchTextField(
+                                suggestion_list: Global.suggestion_list,
+                                homeController: homeController));
+                        homeController.get_products_by_search(result!, context);
+                        print(result);
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             ),
@@ -431,20 +448,24 @@ class CategoryView2 extends StatelessWidget {
               color: homeController.selected_category.value == index + 2
                   ? Colors.white
                   : Colors.grey.withOpacity(0.2),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-                  child: Text(
-                    collection.title.toString(),
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: homeController.selected_category.value == index + 2
-                            ? AppColors.main2
-                            : Colors.black45,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      collection.title.toString(),
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: homeController.selected_category.value == index + 2
+                              ? AppColors.main2
+                              : Colors.black45,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -456,23 +477,22 @@ class CategoryView2 extends StatelessWidget {
   }
 
   _products(SubCategory subCategory, BuildContext context, int index) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        GestureDetector(
-          onTap: () {
-            print('*************');
-            homeController.get_products(subCategory.id, index, context);
-          },
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.2,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: GestureDetector(
+        onTap: (){
+          homeController.get_products(subCategory.id, index, context,homeController.selected_category.value-2);
+        },
+        child: Column(
+          children: [
+            Expanded(
+              flex: 4,
+              child: Container(
                 decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                   image: DecorationImage(
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
+
                     image: NetworkImage(homeController
                         .sub_Category[index].image ==
                         null
@@ -482,8 +502,10 @@ class CategoryView2 extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8),
-              Center(
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
                 child: Container(
                   child: Text(
                     homeController.sub_Category[index].title.toString(),
@@ -494,11 +516,10 @@ class CategoryView2 extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        const SizedBox(height: 5),
-      ],
+      ),
     );
   }
 }
@@ -576,7 +597,7 @@ class SearchTextField extends SearchDelegate<String> {
     });
     return Container(
       color: AppColors.main,
-      child: ListView.builder(
+      child: query.isEmpty?Center():ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(

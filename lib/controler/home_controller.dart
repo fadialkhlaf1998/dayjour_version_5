@@ -96,7 +96,7 @@ class HomeController extends GetxController{
     MyApi.check_internet().then((internet) {
       if (internet) {
         loading.value=true;
-        MyApi.getSubCategory(category_id).then((value) {
+        MyApi.getSuperCategory(category_id).then((value) {
           sub_Category.clear();
           loading.value=false;
           sub_Category.addAll(value);
@@ -111,20 +111,27 @@ class HomeController extends GetxController{
     });
   }
 
-  get_products(int sub_category,index,BuildContext context){
+  view_all(List<MyProduct> products,String title){
+    Get.to(()=>ProductSearch(products, title));
+  }
+
+  get_products(int sub_category,index,BuildContext context,int selected_category){
     MyApi.check_internet().then((internet) {
       if (internet) {
         // print('----------------------');
         loading.value=true;
-        MyApi.getProducts(wishListController.wishlist,sub_category).then((value) {
-          loading.value=false;
-          Get.to(()=>CategoryView(sub_Category, value,index));
-        }).catchError((err){
-          loading.value=false;
+        MyApi.getSubCategory(sub_category).then((value0){
+          MyApi.getProducts(wishListController.wishlist,sub_category).then((value) {
+            loading.value=false;
+            Get.to(()=>CategoryView(value0, value,0,sub_Category,index,category[selected_category].title));
+          }).catchError((err){
+            loading.value=false;
+          });
         });
+
       }else{
         Get.to(NoInternet())!.then((value) {
-          get_products(sub_category,index,context);
+          get_products(sub_category,index,context,selected_category);
         });
       }
     });
@@ -153,6 +160,8 @@ class HomeController extends GetxController{
     });
   }
 
+
+
   get_products_by_brand(int brand_id,BuildContext context){
     MyApi.check_internet().then((internet) {
       if (internet) {
@@ -169,7 +178,6 @@ class HomeController extends GetxController{
         .catchError((err){
           loading.value=false;
           App.error_msg(context, App_Localization.of(context).translate("wrong"));
-
         });
       }else{
         Get.to(NoInternet())!.then((value) {
@@ -253,20 +261,22 @@ class HomeController extends GetxController{
     selected_bottom_nav_bar.value=index;
   }
 
-  go_to_sub_category_page(int category_id,BuildContext context){
+  go_to_sub_category_page(int category_id,BuildContext context,int selected_category){
     MyApi.check_internet().then((internet) {
       if (internet) {
         loading.value=true;
-        MyApi.getSubCategory(category_id).then((value) {
+        MyApi.getSuperCategory(category_id).then((value) {
           sub_Category.clear();
           // product_loading.value=false;
           sub_Category.addAll(value);
           if(sub_Category.isNotEmpty){
-
-            MyApi.getProducts(wishListController.wishlist, sub_Category.first.id).then((value) {
-              loading.value=false;
-              Get.to(()=>CategoryView(sub_Category, value, 0));
+            MyApi.getSubCategory(sub_Category.first.id).then((sub_cate) {
+              MyApi.getProducts(wishListController.wishlist, sub_cate.first.id).then((value) {
+                loading.value=false;
+                Get.to(()=>CategoryView(sub_cate, value, 0,sub_Category,0,category[selected_category].title));
+              });
             });
+
           }else{
 
             App.error_msg(context, App_Localization.of(context).translate("no_elm"));
@@ -309,7 +319,6 @@ class HomeController extends GetxController{
           MyApi.get_customer_order(Global.customer!.id).then((value) {
             loading.value=false;
             Get.to(()=>MyOrderView(value));
-          
           });
         }else{
           App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
@@ -323,19 +332,36 @@ class HomeController extends GetxController{
       }
     });
   }
-  go_to_product_slider(int index){
+  go_to_product_slider(int index,BuildContext context){
     loading.value=true;
     MyApi.check_internet().then((internet) {
       if (internet) {
-        MyApi.getProductsInfo(wishListController.wishlist,slider[index].product_id).then((value) {
-          loading.value=false;
-          //todo add favorite
-          MyProduct p = MyProduct(id: value!.id, subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability);
-          Get.to(()=>ProductView(value,p));
-        });
+        if(slider[index].product_id!=null){
+          MyApi.getProductsInfo(wishListController.wishlist,slider[index].product_id!).then((value) {
+            loading.value=false;
+            MyProduct p = MyProduct(id: value!.id, subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability);
+            Get.to(()=>ProductView(value,p));
+          });
+        }else if(slider[index].sub_category_id!=null){
+          MyApi.getProducts(wishListController.wishlist,slider[index].sub_category_id!).then((value) {
+            loading.value=false;
+            if(value.isNotEmpty){
+              Get.to(()=>ProductSearch(value,slider[index].title));
+            }else{
+              App.error_msg(context, App_Localization.of(context).translate("no_elm"));
+            }
+          })
+              .catchError((err){
+            loading.value=false;
+            App.error_msg(context, App_Localization.of(context).translate("wrong"));
+          });
+        }else if(slider[index].brand_id!=null){
+          get_products_by_brand(slider[index].brand_id!,context);
+        }
+
       }else{
         Get.to(()=>NoInternet())!.then((value) {
-          go_to_product_slider(index);
+          go_to_product_slider(index,context);
         });
       }
     });

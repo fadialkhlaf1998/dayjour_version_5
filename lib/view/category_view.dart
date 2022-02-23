@@ -6,6 +6,7 @@ import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/product_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
@@ -21,13 +22,19 @@ class CategoryView extends StatelessWidget {
   Global global = Global();
   List<MyProduct> products;
   List<SubCategory> subCategory;
+  List<SubCategory> category;
   int selected;
+  int selected_category;
+  String title;
   ScrollController scrollController = ScrollController();
+  ScrollController scrollController_2 = ScrollController();
 
-  CategoryView(this.subCategory, this.products, this.selected) {
+  CategoryView(this.subCategory, this.products, this.selected,this.category,this.selected_category,this.title) {
     productsController.my_products = this.products;
     productsController.sub_categories = this.subCategory;
     productsController.selected_sub_category.value = this.selected;
+    productsController.category=this.category;
+    productsController.selected_category=this.selected_category.obs;
   }
 
   @override
@@ -39,6 +46,11 @@ class CategoryView extends StatelessWidget {
     Future.delayed(Duration(milliseconds: 200)).then((value) {
       scrollController.animateTo(
         (MediaQuery.of(context).size.height * 0.1 + 20) * selected,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 800),
+      );
+      scrollController_2.animateTo(
+        (MediaQuery.of(context).size.height * 0.1 + 20) * selected_category,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 800),
       );
@@ -57,18 +69,16 @@ class CategoryView extends StatelessWidget {
                     child: Column(
                       children: [
 
-                        SizedBox(
-                          height: 20 + MediaQuery.of(context).size.height * 0.09,
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.09,
+                          width: MediaQuery.of(context).size.width,
+                          color: App.main2,
                         ),
+                        _category(context),
                         _sub_category(context),
-                        Divider(
-                          thickness: 1,
-                          color: Colors.black.withOpacity(0.25),
-                          indent: 30,
-                          endIndent: 30,
-                        ),
+
                         const SizedBox(
-                          height: 20,
+                          height: 10,
                         ),
                         _body(context),
 
@@ -100,12 +110,83 @@ class CategoryView extends StatelessWidget {
       ),
     );
   }
+  _category(BuildContext context) {
+    return Container(
+      color: App.main,
+      child: Column(
 
+        children: [
+          SizedBox(height: 10,),
+          Row(
+            children: [
+              SizedBox(width: 10,),
+              Text(this.title,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.bold),)
+            ],
+          ),
+          SizedBox(height: 10,),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.2,
+            color: App.main,
+            child: ListView.builder(
+
+                padding: EdgeInsets.only(left: 10, right: 10),
+                itemCount: productsController.category.length,
+                shrinkWrap: true,
+                controller: scrollController_2,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      SizedBox(width: 10,),
+                      GestureDetector(
+                        onTap: () {
+                          productsController.update_sub_category(index);
+                        },
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.14,
+                                width: MediaQuery.of(context).size.height * 0.14,
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+
+                                    ],
+                                    border: Border.all(color: productsController.selected_category==index?AppColors.main2:Colors.transparent,width: 2),
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: NetworkImage(productsController
+                                            .category[index].image))),
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 4,
+                                child: Text(
+                                  productsController.category[index].title,
+                                  maxLines: 2,
+                                  style: App.textNormal( productsController.selected_category==index?AppColors.main2:Colors.black, 12),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+          ),
+        ],
+      ),
+    );
+  }
   _sub_category(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.17,
+      height: 40,
       child: ListView.builder(
-          padding: EdgeInsets.only(left: 10, right: 10),
+          padding: EdgeInsets.only(left: 10, right: 10,top: 10),
           itemCount: productsController.sub_categories.length,
           shrinkWrap: true,
           controller: scrollController,
@@ -122,34 +203,21 @@ class CategoryView extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.12,
-                          width: MediaQuery.of(context).size.height * 0.12,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.25),
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
-                                  offset:
-                                      Offset(1, 8), // changes position of shadow
-                                ),
-                              ],
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: NetworkImage(productsController
-                                      .sub_categories[index].image))),
-                        ),
+
                         SizedBox(height: 5),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: Text(
-                            productsController.sub_categories[index].title,
-                            maxLines: 2,
-                            style: App.textNormal(Colors.black, 12),
-                            textAlign: TextAlign.center,
-                          ),
+                        Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width / 4,
+                              child: Text(
+                                productsController.sub_categories[index].title,
+                                maxLines: 1,
+                                style: App.textNormal(Colors.black, 12),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Container(height: 2,width: MediaQuery.of(context).size.width / 4,color:productsController.selected_sub_category.value==index?App.main2: Colors.transparent,)
+                          ],
                         ),
                       ],
                     ),
@@ -176,25 +244,48 @@ class CategoryView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10,left: 10),
-                    child: Row(
-                      children: [
-                        Container(
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 25,
-                              color: Colors.white,
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10,left: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Icon(
+                                  Icons.arrow_back_ios,
+                                  size: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 10,left: 0),
+                        child: GestureDetector(
+                          onTap: (){
+                            Get.back();
+                          },
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                AssetImage("assets/introduction/logo.png"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
 
                   Row(
@@ -217,25 +308,7 @@ class CategoryView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(right: 10,left: 10),
-                        child: GestureDetector(
-                          onTap: (){
-                            Get.back();
-                          },
-                          child: Container(
-                            width: 25,
-                            height: 25,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image:
-                                AssetImage("assets/introduction/logo.png"),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                 ],
@@ -309,10 +382,9 @@ class CategoryView extends StatelessWidget {
 
   _products(MyProduct product, BuildContext context, int index) {
     return Padding(
-      padding: EdgeInsets.only(right: 0,bottom: index>=productsController.my_products.length-2?20:0),
+      padding: EdgeInsets.only(right: 0,bottom: productsController.my_products.length%2==0&&index>=productsController.my_products.length-2?20:index>=productsController.my_products.length-1?20:0),
       child: GestureDetector(
         onTap: () {
-          //todo go to product
           productsController.go_to_product(index);
         },
         child: Stack(
@@ -495,7 +567,7 @@ class SearchTextField extends SearchDelegate<String> {
     });
     return Container(
       color: AppColors.main,
-      child: ListView.builder(
+      child: query.isEmpty?Center():ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(

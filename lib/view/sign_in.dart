@@ -26,19 +26,31 @@ class SignIn extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,size: 22,),onPressed: (){
+                  Get.back();
+                },)
+              ],
+            ),
+          ),
         ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.18,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(App_Localization.of(context).translate("sign_in2"),
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 35)),
-              SizedBox(height: 20,),
-            ],
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(App_Localization.of(context).translate("sign_in2"),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 35)),
+              ],
+            ),
           ),
         ),
       ],
@@ -106,7 +118,7 @@ class SignIn extends StatelessWidget {
                     suffixIcon: InkWell(
                       onTap: signInController.change_visibilty,
                       child: Icon(
-                        signInController.hide_passeord.value
+                        !signInController.hide_passeord.value
                             ? Icons.visibility
                             : Icons.visibility_off,
                         color: Colors.black45,
@@ -118,8 +130,7 @@ class SignIn extends StatelessWidget {
             ],
           ),
           SizedBox(height: 15),
-          Container
-            (
+          Container(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -143,7 +154,6 @@ class SignIn extends StatelessWidget {
   _sign_in(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.45,
-      height: MediaQuery.of(context).size.height * 0.06,
       child: FloatingActionButton.extended(
         backgroundColor: App.main2,
         onPressed: () {
@@ -159,7 +169,6 @@ class SignIn extends StatelessWidget {
   _sign_up(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.3,
       child: Column(
         children: [
           Padding(
@@ -192,7 +201,7 @@ class SignIn extends StatelessWidget {
                 SizedBox(width: 2,),
                 GestureDetector(
                   onTap: () {
-                      Get.off(()=> SignUp());
+                      Get.to(()=> SignUp());
                   },
                   child: Text(
                     App_Localization.of(context).translate("sign_up"),

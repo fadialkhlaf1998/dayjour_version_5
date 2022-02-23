@@ -15,6 +15,7 @@ void main() {
 }
 
 //todo remove not secure
+//FADI
 class MyHttpOverrides extends HttpOverrides{
   @override
   HttpClient createHttpClient(SecurityContext? context){
@@ -68,6 +69,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: generateMaterialColor(App.main2),
+          fontFamily: "NunitoSans"
         ),
         locale: _locale,
         supportedLocales: [Locale('en', ''), Locale('ar', '')],

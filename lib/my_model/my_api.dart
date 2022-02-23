@@ -154,6 +154,35 @@ class MyApi {
     }
 
   }
+  static Future<List<SubCategory>> getSuperCategory(int category_id)async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/super_super_category'));
+    request.body = json.encode({
+      "id": category_id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      print(jsonlist);
+      List<SubCategory> list = <SubCategory>[];
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(SubCategory.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+    else {
+      print(response.statusCode);
+      return <SubCategory>[];
+    }
+
+  }
   static Future<List<SubCategory>> getMakeupSubSubCategory()async{
 
     var headers = {
@@ -235,6 +264,35 @@ class MyApi {
 
   }
 
+  static Future<List<MyProduct>> getOrderItems(int order_id)async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/order_item'));
+    request.body = json.encode({
+      "id": order_id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      List<MyProduct> list = <MyProduct>[];
+
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+    else {
+      return <MyProduct>[];
+    }
+
+  }
+
   static List<MyProduct> get_favorite(List<MyProduct> wishlist,List<MyProduct> prods){
     for(int i=0 ; i<wishlist.length;i++){
       for(int j=0 ; j<prods.length;j++){
@@ -308,7 +366,7 @@ class MyApi {
     var headers = {
       'Content-Type': 'application/json',
     };
-    var request = http.Request('POST', Uri.parse(url+'api/product/new_arivvial'));
+    var request = http.Request('GET', Uri.parse(url+'api/product/new_arivvial'));
 
     request.headers.addAll(headers);
 
@@ -427,9 +485,10 @@ class MyApi {
       "pass": pass
     });
     request.headers.addAll(headers);
-
+    print('*-*-*-');
     http.StreamedResponse response = await request.send();
 
+    print(response.statusCode);
     if (response.statusCode == 200) {
       String json = await response.stream.bytesToString();
       Result result = Result.fromJson(json);

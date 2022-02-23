@@ -9,13 +9,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Accepted_order extends StatefulWidget {
-  const Accepted_order({Key? key}) : super(key: key);
+  String total;
+  String sub_total;
+  String shipping;
+
+
+  Accepted_order(this.total, this.sub_total, this.shipping);
 
   @override
-  _Accepted_orderState createState() => _Accepted_orderState();
+  _Accepted_orderState createState() => _Accepted_orderState(this.total, this.sub_total, this.shipping);
 }
 
 class _Accepted_orderState extends State<Accepted_order> {
+
+  String total;
+  String sub_total;
+  String shipping;
+
+
+  _Accepted_orderState(this.total, this.sub_total, this.shipping);
 
   CheckoutController checkoutController = Get.find();
   HomeController homeController = Get.put(HomeController());
@@ -40,14 +52,20 @@ class _Accepted_orderState extends State<Accepted_order> {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            width: 25,
-                            height: 25,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/introduction/logo.png"),
-                                fit: BoxFit.cover,
+                          SizedBox(width: 10,),
+                          GestureDetector(
+                            onTap: (){
+                              Get.to(()=>Home());
+                            },
+                            child: Container(
+                              width: 25,
+                              height: 25,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      "assets/introduction/logo.png"),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -125,13 +143,179 @@ class _Accepted_orderState extends State<Accepted_order> {
     ]);
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            _bar(),
-            const SizedBox(height: 40),
-            _body(),
-            _footer(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _bar(),
+              const SizedBox(height: 40),
+              _body(),
+              Container(
+                width: MediaQuery.of(context).size.width*0.8,
+
+                child:  Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          App_Localization.of(context).translate("sub_totals"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Container(
+                            child: LayoutBuilder(
+                              builder: (BuildContext context,
+                                  BoxConstraints constraints) {
+                                final boxWidth = constraints.constrainWidth();
+                                final dashWidth = 4.0;
+                                final dashHeight = 2.0;
+                                final dashCount =
+                                (boxWidth / (2 * dashWidth)).floor();
+                                return Flex(
+                                  children: List.generate(dashCount, (_) {
+                                    return SizedBox(
+                                      width: dashWidth,
+                                      height: dashHeight,
+                                      child: const DecoratedBox(
+                                        decoration:
+                                        BoxDecoration(color: Colors.grey),
+                                      ),
+                                    );
+                                  }),
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  direction: Axis.horizontal,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          sub_total.toString() + " "+App_Localization.of(context).translate("aed"),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          App_Localization.of(context).translate("shipping"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Container(
+                            child: LayoutBuilder(
+                              builder: (BuildContext context,
+                                  BoxConstraints constraints) {
+                                final boxWidth = constraints.constrainWidth();
+                                final dashWidth = 4.0;
+                                final dashHeight = 2.0;
+                                final dashCount =
+                                (boxWidth / (2 * dashWidth)).floor();
+                                return Flex(
+                                  children: List.generate(dashCount, (_) {
+                                    return SizedBox(
+                                      width: dashWidth,
+                                      height: dashHeight,
+                                      child: const DecoratedBox(
+                                        decoration:
+                                        BoxDecoration(color: Colors.grey),
+                                      ),
+                                    );
+                                  }),
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  direction: Axis.horizontal,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          shipping.toString() + " "+App_Localization.of(context).translate("aed"),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Text(
+                          App_Localization.of(context).translate("total"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Container(
+                            child: LayoutBuilder(
+                              builder: (BuildContext context,
+                                  BoxConstraints constraints) {
+                                final boxWidth = constraints.constrainWidth();
+                                final dashWidth = 4.0;
+                                final dashHeight = 2.0;
+                                final dashCount =
+                                (boxWidth / (2 * dashWidth)).floor();
+                                return Flex(
+                                  children: List.generate(dashCount, (_) {
+                                    return SizedBox(
+                                      width: dashWidth,
+                                      height: dashHeight,
+                                      child: const DecoratedBox(
+                                        decoration:
+                                        BoxDecoration(color: Colors.grey),
+                                      ),
+                                    );
+                                  }),
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  direction: Axis.horizontal,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          total.toString() + " "+App_Localization.of(context).translate("aed"),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ),
+              _footer(),
+            ],
+          ),
         ),
       ),
     );

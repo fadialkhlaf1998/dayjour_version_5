@@ -79,22 +79,31 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(App_Localization.of(context).translate("best_sellers"),style: App.textBlod(Colors.black, 20),)
+                Text(App_Localization.of(context).translate("best_sellers"),style: App.textBlod(Colors.black, 20),),
+                GestureDetector(
+                    onTap: (){
+                      homeController.view_all(homeController.bestSellers, App_Localization.of(context).translate("best_sellers"));
+                    },
+                    child: Text(App_Localization.of(context).translate("see_all"),style: App.textBlod(Colors.black, 14),),
+                ),
               ],
             ),
             SizedBox(height: 15,),
             Container(
-              child: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 4/6,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10
-              ),
+                height: MediaQuery.of(context).size.height*0.4,
+              child: ListView.builder(
+                  // physics: NeverScrollableScrollPhysics(),
+              //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //   crossAxisCount: 2,
+              //   childAspectRatio: 4/6,
+              //   crossAxisSpacing: 10,
+              //   mainAxisSpacing: 10
+              // ),
+                scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: homeController.bestSellers.length,
+                  itemCount: homeController.bestSellers.length>4?4:homeController.bestSellers.length,
                   itemBuilder: (context,index){
                     return GestureDetector(
                       onTap: (){
@@ -105,6 +114,8 @@ class Home extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 12, left: 5,right: 5),
                             child: Container(
+                                height: MediaQuery.of(context).size.height*0.4,
+                                width: MediaQuery.of(context).size.height*0.25,
                                 decoration: BoxDecoration(
                                     boxShadow: [
                                       BoxShadow(
@@ -179,15 +190,17 @@ class Home extends StatelessWidget {
             ),
             SizedBox(height: 15,),
             Container(
-              child: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 4/2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10
-              ),
+                height:  MediaQuery.of(context).size.height*0.2,
+              child: ListView.builder(
+                  // physics: NeverScrollableScrollPhysics(),
+              //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //   crossAxisCount: 3,
+              //   childAspectRatio: 4/4,
+              //   crossAxisSpacing: 10,
+              //   mainAxisSpacing: 10
+              // ),
                   shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
                   itemCount: homeController.brands.length,
                   itemBuilder: (context,index){
                     return GestureDetector(
@@ -195,6 +208,8 @@ class Home extends StatelessWidget {
                         homeController.get_products_by_brand(homeController.brands[index].id, context);
                       },
                       child: Container(
+                        width: MediaQuery.of(context).size.height*0.2,
+                        height:  MediaQuery.of(context).size.height*0.2,
                         margin: EdgeInsets.only(left: 3, right: 3, bottom: 5),
                           decoration: BoxDecoration(
                               boxShadow: [
@@ -230,22 +245,31 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(App_Localization.of(context).translate("new_arrivals"),style: App.textBlod(Colors.black, 20),)
+                Text(App_Localization.of(context).translate("new_arrivals"),style: App.textBlod(Colors.black, 20),),
+                GestureDetector(
+                  onTap: (){
+                    homeController.view_all(homeController.newArrivals, App_Localization.of(context).translate("new_arrivals"));
+                  },
+                  child: Text(App_Localization.of(context).translate("see_all"),style: App.textBlod(Colors.black, 14),),
+                ),
               ],
             ),
             SizedBox(height: 15,),
             Container(
-                child: GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 4/6,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10
-                    ),
+              height: MediaQuery.of(context).size.height*0.4,
+                child: ListView.builder(
+                    // physics: NeverScrollableScrollPhysics(),
+                    // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    //     crossAxisCount: 2,
+                    //     childAspectRatio: 4/6,
+                    //     crossAxisSpacing: 10,
+                    //     mainAxisSpacing: 10
+                    // ),
                     shrinkWrap: true,
-                    itemCount: homeController.newArrivals.length,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: homeController.newArrivals.length>4?4:homeController.newArrivals.length,
                     itemBuilder: (context,index){
                       return GestureDetector(
                         onTap: (){
@@ -256,6 +280,8 @@ class Home extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 12, left: 5,right: 5),
                               child: Container(
+                                  height: MediaQuery.of(context).size.height*0.4,
+                                  width: MediaQuery.of(context).size.height*0.25,
                                   decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -318,59 +344,80 @@ class Home extends StatelessWidget {
       ),
     );
   }
+
   _btnNavBar(BuildContext context) {
     return Obx(
-          () => Container(
+          () => Stack(
+            children: [
+              Container(
         width: MediaQuery.of(context).size.width,
         child: BottomNavigationBar(
-          mouseCursor: SystemMouseCursors.grab,
-          unselectedItemColor: AppColors.nav_bar,
-          selectedItemColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(fontSize: 12 , color: AppColors.nav_bar),
-          backgroundColor: AppColors.main2,
-          iconSize: 25,
-          currentIndex: homeController.selected_bottom_nav_bar.value,
-          onTap: (index) {
-            homeController.selected_bottom_nav_bar.value=index;
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              label: App_Localization.of(context).translate("home"),
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.all(3),
-                child: SvgPicture.asset('assets/icons/category.svg',width: 20,height: 20,color: homeController.selected_bottom_nav_bar.value==1?Colors.white:AppColors.nav_bar,
+              mouseCursor: SystemMouseCursors.grab,
+              unselectedItemColor: AppColors.nav_bar,
+              selectedItemColor: Colors.white,
+              type: BottomNavigationBarType.fixed,
+              selectedLabelStyle: TextStyle(fontSize: 12 , color: AppColors.nav_bar),
+              backgroundColor: AppColors.main2,
+              iconSize: 25,
+              currentIndex: homeController.selected_bottom_nav_bar.value,
+              onTap: (index) {
+                cartController.get_total();
+                homeController.selected_bottom_nav_bar.value=index;
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.home,
+                  ),
+                  label: App_Localization.of(context).translate("home"),
                 ),
-              ),
-              label: App_Localization.of(context).translate("categories"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.favorite_border,
-              ),
-              label: App_Localization.of(context).translate("wishlist"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.shopping_cart_outlined,
-              ),
-              label: App_Localization.of(context).translate("cart"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-              ),
-              backgroundColor: Colors.white,
-              label: App_Localization.of(context).translate("profile"),
-            ),
-          ],
+                BottomNavigationBarItem(
+                  icon: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: SvgPicture.asset('assets/icons/category.svg',width: 20,height: 20,color: homeController.selected_bottom_nav_bar.value==1?Colors.white:AppColors.nav_bar,
+                    ),
+                  ),
+                  label: App_Localization.of(context).translate("categories"),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.favorite_border,
+                  ),
+                  label: App_Localization.of(context).translate("wishlist"),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                  ),
+                  label: App_Localization.of(context).translate("cart"),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.person,
+                  ),
+                  backgroundColor: Colors.white,
+                  label: App_Localization.of(context).translate("profile"),
+                ),
+              ],
         ),
       ),
+              Positioned(
+                top: 2,
+                  right: Global.lang_code=="en"?(MediaQuery.of(context).size.width/5)+(MediaQuery.of(context).size.width/10)-20:null,
+                  left: Global.lang_code=="ar"?(MediaQuery.of(context).size.width/5)+(MediaQuery.of(context).size.width/10)-20:null,
+                  child: Container(
+                width: 15,
+                height: 15,
+                decoration: BoxDecoration(
+                  color: cartController.my_order.length==0?Colors.transparent:Colors.white,
+                  shape: BoxShape.circle
+                ),
+                child: Center(
+                  child: Text(cartController.my_order.length.toString(),style: TextStyle(color: cartController.my_order.length==0?Colors.transparent:App.main2,fontSize: 9),),
+                ),
+              ))
+            ],
+          ),
     );
   }
   _home(BuildContext context) {
@@ -386,9 +433,10 @@ class Home extends StatelessWidget {
                 children: [
 
                   SizedBox(height: MediaQuery.of(context).size.height * 0.09,),
+                  SizedBox(height: 10,),
                   homeController.category.isEmpty ?
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.25-45,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     width: MediaQuery.of(context).size.width,
                     color: App.main2,
                     child: Column(
@@ -404,23 +452,19 @@ class Home extends StatelessWidget {
                     ),
                   ) :
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.25-45,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     width: MediaQuery.of(context).size.width,
-                    color: App.main2,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount:
-                        homeController.category.length,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _categories(homeController.category[index], context, index),
-                            ],
-                          );
-                        }),
+                    color: App.main,
+                    child: Center(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount:
+                          homeController.category.length,
+                          itemBuilder: (context, index) {
+                            return _categories(homeController.category[index], context, index);
+                          }),
+                    ),
                   ),
                   // _header(context),
                   _body(context),
@@ -475,11 +519,7 @@ class Home extends StatelessWidget {
                           onTap: () {
                             _key.currentState!.openDrawer();
                           },
-                          child: Icon(
-                            Icons.list,
-                            size: 30,
-                            color: Colors.white,
-                          ),
+                          child: SvgPicture.asset("assets/icons/menu.svg",width: 30,height: 30,)
                         ),
                         SizedBox(
                           width: 10,
@@ -526,16 +566,16 @@ class Home extends StatelessWidget {
   }
   _categories(Category collection, BuildContext context, int index) {
     return Padding(
-        padding: const EdgeInsets.only(left: 8),
+        padding: const EdgeInsets.only(left: 10),
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.22,
+          width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
             children: [
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: GestureDetector(
                   onTap: () {
-                    homeController.go_to_sub_category_page(collection.id, context);
+                    homeController.go_to_sub_category_page(collection.id, context,index);
                   },
                   child: Container(
                     //width: MediaQuery.of(context).size.width * 0.2,
@@ -579,10 +619,10 @@ class Home extends StatelessWidget {
                       collection.title.toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 12,
                       ),
-                      maxLines: 2,
+                      maxLines: 1,
                     ),
                   ],
                 ),
@@ -635,7 +675,7 @@ class Home extends StatelessWidget {
                       int index, int realIndex) {
                     return GestureDetector(
                       onTap: (){
-                        homeController.go_to_product_slider(index);
+                        homeController.go_to_product_slider(index,context);
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.2,
@@ -776,7 +816,7 @@ class Home extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           homeController.loading.value = true;
-          homeController.go_to_sub_category_page(collection.id, context);
+          homeController.go_to_sub_category_page(collection.id, context,index);
         },
         child: Container(
           height: height,
@@ -917,7 +957,7 @@ class SearchTextField extends SearchDelegate<String> {
     });
     return Container(
       color: AppColors.main,
-      child: ListView.builder(
+      child: query.isEmpty?Center():ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
