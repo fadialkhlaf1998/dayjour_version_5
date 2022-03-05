@@ -64,32 +64,29 @@ class App{
   }
 
   static openwhatsapp(BuildContext context,String msg) async{
-    var whatsapp ="+971 52 692 4018";
+    var whatsapp ="971526924021";
     var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
     var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
-    // if(Platform.isIOS){
-    //   // for iOS phone only
-    //   if( await canLaunch(whatappURL_ios)){
-    //     await launch(whatappURL_ios, forceSafariVC: false);
-    //   }else{
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //         SnackBar(content: new Text("whatsapp no installed")));
-    //
-    //   }
-    //
-    // }else{
-      // android , web
-      if( await canLaunch(whatappURL_ios)){
-        await launch(whatappURL_ios);
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: new Text("whatsapp no installed")));
 
-      }
+    String url = WA_url(whatsapp,msg);
 
+    if( await canLaunch(url)){
+      await launch(url);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Can not open whatsapp")));
 
-    // }
+    }
+  }
 
+  static String WA_url(String phone,String message) {
+    if (Platform.isAndroid) {
+      // add the [https]
+      return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
+    } else {
+      // add the [https]
+      return "https://api.whatsapp.com/send?phone=$phone=${Uri.parse(message)}"; // new line
+    }
   }
 
   static Drawer get_drawer(BuildContext context,HomeController homeController){

@@ -1,7 +1,9 @@
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
+import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/sign_in_controller.dart';
+import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/view/forget_password.dart';
 import 'package:dayjour_version_3/view/sign_up.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,14 @@ class SignIn extends StatelessWidget {
   SignInController signInController=Get.put(SignInController());
   TextEditingController email=TextEditingController();
   TextEditingController password=TextEditingController();
+
+  SignIn(){
+    print(Global.remember_password);
+    print(Global.remember_pass);
+    if(Global.remember_pass&&Global.remember_password!="non"){
+      password.text=Global.remember_password;
+    }
+  }
 
   _header(BuildContext context) {
     return Column(
@@ -58,7 +68,7 @@ class SignIn extends StatelessWidget {
   }
   _body(BuildContext context) {
     return Container(
-      height:200,
+
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
@@ -129,7 +139,20 @@ class SignIn extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 15),
+          SizedBox(height: 10),
+
+          Container(
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: Row(
+              children: [
+                Checkbox(value: signInController.remember_value.value,activeColor: App.main2,onChanged: (val){
+                  signInController.remember_value.value=val!;
+                  Store.save_remember(val);
+                },),
+                Text(App_Localization.of(context).translate("remember_pass"),style: TextStyle(fontSize: 13),)
+              ],
+            ),
+          ),
           Container(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
@@ -147,6 +170,7 @@ class SignIn extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 10,),
         ],
       ),
     );
@@ -187,7 +211,7 @@ class SignIn extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

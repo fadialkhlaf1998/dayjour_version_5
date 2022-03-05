@@ -48,6 +48,7 @@ class IntroController extends GetxController{
   }
 
   get_data(){
+    Store.load_remember();
     Store.load_order().then((my_order) {
       cartController.my_order.value = my_order;
     });

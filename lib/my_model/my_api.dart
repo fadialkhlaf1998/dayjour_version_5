@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/helper/store.dart';
+import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/my_responce.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/customer.dart';
-import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/product_info.dart';
 import 'package:dayjour_version_3/my_model/slider.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
@@ -15,7 +14,6 @@ import 'package:dayjour_version_3/my_model/top_category.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-
 import 'my_order.dart';
 
 class MyApi {
@@ -23,6 +21,35 @@ class MyApi {
   // static String url = "http://10.0.2.2:3000/";
   // static String url = "https://phpstack-548447-2377428.cloudwaysapps.com/";
   static String url = "https://app.dayjour.net/";
+
+  static Future<List<MyProduct>> getCart(List<int> arr)async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/cart_info'));
+    request.body = json.encode({
+      "arr": arr
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      List<MyProduct> list = <MyProduct>[];
+
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return list;
+    }
+    else {
+      return <MyProduct>[];
+    }
+  }
+
   static Future<List<Brand>> getBrands()async{
 
     var request = http.Request('GET', Uri.parse(url+'api/brand'));
@@ -297,8 +324,8 @@ class MyApi {
     for(int i=0 ; i<wishlist.length;i++){
       for(int j=0 ; j<prods.length;j++){
         if(prods[j].id==wishlist[i].id){
-
           prods[j].favorite.value=true;
+          wishlist[i]=prods[j];
         }
       }
     }

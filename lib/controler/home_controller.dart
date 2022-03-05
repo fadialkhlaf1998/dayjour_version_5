@@ -121,7 +121,7 @@ class HomeController extends GetxController{
         // print('----------------------');
         loading.value=true;
         MyApi.getSubCategory(sub_category).then((value0){
-          MyApi.getProducts(wishListController.wishlist,sub_category).then((value) {
+          MyApi.getProducts(wishListController.wishlist,value0.first.id).then((value) {
             loading.value=false;
             Get.to(()=>CategoryView(value0, value,0,sub_Category,index,category[selected_category].title));
           }).catchError((err){
@@ -137,7 +137,7 @@ class HomeController extends GetxController{
     });
   }
 
-  get_products_by_search(String query,BuildContext context){
+  Future<int?> get_products_by_search(String query,BuildContext context)async{
     MyApi.check_internet().then((internet) {
       if (internet) {
         loading.value=true;
@@ -145,16 +145,19 @@ class HomeController extends GetxController{
           loading.value=false;
           if(value.isNotEmpty){
             Get.to(()=>ProductSearch(value,query));
+            return 0;
           }else{
             App.error_msg(context, App_Localization.of(context).translate("fail_search"));
           }
 
         }).catchError((err){
           loading.value=false;
+          return 0;
         });
       }else{
-        Get.to(NoInternet())!.then((value) {
-          get_products_by_search(query,context);
+        Get.to(NoInternet())!.then((value) async{
+          return await get_products_by_search(query,context);
+          // return 0;
         });
       }
     });

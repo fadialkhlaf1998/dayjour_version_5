@@ -19,11 +19,15 @@ class CheckoutController extends GetxController{
   var selected=false.obs;
   var is_cod=false.obs;
   CartController cartController = Get.find();
+  String shipping ="";
+  String total ="";
+  String sub_total ="";
+
   List<LineItem> lineItems = <LineItem>[];
 
   /**address controllers*/
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
+  TextEditingController firstname = TextEditingController();
+  TextEditingController lastname = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController apartment = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -35,9 +39,13 @@ class CheckoutController extends GetxController{
 
 
   next(BuildContext context) async{
+    cartController.get_total();
     get_details();
     if(selected_operation==0){
-      if(firstName.value.text.isEmpty||lastName.value.text.isEmpty||address.value.text.isEmpty||
+      shipping=cartController.shipping.value;
+      sub_total=cartController.sub_total.value;
+      total=cartController.total.value;
+      if(address.value.text.isEmpty||firstname.value.text.isEmpty||lastname.value.text.isEmpty||
           apartment.value.text.isEmpty||city.value.text.isEmpty||phone.value.text.isEmpty||country=="non"||emirate=="non"||phone.value.text.length<9){
         address_err.value=true;
         // selected_operation++;
@@ -54,7 +62,8 @@ class CheckoutController extends GetxController{
         selected_operation.value = 0;
         selected.value = false;
         await add_order_payment(context);
-        Get.off(Accepted_order(cartController.sub_total.value,cartController.shipping.value,cartController.total.value));
+
+        Get.off(Accepted_order(total,sub_total,shipping));
       }
     }
   }
@@ -92,7 +101,7 @@ class CheckoutController extends GetxController{
   add_order_payment(BuildContext context){
     cartController.get_total();
     //todo add order to shpify
-    MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+    add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
     cartController.clear_cart();
    // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
@@ -104,24 +113,33 @@ class CheckoutController extends GetxController{
       // Get.offAll(()=>Home());
     }else{
       //todo add order to shpify
-      MyApi.add_order(firstName.text, lastName.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+      add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
       // Get.offAll(()=>Home());
     }
   }
 
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems).then((succ) {
+      if(!succ){
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+      }
+    }).catchError((err){
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+    });
+  }
+
   String get_details(){
     String text="";
     lineItems.clear();
     for(int i=0;i<my_order.length;i++){
-      print(my_order.length);
-      print('*****************************');
-      print( my_order[i].product.value.id);
-      print( my_order[i].quantity);
-      print('*****************************');
-      lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
-      text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
+      if(my_order[i].quantity.value>0){
+        lineItems.add(LineItem(id: my_order[i].product.value.id, quantity: my_order[i].quantity.value));
+        text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
+      }else{
+        my_order.removeAt(i);
+      }
     }
     return text;
   }

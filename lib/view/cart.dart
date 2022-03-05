@@ -101,8 +101,7 @@ class _CartState extends State<Cart> {
                           SizedBox(height: 7),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.6,
-                            child: Text(
-                              cartController.my_order[index].price.value + " AED",
+                            child: Text( double.parse(cartController.my_order[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
                               style: TextStyle(
                                   color: AppColors.main2,
                                   fontSize: 16,
@@ -116,7 +115,21 @@ class _CartState extends State<Cart> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(right: 10,top: 5,bottom: 15),
-                                child: Container(
+                                child:
+                                cartController.my_order[index].product.value.availability==0?
+                                Container(
+                                  height: 34,
+                                  width: MediaQuery.of(context).size.width * 0.35,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black12,
+                                    border: Border.all(color: App.main2),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(App_Localization.of(context).translate("out_stock"),style: TextStyle(color: App.main2,fontSize: 12),),
+                                  ),
+                                )
+                                :Container(
                                   height: 34,
                                   width: MediaQuery.of(context).size.width * 0.35,
                                   decoration: BoxDecoration(
@@ -191,6 +204,8 @@ class _CartState extends State<Cart> {
         _sub_totals(),
         const SizedBox(height: 20),
         _shipping(),
+        const SizedBox(height: 20),
+        _totals(),
         const SizedBox(height: 60),
       ],
     );
@@ -241,13 +256,70 @@ class _CartState extends State<Cart> {
           ),
           SizedBox(width: 10),
          Text(
-           cartController.sub_total.value.toString() + " AED",
+           double.parse(cartController.sub_total.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
            style: TextStyle(
                color: Colors.black,
                fontWeight: FontWeight.bold,
                fontSize: 13,
            ),
          ),
+        ],
+      ),
+    );
+  }
+  _totals() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.85,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            App_Localization.of(context).translate("total"),
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 13,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          SizedBox(width: 10),
+          Flexible(
+            child: Container(
+              child: LayoutBuilder(
+                builder: (BuildContext context,
+                    BoxConstraints constraints) {
+                  final boxWidth = constraints.constrainWidth();
+                  final dashWidth = 4.0;
+                  final dashHeight = 2.0;
+                  final dashCount =
+                  (boxWidth / (2 * dashWidth)).floor();
+                  return Flex(
+                    children: List.generate(dashCount, (_) {
+                      return SizedBox(
+                        width: dashWidth,
+                        height: dashHeight,
+                        child: const DecoratedBox(
+                          decoration:
+                          BoxDecoration(color: Colors.grey),
+                        ),
+                      );
+                    }),
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    direction: Axis.horizontal,
+                  );
+                },
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Text(
+            double.parse(cartController.total.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
+          ),
         ],
       ),
     );
@@ -301,7 +373,7 @@ class _CartState extends State<Cart> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                "10.00 AED",
+                cartController.shipping.value+ " "+App_Localization.of(context).translate("aed"),
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -330,7 +402,7 @@ class _CartState extends State<Cart> {
             );
           }
           else  if(Global.customer == null){
-            App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
+            App.error_msg(context, App_Localization.of(context).translate("please_login_first"));
           }
           else {
             Get.to(() => Checkout());

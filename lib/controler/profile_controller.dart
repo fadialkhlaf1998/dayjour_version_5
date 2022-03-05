@@ -41,10 +41,10 @@ class ProfileController extends GetxController{
             MyApi.change_password(Global.customer!.email, pass).then((result) {
               loading.value=false;
               if(result.succses){
-                App.sucss_msg(context, result.message);
+                App.sucss_msg(context,App_Localization.of(context).translate("password_changed_succ"));
                 Get.back();
               }else{
-                App.error_msg(context, result.message);
+                App.error_msg(context, App_Localization.of(context).translate("wrong"));
               }
             });
           }else{

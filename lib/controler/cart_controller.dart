@@ -1,6 +1,9 @@
+import 'package:dayjour_version_3/app_localization.dart';
+import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/my_order.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController{
@@ -11,20 +14,51 @@ class CartController extends GetxController{
 
   //todo save when do any thing
 
-  add_to_cart(MyProduct product , int count){
-    for(int i=0;i<my_order.length;i++){
-      if(my_order[i].product.value.id==product.id){
-        my_order[i].quantity.value = my_order[i].quantity.value + count;
-        double x = (my_order[i].quantity.value * double.parse(product.price.toString())) as double;
-        my_order[i].price.value = x.toString();
-        get_total();
-        return ;
+  // add_to_cart(MyProduct product , int count){
+  //   for(int i=0;i<my_order.length;i++){
+  //     if(my_order[i].product.value.id==product.id&&product.availability>my_order[i].quantity.value){
+  //       my_order[i].quantity.value = my_order[i].quantity.value + count;
+  //       double x = (my_order[i].quantity.value * double.parse(product.price.toString())) as double;
+  //       my_order[i].price.value = x.toString();
+  //       get_total();
+  //       return ;
+  //     }
+  //   }
+  //   if(product.availability>0){
+  //     double x = (count * double.parse(product.price.toString())) as double;
+  //     MyOrder myOrder = MyOrder(product:product.obs,quantity:count.obs,price:x.toString().obs);
+  //     my_order.add(myOrder);
+  //     get_total();
+  //   }
+  //
+  // }
+
+  bool add_to_cart(MyProduct product , int count,BuildContext context){
+    if(product.availability>0){
+      for(int i=0;i<my_order.length;i++){
+        if(my_order[i].product.value.id==product.id){
+          if(my_order[i].quantity.value+count<=product.availability){
+            App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+            my_order[i].quantity.value = my_order[i].quantity.value + count;
+            double x = (my_order[i].quantity.value * double.parse(product.price.toString())) as double;
+            my_order[i].price.value = x.toString();
+            get_total();
+            return true;
+          }else{
+            return false;
+          }
+        }
       }
+      App.sucss_msg(context, App_Localization.of(context).translate("Just_Added_To_Your_Cart"));
+      double x = (count * double.parse(product.price.toString())) as double;
+      MyOrder myOrder = MyOrder(product:product.obs,quantity:count.obs,price:x.toString().obs);
+      my_order.add(myOrder);
+      get_total();
+      return true;
+    }else{
+      App.error_msg(context, App_Localization.of(context).translate("out_stock"));
+      return false;
     }
-    double x = (count * double.parse(product.price.toString())) as double;
-    MyOrder myOrder = MyOrder(product:product.obs,quantity:count.obs,price:x.toString().obs);
-    my_order.add(myOrder);
-    get_total();
   }
 
   clear_cart(){
@@ -33,10 +67,13 @@ class CartController extends GetxController{
   }
 
   increase(MyOrder myOrder,index){
-    my_order[index].quantity.value++;
-    double x =  (my_order[index].quantity.value * double.parse(my_order[index].product.value.price.toString())) as double;
-    my_order[index].price.value=x.toString();
-    get_total();
+    if(my_order[index].product.value.availability>my_order[index].quantity.value){
+      my_order[index].quantity.value++;
+      double x =  (my_order[index].quantity.value * double.parse(my_order[index].product.value.price.toString())) as double;
+      my_order[index].price.value=x.toString();
+      get_total();
+    }
+
   }
 
   decrease(MyOrder myOrder,index){
@@ -62,7 +99,14 @@ class CartController extends GetxController{
         // y += double.parse(elm.shipping.value);
       }
       sub_total.value=x.toString();
-      // shipping.value = y.toString();
+    print(x);
+    if(x>250){
+        y=0;
+        shipping.value="0.00";
+      }else{
+        y=10;
+        shipping.value="10.00";
+      }
       total.value = (x + y).toString();
       Store.save_order(my_order.value);
   }

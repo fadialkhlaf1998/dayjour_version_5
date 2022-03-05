@@ -11,8 +11,6 @@ import 'package:get/get.dart';
 class AddressView extends StatelessWidget {
 
   /**address controllers*/
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController apartment = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -24,8 +22,6 @@ class AddressView extends StatelessWidget {
 
   AddressView(){
     if(Global.my_address!=null){
-      firstName.text=Global.my_address!.first_name;
-      lastName.text = Global.my_address!.last_name;
       address.text = Global.my_address!.address;
       apartment.text = Global.my_address!.apartment;
       city.text = Global.my_address!.city;
@@ -37,68 +33,10 @@ class AddressView extends StatelessWidget {
 
   _checkout_body(context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 10),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.92,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    child: TextField(
-                      controller: firstName,
-                      cursorColor: AppColors.main2,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: InputBorder.none,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.black45)
-                        ),
-                        hintText: App_Localization.of(context).translate("firstname"),
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding: EdgeInsets.all(5),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    child: TextField(
-                      controller: lastName,
-                      cursorColor: AppColors.main2,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: InputBorder.none,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: Colors.black45)
-                        ),
-                        hintText: App_Localization.of(context).translate("lastname"),
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding: EdgeInsets.all(5),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
+        const SizedBox(height: 50),
         Container(
           width: MediaQuery.of(context).size.width * 0.92,
           child: Row(
@@ -292,37 +230,41 @@ class AddressView extends StatelessWidget {
         const SizedBox(height: 5),
         Container(
           width: MediaQuery.of(context).size.width * 0.92,
+          height:  MediaQuery.of(context).size.height*0.1,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Stack(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.92,
-                    height: MediaQuery.of(context).size.height * 0.1,
+                    height: 70,
                     child: TextField(
-                      maxLength: 9,
                       keyboardType: TextInputType.number,
                       controller: phone,
                       cursorColor: AppColors.main2,
+                      maxLength: 9,
                       decoration: InputDecoration(
-                        prefixStyle: TextStyle(color: AppColors.main2),
-                        prefix: Text('+971  '),
+                        prefixStyle: TextStyle(color: Colors.transparent),
+                        prefixText: '+971 |   ',
                         fillColor: Colors.white,
                         filled: true,
                         border: InputBorder.none,
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide(color: Colors.red)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.black45)
                         ),
-                        hintText: App_Localization.of(context).translate("phone"),
+                        // hintText: App_Localization.of(context).translate("phone"),
                         hintStyle: TextStyle(color: Colors.black),
                         contentPadding: EdgeInsets.all(5),
 
                       ),
                     ),
                   ),
+                  Positioned(left: 5,top:12.5,child: Container(height: 20,color: Colors.transparent,child: Text("+971 - " , style: TextStyle(color: Colors.black,fontSize: 16),)),)
                 ],
               ),
             ],
@@ -330,7 +272,7 @@ class AddressView extends StatelessWidget {
         ),
         GestureDetector(
           onTap: (){
-            Store.save_address(firstName.text, lastName.text, address.text,
+            Store.save_address( address.text,
                 apartment.text, city.text, country.value, emirate.value, phone.text);
             App.sucss_msg(context, App_Localization.of(context).translate("your_address_has_been_saved_successfully"));
             Get.back();

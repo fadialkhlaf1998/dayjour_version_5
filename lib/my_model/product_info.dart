@@ -29,7 +29,7 @@ class ProductInfo {
   String title;
   String subTitle;
   String description;
-  int price;
+  double price;
   double rate;
   String image;
   int ratingCount;
@@ -49,13 +49,14 @@ class ProductInfo {
     title: json["title"],
     subTitle: json["sub_title"],
     description: json["description"],
-    price: double.parse(json["price"].toString()).round(),
+    price: double.parse(json["price"].toString()),
     rate:double.parse(json["rate"].toString()),
     image: json["image"],
     ratingCount: json["rating_count"],
     images: List<Image>.from(json["images"].map((x) => Image.fromMap(x))),
     reviews: List<Review>.from(json["reviews"].map((x) => Review.fromMap(x))),
     availability: json["availability"]==null?0:json["availability"],
+    // availability: 0,
   );
 
   Map<String, dynamic> toMap() => {

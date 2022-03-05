@@ -57,7 +57,7 @@ class PolicyPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
+                  margin: EdgeInsets.only(left: 20, right: 20),
                   width: 25,
                   child: IconButton(onPressed: (){
                     Get.back();
@@ -71,7 +71,14 @@ class PolicyPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 25),
                 ),
-                SizedBox(width: 35,),
+                Container(
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  width: 25,
+                  child: IconButton(onPressed: (){
+
+                  },
+                      icon: Icon(Icons.arrow_back_ios, color: Colors.transparent,size: 25,)),
+                ),
               ],
             ),
           ),
@@ -94,14 +101,17 @@ class PolicyPage extends StatelessWidget {
           child: Html(data: App_Localization.of(context).translate(content),style: content=="about_us_content"?{
 
             "*": Style(
-             textAlign: TextAlign.center
+                textAlign: TextAlign.center
             ),
             "p": Style(
-                textAlign: TextAlign.left
+                textAlign: TextAlign.justify
             ),
           }:{
             "table": Style(
               backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
+            ),
+            "p": Style(
+                textAlign: TextAlign.justify
             ),
           },),
         ),

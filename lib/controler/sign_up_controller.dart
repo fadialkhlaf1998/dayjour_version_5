@@ -28,7 +28,7 @@ class SignUpController extends GetxController{
 
    if(email.isEmpty||pass.isEmpty||fname.isEmpty||lname.isEmpty||pass.length<6 ||!RegExp(r'\S+@\S+\.\S+').hasMatch(email)) {
     if(email.isEmpty || !RegExp(r'\S+@\S+\.\S+').hasMatch(email)){
-     App.error_msg(context, App_Localization.of(context).translate("email_is_invalid"));
+
      email_vaildate.value=false;
     }else{
      email_vaildate.value=true;

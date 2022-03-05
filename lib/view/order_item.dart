@@ -81,6 +81,7 @@ class OrderItems extends StatelessWidget {
                                         Container(
                                           width: MediaQuery.of(context).size.width-155,
                                           child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(products[index].title,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
                                             ],
@@ -106,7 +107,7 @@ class OrderItems extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   Text(App_Localization.of(context).translate("total")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                  Text((products[index].count!*products[index].price).toString()+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.main2,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                                  Text((products[index].count!*products[index].price).toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.main2,fontSize: 12,overflow: TextOverflow.ellipsis),),
                                                 ],
                                               ),
                                             ],

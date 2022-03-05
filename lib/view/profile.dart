@@ -45,19 +45,26 @@ class Profile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
+            child:Global.customer!=null? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Global.customer!=null?
+                SizedBox(width: 10,),
                 Text(
-                  App_Localization.of(context).translate("hello")+", "+Global.customer!.firstname+" "+Global.customer!.lastname,
+                  App_Localization.of(context).translate("hello")+", ",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16),
-                ):Center(),
+                ),
+                Text(
+                  Global.customer!.firstname+" "+Global.customer!.lastname,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                ),
               ],
-            ),
+            ):Center(),
           ),
         ],
       ),

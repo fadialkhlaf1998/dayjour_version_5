@@ -30,9 +30,9 @@ class _Checkout2State extends State<Checkout> {
   GlobalKey<ScaffoldState> _key =  GlobalKey<ScaffoldState>();
 
   _Checkout2State(){
+    checkoutController.firstname.text=Global.customer!.firstname;
+    checkoutController.lastname.text=Global.customer!.lastname;
     if(Global.my_address!=null){
-      checkoutController.firstName.text=Global.my_address!.first_name;
-      checkoutController.lastName.text = Global.my_address!.last_name;
       checkoutController.address.text = Global.my_address!.address;
       checkoutController.apartment.text = Global.my_address!.apartment;
       checkoutController.city.text = Global.my_address!.city;
@@ -60,7 +60,11 @@ class _Checkout2State extends State<Checkout> {
                   onTap: () {
                     if(checkoutController.selected_operation.value == 0 ){
                       Get.back();
-                    }else{
+                    }else if( checkoutController.selected_operation.value==1&&checkoutController.selected.value){
+                      checkoutController.selected.value=false;
+                      // checkoutController.selected_operation.value --;
+                    }
+                    else {
                       checkoutController.selected.value=false;
                       checkoutController.selected_operation.value --;
                     }
@@ -209,6 +213,7 @@ class _Checkout2State extends State<Checkout> {
     return Column(
       children: [
         const SizedBox(height: 10),
+
         Container(
           width: MediaQuery.of(context).size.width * 0.92,
           child: Row(
@@ -262,22 +267,22 @@ class _Checkout2State extends State<Checkout> {
                     width: MediaQuery.of(context).size.width * 0.45,
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: TextField(
-                      controller: checkoutController.firstName,
+                      controller: checkoutController.firstname,
                       cursorColor: AppColors.main2,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
                         errorText:
-                        checkoutController.address_err.value && checkoutController.firstName.text.isEmpty ? App_Localization.of(context).translate("first_name_is_required") : null,
+                        checkoutController.address_err.value && checkoutController.firstname.text.isEmpty ? App_Localization.of(context).translate("first_name_is_required") : null,
                         border: InputBorder.none,
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.red)),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5),
                             borderSide: BorderSide(color: Colors.black45)
                         ),
-                        hintText: App_Localization.of(context).translate("firstname"),
+                        hintText: App_Localization.of(context).translate("first_name"),
                         hintStyle: TextStyle(color: Colors.black),
                         contentPadding: EdgeInsets.all(5),
                       ),
@@ -292,13 +297,13 @@ class _Checkout2State extends State<Checkout> {
                     width: MediaQuery.of(context).size.width * 0.45,
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: TextField(
-                      controller: checkoutController.lastName,
+                      controller: checkoutController.lastname,
                       cursorColor: AppColors.main2,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
                         errorText:
-                        checkoutController.address_err.value && checkoutController.lastName.text.isEmpty ? App_Localization.of(context).translate("last_name_is_required") : null,
+                        checkoutController.address_err.value && checkoutController.lastname.text.isEmpty ? App_Localization.of(context).translate("last_name_is_required") : null,
                         border: InputBorder.none,
                         errorBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -314,10 +319,11 @@ class _Checkout2State extends State<Checkout> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
+
         Container(
           width: MediaQuery.of(context).size.width * 0.92,
           child: Row(
@@ -766,7 +772,7 @@ class _Checkout2State extends State<Checkout> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.35,
                               child: Text(
-                                cartController.my_order[index].product.value.price.toString() + " "+App_Localization.of(context).translate("aed") ,
+                                cartController.my_order[index].product.value.price.toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed") ,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: AppColors.main2,

@@ -159,7 +159,7 @@ class CategoryView2 extends StatelessWidget {
               height: 40,
 
               child: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10,right: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +259,7 @@ class CategoryView2 extends StatelessWidget {
                 //  border: Border.all(color: Colors.grey, width: 0.5)
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10,right: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,7 +449,7 @@ class CategoryView2 extends StatelessWidget {
                   ? Colors.white
                   : Colors.grey.withOpacity(0.2),
               child: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10,right: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -582,7 +582,9 @@ class SearchTextField extends SearchDelegate<String> {
       return name.toLowerCase().contains(query.toLowerCase());
     });
     homeController.get_products_by_search(query, context);
-    close(context, query);
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      close(context, query);
+    });
     return Center(
       child: CircularProgressIndicator(
         color: AppColors.main2,

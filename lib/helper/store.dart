@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/my_model/log_in_info.dart';
+import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_order.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 
@@ -17,6 +18,26 @@ class Store{
     });
   }
 
+  static save_remember(bool val){
+    // print(val);
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool("remember", val);
+      Global.remember_pass=val;
+    });
+  }
+
+  static Future<bool> load_remember()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool val = prefs.getBool("remember")??false;
+    String pass = prefs.getString("remember_pass")??"non";
+    Global.remember_password=pass;
+    Global.remember_pass=val;
+    print("remember");
+    print(Global.remember_password);
+    print(Global.remember_pass);
+    return val;
+  }
+
   static Future<List<MyOrder>> load_order()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String myjson = prefs.getString("my_order")??"non";
@@ -25,9 +46,31 @@ class Store{
     }else{
       var jsonlist = jsonDecode(myjson) as List;
       List<MyOrder> list = <MyOrder>[];
+      List<MyOrder> finallist = <MyOrder>[];
+      List<int> arr = <int>[];
       for(int i=0;i<jsonlist.length;i++){
-        list.add(MyOrder.fromMap(jsonlist[i]));
+        MyOrder order = MyOrder.fromMap(jsonlist[i]);
+        list.add(order);
+        arr.add(order.product.value.id);
       }
+      List<MyProduct> prods = await MyApi.getCart(arr);
+      for(int i=0 ; i<prods.length;i++){
+        for(int j=0;j<list.length;j++){
+          if(prods[i].id==list[j].product.value.id){
+            list[j].product.value.availability=prods[i].availability;
+            if(prods[i].availability==0){
+              list[j].price.value="0.00";
+            }
+            if(list[j].quantity.value>prods[i].availability&&prods[i].availability!=0){
+              list[j].quantity.value=prods[i].availability;
+              list[j].price.value=(list[j].quantity.value*list[j].product.value.price).toString();
+            }else if(prods[i].availability!=0){
+              list[j].price.value=(list[j].quantity.value*list[j].product.value.price).toString();
+            }
+          }
+        }
+      }
+      save_order(list);
       return list;
     }
   }
@@ -59,6 +102,8 @@ class Store{
     SharedPreferences.getInstance().then((prefs) {
       prefs.setString("email", email);
       prefs.setString("pass", pass);
+      prefs.setString("remember_pass", pass);
+      Global.remember_password=pass;
     });
   }
 
@@ -134,9 +179,9 @@ class Store{
     }
   }
 
-  static save_address(first_name, last_name, address,apartment, city, country, emirate, phone)async{
+  static save_address( address,apartment, city, country, emirate, phone)async{
     SharedPreferences.getInstance().then((prefs) {
-    prefs.setString("address",Address(first_name: first_name,last_name: last_name,address: address,apartment: apartment,city: city,country: country,phone: phone,Emirate: emirate).toJson());
+    prefs.setString("address",Address(address: address,apartment: apartment,city: city,country: country,phone: phone,Emirate: emirate).toJson());
     });
     load_address();
   }

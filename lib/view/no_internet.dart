@@ -1,3 +1,4 @@
+import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
@@ -35,7 +36,7 @@ class _NoInternetState extends State<NoInternet> {
               const SizedBox(
                 height: 15,
               ),
-              const Text("No Internet Connection",
+              Text(App_Localization.of(context).translate("no_net").toString(),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 25
@@ -66,7 +67,7 @@ class _NoInternetState extends State<NoInternet> {
                       color: App.main2,),
                       const SizedBox(width: 5,),
                       Center(
-                          child: Text("Reload",
+                          child: Text(App_Localization.of(context).translate("reaload"),
                             style: TextStyle(
                               color: App.main2,
                               fontSize: 16,

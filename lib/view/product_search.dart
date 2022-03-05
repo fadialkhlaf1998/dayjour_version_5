@@ -128,20 +128,22 @@ class ProductSearch extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      width: 25,
+                      width: 35,
                       height: MediaQuery.of(context).size.height * 0.07,
-                      child: IconButton(
-                        onPressed: () async {
-                          final result = await showSearch(
-                              context: context,
-                              delegate: SearchTextField(
-                                  suggestion_list: Global.suggestion_list, homeController: homeController));
-                          get_result(result!, context);
-                          print(result);
-                        },
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.white,
+                      child: Center(
+                        child: IconButton(
+                          onPressed: () async {
+                            final result = await showSearch(
+                                context: context,
+                                delegate: SearchTextField(
+                                    suggestion_list: Global.suggestion_list, homeController: homeController));
+                            get_result(result!, context);
+                            print(result);
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -235,7 +237,8 @@ class ProductSearch extends StatelessWidget {
                   );
                 }),
               ),*/
-            )
+            ),
+            SizedBox(height: 30,),
           ],
         ),
       ),
@@ -252,8 +255,6 @@ class ProductSearch extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width * 0.44,
-              height: MediaQuery.of(context).size.height * 0.3,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -317,7 +318,7 @@ class ProductSearch extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: Text(
-                          product.price.toString()+ " "+App_Localization.of(context).translate("aed"),
+                          product.price.toStringAsFixed(2)+ " "+App_Localization.of(context).translate("aed"),
                           maxLines: 2,
                           style: const TextStyle(
                               color: Colors.black,
@@ -411,7 +412,9 @@ class SearchTextField extends SearchDelegate<String> {
       return name.toLowerCase().contains(query.toLowerCase());
     });
     homeController.get_products_by_search(query, context);
-    close(context, query);
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      close(context, query);
+    });
     return Center(
       child: CircularProgressIndicator(
         color: AppColors.main2,

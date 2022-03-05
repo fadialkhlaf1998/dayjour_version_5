@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/view/introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:new_version/new_version.dart';
 
 
 void main() {
@@ -45,13 +46,17 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale=locale;
     });
+
   }
+
 
   @override
   void initState() {
     super.initState();
     // cartController.load_cart();
     // wishlistController.load_wishlist();
+    // Instantiate NewVersion manager object (Using GCP Console app as example)
+
     Global.load_language().then((language) {
       setState(() {
         _locale= Locale(language);

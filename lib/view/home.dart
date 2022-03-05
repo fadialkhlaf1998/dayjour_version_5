@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:new_version/new_version.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'chat_view.dart';
@@ -40,12 +41,52 @@ class Home extends StatelessWidget {
 
 
 
+
+  basicStatusCheck(NewVersion newVersion,BuildContext context) {
+    newVersion.showAlertIfNecessary(context: context);
+  }
+
+  advancedStatusCheck(NewVersion newVersion,BuildContext context) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      debugPrint(status.releaseNotes);
+      debugPrint(status.appStoreLink);
+      debugPrint(status.localVersion);
+      debugPrint(status.storeVersion);
+      debugPrint(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'Custom Title',
+        dialogText: 'Custom Text',
+      );
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    Future.delayed(Duration(milliseconds: 300)).then((value) {
+      final newVersion = NewVersion(
+        iOSId: 'com.MaxArt.DayjourVersion1',
+        androidId: 'com.maxart.dayjour_version_3',
+      );
+
+      // You can let the plugin handle fetching the status and showing a dialog,
+      // or you can fetch the status and display your own dialog, or no dialog.
+      const simpleBehavior = true;
+
+      if (simpleBehavior) {
+        basicStatusCheck(newVersion,context);
+      } else {
+        advancedStatusCheck(newVersion,context);
+      }
+    });
     return Obx((){
       return  Scaffold(
         backgroundColor: App.main2,
@@ -145,7 +186,7 @@ class Home extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(homeController.bestSellers[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
-                                        Text(homeController.bestSellers[index].price.toString()+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+                                        Text(homeController.bestSellers[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
                                       ],
                                     ),
                                   ))
@@ -312,7 +353,7 @@ class Home extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(homeController.newArrivals[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
-                                            Text(homeController.newArrivals[index].price.toString()+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                                            Text(homeController.newArrivals[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
 
                                           ],
                                         ),
@@ -546,8 +587,9 @@ class Home extends StatelessWidget {
                       final result = await showSearch(
                           context: context,
                           delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
+                      // Get.back();
                       homeController.get_products_by_search(result!, context);
-                      print(result);
+                      // print(result);
                     },
                     icon: Icon(
                       Icons.search,
@@ -941,8 +983,13 @@ class SearchTextField extends SearchDelegate<String> {
     final suggestions = suggestion_list.where((name) {
       return name.toLowerCase().contains(query.toLowerCase());
     });
-    homeController.get_products_by_search(query, context);
-    close(context, query);
+    // homeController.get_products_by_search(query, context);
+    // close(context, query);
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      close(context, query);
+    });
+    // homeController.get_products_by_search(query, context)
+    // Get.back();
     return Center(
       child: CircularProgressIndicator(
         color: AppColors.main2,

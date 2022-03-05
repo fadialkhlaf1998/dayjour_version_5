@@ -157,13 +157,13 @@ class _MyOrderViewState extends State<MyOrderView> {
 
     final format = DateFormat('yyyy-MMM-dd hh:mm');
     final clockString = format.format(dateTime);
-    return clockString;
+    return clockString.replaceAll(" ", ",");
   }
 
   _body1(BuildContext context) {
     return myOrderController.my_order.isEmpty
         ? Container(
-            height: MediaQuery.of(context).size.height * 0.2,
+            height: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -258,33 +258,34 @@ class _MyOrderViewState extends State<MyOrderView> {
                                             Text(myOrderController.my_order[index].code.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
                                           ],
                                         ),
+                                        Center(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+
+                                              Row(
+                                                children: [
+                                                  Text(App_Localization.of(context).translate("sub_totals")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
+                                                  Text(myOrderController.my_order[index].subTotal.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(App_Localization.of(context).translate("shipping")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
+                                                  Text(myOrderController.my_order[index].shipping.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
+                                                ],
+                                              ),
+
+                                            ],
+                                          ),
+                                        ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-
-                                            Row(
-                                              children: [
-                                                Text(App_Localization.of(context).translate("sub_totals")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
-                                                Text(myOrderController.my_order[index].subTotal.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
-                                              ],
-                                            ),
-
-                                            Row(
-                                              children: [
-                                                Text(App_Localization.of(context).translate("shipping")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
-                                                Text(myOrderController.my_order[index].shipping.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
-                                              ],
-                                            ),
-
-                                            Row(
-                                              children: [
-                                                Text(App_Localization.of(context).translate("total")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
-                                                Text(myOrderController.my_order[index].total.toString(),style: TextStyle(color: Colors.grey,fontSize: 13),),
-                                              ],
-                                            ),
+                                            Text(App_Localization.of(context).translate("total")+": ",style: TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.bold),),
+                                            Text(myOrderController.my_order[index].total.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
                                           ],
                                         ),
-                                        SizedBox(height: 1,),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [

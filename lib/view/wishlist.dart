@@ -2,6 +2,7 @@
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
+import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,13 +16,14 @@ class Wishlist extends StatelessWidget {
   Wishlist({Key? key}) : super(key: key);
 
   CartController cartController = Get.find();
+  HomeController homeController = Get.find();
   WishListController wishlistController = Get.find();
 
   _wishlist(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: const EdgeInsets.only(left: 5,right: 5),
+        padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -57,7 +59,7 @@ class Wishlist extends StatelessWidget {
                     children: [
                       Container(
                         height: MediaQuery.of(context).size.height * 0.15,
-                        width: MediaQuery.of(context).size.width*0.45,
+                        width: MediaQuery.of(context).size.width*0.45-20,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.contain,
@@ -119,21 +121,11 @@ class Wishlist extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.success(
-                              message: App_Localization.of(context).translate("Just_Added_To_Your_Cart"),
-                              //backgroundColor: AppColors.main2,
-                            ),
-                          );
-                          cartController.add_to_cart(wishlistController.wishlist[index],1);
-                          wishlistController.delete_from_wishlist(wishlistController.wishlist[index]);
-                          // showTopSnackBar(
-                          //   context,
-                          //   CustomSnackBar.success(
-                          //     message: "Just Added To Your Cart",
-                          //   ),
-                          // );
+                          if(wishlistController.wishlist[index].availability>0){
+                            if(cartController.add_to_cart(wishlistController.wishlist[index],1,context)) {
+                              wishlistController.delete_from_wishlist(wishlistController.wishlist[index]);
+                            }
+                          }
                         },
                         child: Container(
                           height: 30,
@@ -144,8 +136,11 @@ class Wishlist extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
+                                wishlistController.wishlist[index].availability>0?
                               App_Localization.of(context)
-                                  .translate("move_to_cart"),
+                                  .translate("move_to_cart"):
+                                App_Localization.of(context)
+                                    .translate("out_stock"),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -177,7 +172,7 @@ class Wishlist extends StatelessWidget {
               SizedBox(height: 15,),
               GestureDetector(
                 onTap: (){
-
+                  homeController.selected_bottom_nav_bar.value=0;
                 },
                 child: Container(
                   width: 120,

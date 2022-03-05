@@ -18,6 +18,7 @@ class ProductController extends GetxController{
   ProductInfo? myProduct;
 
   increase(){
+    if(myProduct!.availability>cart_count.value)
     cart_count.value++;
   }
 
@@ -26,9 +27,14 @@ class ProductController extends GetxController{
     cart_count.value--;
   }
 
-  add_to_cart(){
+  add_to_cart(BuildContext context){
+    // if(myProduct!.availability>0){
     MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability);
-    cartController.add_to_cart(myProduct1, cart_count.value);
+    cartController.add_to_cart(myProduct1, cart_count.value,context);
+    // }else{
+    //   // App_Localization.of(context).translate("out_stock");
+    // }
+
   }
 
   favorite(ProductInfo product){

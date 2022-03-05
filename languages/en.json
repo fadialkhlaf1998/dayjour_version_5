@@ -53,7 +53,6 @@
   "email_not_exist" :"email not exist",
 
 
-
   "comment_2": "*********** dashboard ***********",
 
   "search": "Search Here",
@@ -181,7 +180,7 @@
   "apartment2": "Apartment",
   "add_review": "Add your review",
   "write_a_review" : "Write a review",
-  "please_login_first" : "Please Login First",
+  "please_login_first" : "Please Sign In First",
   "dont_have_product" : "Your cart is empty",
   "dont_have_wishlist" :"You currently have nothing saved to your Wishlist",
   "press_to_show_more" : "Press to show more",
@@ -226,5 +225,9 @@
   "canceled": "Canceled",
   "view_order": "View Order",
   "count": "Count",
-  "view_bill": "View Bill"
+  "out_stock": "Out Of Stock",
+  "password_changed_succ" : "Password Changed Successfully",
+  "reaload": "Reload",
+  "no_net": "No Internet Connection",
+  "remember_pass": "Remember Password"
 }

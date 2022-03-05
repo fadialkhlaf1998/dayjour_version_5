@@ -20,6 +20,7 @@ class SignInController extends GetxController{
   var loading = false.obs;
   var email_vaildate = true.obs;
   var pass_vaildate = true.obs;
+  var remember_value = Global.remember_pass.obs;
 
   void change_visibilty(){
     hide_passeord.value = !hide_passeord.value;

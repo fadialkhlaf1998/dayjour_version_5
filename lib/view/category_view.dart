@@ -382,7 +382,7 @@ class CategoryView extends StatelessWidget {
 
   _products(MyProduct product, BuildContext context, int index) {
     return Padding(
-      padding: EdgeInsets.only(right: 0,bottom: productsController.my_products.length%2==0&&index>=productsController.my_products.length-2?20:index>=productsController.my_products.length-1?20:0),
+      padding: EdgeInsets.only(right: 0,bottom: productsController.my_products.length%2==0&&index>=productsController.my_products.length-2?5:index>=productsController.my_products.length-1?5:0),
       child: GestureDetector(
         onTap: () {
           productsController.go_to_product(index);
@@ -449,7 +449,7 @@ class CategoryView extends StatelessWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 child: Text(
-                                  product.price.toString() +
+                                  product.price.toStringAsFixed(2) +
                                       " " +
                                       App_Localization.of(context)
                                           .translate("aed"),
@@ -552,7 +552,9 @@ class SearchTextField extends SearchDelegate<String> {
       return name.toLowerCase().contains(query.toLowerCase());
     });
     homeController.get_products_by_search(query, context);
-    close(context, query);
+    Future.delayed(Duration(milliseconds: 200)).then((value) {
+      close(context, query);
+    });
     return Center(
       child: CircularProgressIndicator(
         color: AppColors.main2,
