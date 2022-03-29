@@ -39,7 +39,7 @@ class _ChatViewState extends State<ChatView> {
       body: SafeArea(
         child: Center(
           child: WebView(
-            initialUrl: "https://tawk.to/chat/61e3bbedb84f7301d32b3e85/1fpgpc6d4",
+            initialUrl: "https://tawk.to/chat/6117c35cd6e7610a49b02c5b/1fd2d68fb",
             // initialUrl: "https://community.shopify.com/c/shopify-apis-and-sdks/bd-p/shopify-apis-and-technology",
             javascriptMode: JavascriptMode.unrestricted,
           ),

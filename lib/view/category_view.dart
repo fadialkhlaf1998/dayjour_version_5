@@ -2,6 +2,7 @@ import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/global.dart';
+import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/product_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
@@ -18,6 +19,7 @@ import 'package:get/get.dart';
 class CategoryView extends StatelessWidget {
   ProductsController productsController = Get.put(ProductsController());
   WishListController wishlistController = Get.find();
+  CartController cartController = Get.find();
   HomeController homeController = Get.find();
   Global global = Global();
   List<MyProduct> products;
@@ -307,6 +309,51 @@ class CategoryView extends StatelessWidget {
                             size: 25,
                           ),
                         ),
+                      ),
+                      Container(
+                        child: IconButton(
+                          onPressed: () async {
+                            Get.back();
+                            homeController.selected_bottom_nav_bar.value=2;
+                          },
+                          icon: Icon(
+                            Icons.favorite,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+
+                      Stack(
+                        children: [
+                          Container(
+                            child: IconButton(
+                              onPressed: () async {
+                                  Get.back();
+                                  homeController.selected_bottom_nav_bar.value=3;
+                              },
+                              icon: Icon(
+                                Icons.shopping_cart_outlined,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              top: 0,
+                              child: cartController.my_order.value.length==0?Center():Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child:  Center(child: FittedBox(child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              child: Text(cartController.my_order.value.length.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
+                            ))),
+                          ))
+                        ],
                       ),
 
                     ],

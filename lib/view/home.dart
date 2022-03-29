@@ -42,24 +42,15 @@ class Home extends StatelessWidget {
 
 
 
-  basicStatusCheck(NewVersion newVersion,BuildContext context) {
-    newVersion.showAlertIfNecessary(context: context);
-  }
-
-  advancedStatusCheck(NewVersion newVersion,BuildContext context) async {
-    final status = await newVersion.getVersionStatus();
-    if (status != null) {
-      debugPrint(status.releaseNotes);
-      debugPrint(status.appStoreLink);
-      debugPrint(status.localVersion);
-      debugPrint(status.storeVersion);
-      debugPrint(status.canUpdate.toString());
-      newVersion.showUpdateDialog(
-        context: context,
-        versionStatus: status,
-        dialogTitle: 'Custom Title',
-        dialogText: 'Custom Text',
-      );
+  _checkVersion(BuildContext context)async{
+    //todo change IDS
+    final newVersion = NewVersion(
+      iOSId: 'com.MaxArt.DayjourVersion1',
+      androidId: 'com.maxart.dayjour_version_3',
+    );
+    final state = await newVersion.getVersionStatus();
+    if(state!.canUpdate){
+      newVersion.showUpdateDialog(context: context, versionStatus: state);
     }
   }
 
@@ -72,20 +63,7 @@ class Home extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     Future.delayed(Duration(milliseconds: 300)).then((value) {
-      final newVersion = NewVersion(
-        iOSId: 'com.MaxArt.DayjourVersion1',
-        androidId: 'com.maxart.dayjour_version_3',
-      );
-
-      // You can let the plugin handle fetching the status and showing a dialog,
-      // or you can fetch the status and display your own dialog, or no dialog.
-      const simpleBehavior = true;
-
-      if (simpleBehavior) {
-        basicStatusCheck(newVersion,context);
-      } else {
-        advancedStatusCheck(newVersion,context);
-      }
+      _checkVersion(context);
     });
     return Obx((){
       return  Scaffold(

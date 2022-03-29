@@ -661,7 +661,7 @@ class MyApi {
     }
   }
 
-  static add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems)async{
+  static Future <bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems)async{
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -689,9 +689,11 @@ class MyApi {
 
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
+      return true;
     }
     else {
       print(response.reasonPhrase);
+      return false;
     }
 
   }

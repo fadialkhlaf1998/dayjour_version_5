@@ -6,6 +6,7 @@ import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/checkout_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/view/home.dart';
+import 'package:dayjour_version_3/view/my_fatoraah.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,7 +43,72 @@ class _Checkout2State extends State<Checkout> {
     }
 
   }
-
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    return WillPopScope(
+      onWillPop: () {
+        if(checkoutController.selected_operation.value == 0 ){
+          Get.back();
+        }else if( checkoutController.selected_operation.value==1&&checkoutController.selected.value){
+          checkoutController.selected.value=false;
+          // checkoutController.selected_operation.value --;
+        }
+        else {
+          checkoutController.selected.value=false;
+          checkoutController.selected_operation.value --;
+        }
+        return Future.value(false);
+      },
+      child: Scaffold(
+          backgroundColor: AppColors.main2,
+          key: _key,
+          body: Obx(() {
+            return SafeArea(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                color: AppColors.main,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _bar(),
+                      const SizedBox(height: 20),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.92,
+                        child: Row(
+                          children: [
+                            Text(
+                              App_Localization.of(context).translate("checkout"),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // checkoutController.selected_operation.value == 3 ? _accepted() :
+                      _header(),
+                      checkoutController.selected_operation.value == 0 ? _checkout_body() :
+                      checkoutController.selected_operation.value == 1 ? _payment_body() :
+                      checkoutController.selected_operation.value == 2 ? _summary_body() :
+                      Center(),
+                      const SizedBox(height: 20),
+                      checkoutController.selected_operation.value == 1 ? Center() : _footer(),
+                      const SizedBox(height: 30),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          })
+      ),
+    );
+  }
   _bar() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -872,7 +938,6 @@ class _Checkout2State extends State<Checkout> {
       ],
     );
   }
-
   _payment(BuildContext context){
     return !checkoutController.selected.value?
     Container(
@@ -932,95 +997,9 @@ class _Checkout2State extends State<Checkout> {
         :Container(
       height: MediaQuery.of(context).size.height*0.65-MediaQuery.of(context).padding.top,
       width: MediaQuery.of(context).size.width,
-      child:MyFatoorah(
-        onResult:(response){
-          if(response.status==PaymentStatus.Success){
-            checkoutController.my_order.clear();
-            checkoutController.my_order.addAll(cartController.my_order);
-            checkoutController.add_order_payment(context);
-            checkoutController.next(context);
-            checkoutController.is_paid.value=true;
-          }else{
-            checkoutController.selected.value=false;
-          }
-        },
-        errorChild: Center(
-          child: Icon(
-            Icons.error,
-            color: Colors.redAccent,
-            size: 50,
-          ),
-        ),
-        succcessChild: Center(
-          child: Icon(
-            Icons.done_all,
-            color: Colors.greenAccent,
-            size: 50,
-          ),
-        ),
-        request: MyfatoorahRequest.test(
-          currencyIso: Country.UAE,
-          successUrl:
-          'https://assets.materialup.com/uploads/473ef52c-8b96-46f7-9771-cac4b112ae28/preview.png',
-          errorUrl:
-          'https://www.digitalpaymentguru.com/wp-content/uploads/2019/08/Transaction-Failed.png',
-          invoiceAmount: double.parse(cartController.total.value),
-          language: Global.lang_code=="en"?ApiLanguage.English:ApiLanguage.Arabic,
-          token: "rLtt6JWvbUHDDhsZnfpAhpYk4dxYDQkbcPTyGaKp2TYqQgG7FGZ5Th_WD53Oq8Ebz6A53njUoo1w3pjU1D4vs_ZMqFiz_j0urb_BH9Oq9VZoKFoJEDAbRZepGcQanImyYrry7Kt6MnMdgfG5jn4HngWoRdKduNNyP4kzcp3mRv7x00ahkm9LAK7ZRieg7k1PDAnBIOG3EyVSJ5kK4WLMvYr7sCwHbHcu4A5WwelxYK0GMJy37bNAarSJDFQsJ2ZvJjvMDmfWwDVFEVe_5tOomfVNt6bOg9mexbGjMrnHBnKnZR1vQbBtQieDlQepzTZMuQrSuKn-t5XZM7V6fCW7oP-uXGX-sMOajeX65JOf6XVpk29DP6ro8WTAflCDANC193yof8-f5_EYY-3hXhJj7RBXmizDpneEQDSaSz5sFk0sV5qPcARJ9zGG73vuGFyenjPPmtDtXtpx35A-BVcOSBYVIWe9kndG3nclfefjKEuZ3m4jL9Gg1h2JBvmXSMYiZtp9MR5I6pvbvylU_PP5xJFSjVTIz7IQSjcVGO41npnwIxRXNRxFOdIUHn0tjQ-7LwvEcTXyPsHXcMD8WtgBh-wxR8aKX7WPSsT1O8d8reb2aR7K3rkV3K82K_0OgawImEpwSvp9MNKynEAJQS6ZHe_J_l77652xwPNxMRTMASk1ZsJL",
-        ),
-      ),
+      child:MyFatoraahPage("title",checkoutController.total.toString()),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    return Scaffold(
-        backgroundColor: AppColors.main2,
-      key: _key,
-        body: Obx(() {
-          return SafeArea(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: AppColors.main,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _bar(),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.92,
-                      child: Row(
-                        children: [
-                          Text(
-                            App_Localization.of(context).translate("checkout"),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                   // checkoutController.selected_operation.value == 3 ? _accepted() :
-                    _header(),
-                    checkoutController.selected_operation.value == 0 ? _checkout_body() :
-                        checkoutController.selected_operation.value == 1 ? _payment_body() :
-                            checkoutController.selected_operation.value == 2 ? _summary_body() :
-                    Center(),
-                    const SizedBox(height: 20),
-                    checkoutController.selected_operation.value == 1 ? Center() : _footer(),
-                    const SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            ),
-          );
-        })
-    );
-  }
+
 }
