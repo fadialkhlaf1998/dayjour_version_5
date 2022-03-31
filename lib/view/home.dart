@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
   _checkVersion(BuildContext context)async{
     //todo change IDS
     final newVersion = NewVersion(
-      iOSId: 'com.MaxArt.DayjourVersion1',
+      iOSId: 'com.MaxArt.Dayjour',
       androidId: 'com.maxart.dayjour_version_3',
     );
     final state = await newVersion.getVersionStatus();
