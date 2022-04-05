@@ -663,11 +663,11 @@ class Home extends StatelessWidget {
   _slider_images(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.width*0.5,
       color: AppColors.main,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.3,
-        width: MediaQuery.of(context).size.width,
+        height:  MediaQuery.of(context).size.width*0.5,
+        width:  MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: AppColors.main,
           borderRadius: BorderRadius.only(
@@ -680,7 +680,7 @@ class Home extends StatelessWidget {
                 CarouselSlider.builder(
                   carouselController: controller,
                   options: CarouselOptions(
-                      height: MediaQuery.of(context).size.height *0.3,
+                      height:  MediaQuery.of(context).size.width*0.5,
                       autoPlay: homeController.slider.length == 1 ? false : true,
                       viewportFraction: 1,
                       enlargeCenterPage: true,
