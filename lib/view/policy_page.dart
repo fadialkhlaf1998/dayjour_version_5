@@ -1,14 +1,11 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
-import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-
-
-
-
 
 class PolicyPage extends StatelessWidget {
   String title;
@@ -116,17 +113,6 @@ class PolicyPage extends StatelessWidget {
           },),
         ),
       ],
-    );
-  }
-  _body1(context){
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(25), )
-        ),
-        width: MediaQuery.of(context).size.width * 0.9,
-        child: Html(data: App_Localization.of(context).translate("privacy_policy_content"),),
-      )
     );
   }
 

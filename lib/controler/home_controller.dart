@@ -2,11 +2,8 @@ import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
-import 'package:dayjour_version_3/helper/api.dart';
 import 'package:dayjour_version_3/controler/intro_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
-
-import 'package:dayjour_version_3/my_model/best_sellers.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
@@ -19,13 +16,6 @@ import 'package:dayjour_version_3/view/my_order.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:dayjour_version_3/view/product.dart';
 import 'package:dayjour_version_3/view/product_search.dart';
-// import 'package:albassel_version_1/view/no_internet.dart';
-// import 'package:albassel_version_1/view/product.dart';
-// import 'package:albassel_version_1/view/products.dart';
-// import 'package:albassel_version_1/view/products_search.dart';
-// import 'package:albassel_version_1/view/setting.dart';
-// import 'package:albassel_version_1/view/welcome.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -83,12 +73,10 @@ class HomeController extends GetxController{
     // Get.to(()=>Setting());
   }
   void nave_to_about_us() {
-    //todo nav to about us
     Get.back();
   }
   void nave_to_logout() {
     Store.logout();
-    // Get.offAll(()=>Welcome());
   }
 
 
@@ -118,7 +106,6 @@ class HomeController extends GetxController{
   get_products(int sub_category,index,BuildContext context,int selected_category){
     MyApi.check_internet().then((internet) {
       if (internet) {
-        // print('----------------------');
         loading.value=true;
         MyApi.getSubCategory(sub_category).then((value0){
           MyApi.getProducts(wishListController.wishlist,value0.first.id).then((value) {
@@ -176,9 +163,7 @@ class HomeController extends GetxController{
           }else{
             App.error_msg(context, App_Localization.of(context).translate("no_elm"));
           }
-
-        })
-        .catchError((err){
+        }).catchError((err){
           loading.value=false;
           App.error_msg(context, App_Localization.of(context).translate("wrong"));
         });
@@ -203,7 +188,7 @@ class HomeController extends GetxController{
               topCategory.addAll(introController.topCategory);
               loading.value=false;
             }else{
-             introController.get_data();
+              introController.get_data();
               get_data();
             }
             if(introController.bestSellers.isNotEmpty){
@@ -304,7 +289,6 @@ class HomeController extends GetxController{
       if (internet) {
         MyApi.getProductsInfo(wishListController.wishlist,product.id).then((value) {
           loading.value=false;
-          //todo add favorite
           Get.to(()=>ProductView(value!,product));
         });
       }else{
@@ -339,14 +323,14 @@ class HomeController extends GetxController{
     loading.value=true;
     MyApi.check_internet().then((internet) {
       if (internet) {
-        if(slider[index].product_id!=null){
+        if(slider[index].product_id!=null&&slider[index].is_product==1){
           MyApi.getProductsInfo(wishListController.wishlist,slider[index].product_id!).then((value) {
             loading.value=false;
-            MyProduct p = MyProduct(id: value!.id, subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability);
+            MyProduct p = MyProduct(id: value!.id, subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability,offer_price: value.offer_price,category_id: value.category_id,super_category_id: value.super_category_id);
             Get.to(()=>ProductView(value,p));
           });
-        }else if(slider[index].sub_category_id!=null){
-          MyApi.getProducts(wishListController.wishlist,slider[index].sub_category_id!).then((value) {
+        }else{
+          MyApi.sliderProducts(wishListController.wishlist,slider[index].id).then((value) {
             loading.value=false;
             if(value.isNotEmpty){
               Get.to(()=>ProductSearch(value,slider[index].title));
@@ -358,8 +342,6 @@ class HomeController extends GetxController{
             loading.value=false;
             App.error_msg(context, App_Localization.of(context).translate("wrong"));
           });
-        }else if(slider[index].brand_id!=null){
-          get_products_by_brand(slider[index].brand_id!,context);
         }
 
       }else{

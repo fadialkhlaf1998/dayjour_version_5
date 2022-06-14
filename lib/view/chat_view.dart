@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    // Enable virtual display.
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
   }
 

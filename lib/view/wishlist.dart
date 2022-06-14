@@ -1,3 +1,4 @@
+// ignore_for_file: must_be_immutable
 
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
@@ -7,10 +8,6 @@ import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-
 
 class Wishlist extends StatelessWidget {
   Wishlist({Key? key}) : super(key: key);
@@ -64,9 +61,7 @@ class Wishlist extends StatelessWidget {
                           image: DecorationImage(
                             fit: BoxFit.contain,
                             image: NetworkImage(
-                                wishlistController.wishlist[index].image.toString() == null
-                                    ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                                    :  wishlistController.wishlist[index].image.toString()
+                                wishlistController.wishlist[index].image.toString()
                             ),
                           ),
                         ),

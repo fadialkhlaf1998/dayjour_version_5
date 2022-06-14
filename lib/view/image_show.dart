@@ -25,17 +25,15 @@ class ImageShow extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _header(context),
-                    Hero(
-                      tag: image,
-                      child: Container(
-                        color: Colors.white,
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height * 0.1),
-                        child: PhotoView(
-                         imageProvider: NetworkImage(image),
-                          backgroundDecoration: BoxDecoration(
-                            color: Colors.white
-                          ),
+                    //hero
+                    Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height * 0.1),
+                      child: PhotoView(
+                       imageProvider: NetworkImage(image),
+                        backgroundDecoration: BoxDecoration(
+                          color: Colors.white
                         ),
                       ),
                     ),

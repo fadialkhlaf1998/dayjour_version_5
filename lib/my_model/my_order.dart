@@ -6,6 +6,7 @@ class MyOrder {
   Rx<MyProduct> product;
   Rx<int> quantity;
   Rx<String> price;
+  Rx<String> discount="0.0".obs;
 
   MyOrder({required this.product,required this.quantity,required this.price});
   factory MyOrder.fromJson(String str) => MyOrder.fromMap(json.decode(str));

@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/my_model/log_in_info.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_order.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dayjour_version_3/my_model/address.dart';
 
@@ -19,7 +17,6 @@ class Store{
   }
 
   static save_remember(bool val){
-    // print(val);
     SharedPreferences.getInstance().then((prefs) {
       prefs.setBool("remember", val);
       Global.remember_pass=val;
@@ -30,11 +27,10 @@ class Store{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool val = prefs.getBool("remember")??false;
     String pass = prefs.getString("remember_pass")??"non";
+    String email = prefs.getString("remember_email")??"non";
     Global.remember_password=pass;
+    Global.remember_email=email;
     Global.remember_pass=val;
-    print("remember");
-    print(Global.remember_password);
-    print(Global.remember_pass);
     return val;
   }
 
@@ -46,7 +42,6 @@ class Store{
     }else{
       var jsonlist = jsonDecode(myjson) as List;
       List<MyOrder> list = <MyOrder>[];
-      List<MyOrder> finallist = <MyOrder>[];
       List<int> arr = <int>[];
       for(int i=0;i<jsonlist.length;i++){
         MyOrder order = MyOrder.fromMap(jsonlist[i]);
@@ -74,7 +69,18 @@ class Store{
       return list;
     }
   }
+  static save_discount_code(String code){
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString("discount_code", code);
+    });
+  }
 
+  static Future<String> load_discount_code()async{
+    var prefs = await SharedPreferences.getInstance();
+    String code=prefs.getString("discount_code")??"non";
+
+    return code;
+  }
   static save_wishlist(List<MyProduct> _products){
     SharedPreferences.getInstance().then((prefs) {
       String myjson = json.encode(List<dynamic>.from(_products.map((x) => x.toMap())));
@@ -103,7 +109,9 @@ class Store{
       prefs.setString("email", email);
       prefs.setString("pass", pass);
       prefs.setString("remember_pass", pass);
+      prefs.setString("remember_email", email);
       Global.remember_password=pass;
+      Global.remember_email=email;
     });
   }
 

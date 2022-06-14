@@ -1,12 +1,8 @@
-import 'dart:ui';
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/settting_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 

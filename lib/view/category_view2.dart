@@ -1,17 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/app_localization.dart';
-import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
-import 'package:dayjour_version_3/controler/product_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
-import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
-import 'package:dayjour_version_3/view/home.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -217,9 +213,7 @@ class CategoryView2 extends StatelessWidget {
                         //   ),
                         // ),
                         child: CachedNetworkImage(
-                          imageUrl: homeController.slider[index].image == null
-                              ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                              : homeController.slider[index].image,
+                          imageUrl: homeController.slider[index].image,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -321,7 +315,7 @@ class CategoryView2 extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: MediaQuery.of(context).size.width * 0.6,
                         // decoration: BoxDecoration(
                         //   image: DecorationImage(
                         //     fit: BoxFit.cover,
@@ -334,14 +328,12 @@ class CategoryView2 extends StatelessWidget {
                         //   ),
                         // ),
                         child: CachedNetworkImage(
-                          imageUrl: homeController
-                              .specialDeals[index].image == null ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                              : homeController.specialDeals[index].image,
+                          imageUrl: homeController.specialDeals[index].image,
                           imageBuilder: (context, imageProvider) => Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
@@ -414,7 +406,6 @@ class CategoryView2 extends StatelessWidget {
                                 suggestion_list: Global.suggestion_list,
                                 homeController: homeController));
                         homeController.get_products_by_search(result!, context);
-                        print(result);
                       },
                       icon: Icon(
                         Icons.search,
@@ -493,11 +484,7 @@ class CategoryView2 extends StatelessWidget {
                   image: DecorationImage(
                     fit: BoxFit.fill,
 
-                    image: NetworkImage(homeController
-                        .sub_Category[index].image ==
-                        null
-                        ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                        : homeController.sub_Category[index].image
+                    image: NetworkImage(homeController.sub_Category[index].image
                         .replaceAll("localhost", "10.0.2.2")),
                   ),
                 ),
@@ -578,9 +565,6 @@ class SearchTextField extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestions = suggestion_list.where((name) {
-      return name.toLowerCase().contains(query.toLowerCase());
-    });
     homeController.get_products_by_search(query, context);
     Future.delayed(Duration(milliseconds: 200)).then((value) {
       close(context, query);

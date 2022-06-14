@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
@@ -7,9 +6,7 @@ import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/drawer.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
-import 'package:dayjour_version_3/controler/checkout_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
-import 'package:dayjour_version_3/controler/product_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/top_category.dart';
@@ -17,7 +14,6 @@ import 'package:dayjour_version_3/view/cart.dart';
 import 'package:dayjour_version_3/view/category_view2.dart';
 import 'package:dayjour_version_3/view/profile.dart';
 import 'package:dayjour_version_3/view/wishlist.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,6 +23,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'chat_view.dart';
 
+// ignore: must_be_immutable
 class Home extends StatelessWidget {
 
   bool closed = true;
@@ -37,13 +34,8 @@ class Home extends StatelessWidget {
   HomeController homeController = Get.put(HomeController());
   CartController cartController = Get.put(CartController());
   WishListController wishlistController = Get.put(WishListController());
-  //CheckoutController checkoutController = Get.put(CheckoutController());
-
-
-
 
   _checkVersion(BuildContext context)async{
-    //todo change IDS
     final newVersion = NewVersion(
       iOSId: 'com.MaxArt.Dayjour',
       androidId: 'com.maxart.dayjour_version_3',
@@ -53,8 +45,6 @@ class Home extends StatelessWidget {
       newVersion.showUpdateDialog(context: context, versionStatus: state);
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +154,7 @@ class Home extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(homeController.bestSellers[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
-                                        Text(homeController.bestSellers[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price)
                                       ],
                                     ),
                                   ))
@@ -331,8 +321,8 @@ class Home extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(homeController.newArrivals[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
-                                            Text(homeController.newArrivals[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
-
+                                            // Text(homeController.newArrivals[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                                            App.price(context, homeController.newArrivals[index].price, homeController.newArrivals[index].offer_price)
                                           ],
                                         ),
                                       ))
@@ -565,9 +555,7 @@ class Home extends StatelessWidget {
                       final result = await showSearch(
                           context: context,
                           delegate: SearchTextField(suggestion_list: Global.suggestion_list,homeController: homeController));
-                      // Get.back();
                       homeController.get_products_by_search(result!, context);
-                      // print(result);
                     },
                     icon: Icon(
                       Icons.search,
@@ -614,9 +602,7 @@ class Home extends StatelessWidget {
                     //   ),
                     // ),
                     child: CachedNetworkImage(
-                      imageUrl: collection.image == null
-                          ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                          : collection.image.toString().replaceAll("localhost", "10.0.2.2"),
+                      imageUrl: collection.image.toString().replaceAll("localhost", "10.0.2.2"),
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -700,16 +686,6 @@ class Home extends StatelessWidget {
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.2,
                         width: MediaQuery.of(context).size.width,
-                        // decoration:BoxDecoration(
-                        //     borderRadius: BorderRadius.only(
-                        //         bottomLeft: Radius.circular(40)),
-                        //   /*  image: DecorationImage(
-                        //       image: CachedNetworkImageProvider(
-                        //         homeController.slider[index].image
-                        //       ),
-                        //       //image: NetworkImage(homeController.slider[index].image.replaceAll("localhost", "10.0.2.2")),
-                        //       fit: BoxFit.fill,
-                        //     )*/),
                         child: CachedNetworkImage(
                           fit: BoxFit.fill,
                           imageUrl: homeController.slider[index].image,
@@ -757,77 +733,82 @@ class Home extends StatelessWidget {
     );
   }
   _top_categories(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.62,
-      width: MediaQuery.of(context).size.width,
-      color: AppColors.main,
-      child: Padding(
-        padding: const EdgeInsets.all(0),
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.4,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15,right: 15),
+                  child: homeController.topCategory.isEmpty
+                      ? Center()
+                      : Text(
+                      App_Localization.of(context)
+                          .translate("top_categories"),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+          ],
+        ),
+        Container(
+          height: MediaQuery.of(context).size.width*0.9,
           width: MediaQuery.of(context).size.width,
-          child:
-          homeController.topCategory.isEmpty
-              ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                App_Localization.of(context).translate("no_top_category"),
-                style: TextStyle(
-                    color: AppColors.main2,
-                    fontSize: 35
-                ),),
-            ],
-          )
-              :
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          color: AppColors.main,
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Container(
+              height: MediaQuery.of(context).size.width*0.9,
+              width: MediaQuery.of(context).size.width,
+              child:
+              homeController.topCategory.isEmpty
+                  ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15,right: 15,top: 15,bottom: 5),
-                        child: homeController.topCategory.isEmpty
-                            ? Center()
-                            : Text(
-                            App_Localization.of(context)
-                                .translate("top_categories"),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ],
+                  Text(
+                    App_Localization.of(context).translate("no_top_category"),
+                    style: TextStyle(
+                        color: AppColors.main2,
+                        fontSize: 35
+                    ),),
+                ],
+              )
+                  :
+              Column(
+                children: [
+
+                  Container(
+                    // width: MediaQuery.of(context).size.width ,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _top_category_card(homeController.topCategory[0],
+                            context, MediaQuery.of(context).size.width*0.8+10, 0),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _top_category_card(homeController.topCategory[1],
+                                context, MediaQuery.of(context).size.width*0.4, 1),
+                            _top_category_card(homeController.topCategory[2],
+                                context, MediaQuery.of(context).size.width*0.4, 2)
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
-              Container(
-                //width: MediaQuery.of(context).size.width ,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _top_category_card(homeController.topCategory[0],
-                        context, MediaQuery.of(context).size.height * 0.517, 0),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _top_category_card(homeController.topCategory[1],
-                            context, MediaQuery.of(context).size.height * 0.25, 1),
-                        _top_category_card(homeController.topCategory[2],
-                            context, MediaQuery.of(context).size.height * 0.25, 2)
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
   _top_category_card(TopCategory collection, BuildContext context, double height, int index) {
@@ -849,8 +830,8 @@ class Home extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.44,
-                    height: height - 40,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: height-30,
                     // decoration: BoxDecoration(
                     //   borderRadius:
                     //   BorderRadius.only(bottomLeft: Radius.circular(40)),
@@ -862,9 +843,7 @@ class Home extends StatelessWidget {
                     //   ),
                     // ),
                     child: CachedNetworkImage(
-                      imageUrl: collection.mainImage == null
-                          ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                          : collection.mainImage.replaceAll("localhost", "10.0.2.2"),
+                      imageUrl: collection.mainImage.replaceAll("localhost", "10.0.2.2"),
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
                           borderRadius:
@@ -958,16 +937,11 @@ class SearchTextField extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestions = suggestion_list.where((name) {
-      return name.toLowerCase().contains(query.toLowerCase());
-    });
-    // homeController.get_products_by_search(query, context);
-    // close(context, query);
+
     Future.delayed(Duration(milliseconds: 200)).then((value) {
       close(context, query);
     });
-    // homeController.get_products_by_search(query, context)
-    // Get.back();
+
     return Center(
       child: CircularProgressIndicator(
         color: AppColors.main2,

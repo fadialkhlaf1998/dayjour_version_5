@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -59,15 +57,27 @@ class App{
     );
   }
 
+  static price(BuildContext context ,double price,double? offer){
+    return offer==null?
+    Text(price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),)
+    :Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+          Text(offer.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.grey[700], fontSize: 9, fontWeight: FontWeight.bold,decoration: TextDecoration.lineThrough),),
+        ],
+      ),
+    );
+  }
+
   static box_shadow(){
     return  BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10);
   }
 
   static openwhatsapp(BuildContext context,String msg) async{
     var whatsapp ="971526924018";
-    var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=$msg";
-    var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse(msg)}";
-
     String url = WA_url(whatsapp,msg);
 
     if( await canLaunch(url)){

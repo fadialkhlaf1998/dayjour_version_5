@@ -1,17 +1,15 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
-import 'package:dayjour_version_3/controler/product_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
-import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
-import 'package:dayjour_version_3/view/home.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -37,6 +35,12 @@ class CategoryView extends StatelessWidget {
     productsController.selected_sub_category.value = this.selected;
     productsController.category=this.category;
     productsController.selected_category=this.selected_category.obs;
+    productsController.productCountShow.value = 10;
+    if(productsController.my_products.length>10){
+      productsController.productCountShow.value = 10;
+    }else{
+      productsController.productCountShow.value = productsController.my_products.length;
+    }
   }
 
   @override
@@ -83,7 +87,10 @@ class CategoryView extends StatelessWidget {
                           height: 10,
                         ),
                         _body(context),
-
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        showMoreBtn(context),
                       ],
                     ),
                   ),
@@ -112,7 +119,37 @@ class CategoryView extends StatelessWidget {
       ),
     );
   }
-  _category(BuildContext context) {
+
+  showMoreBtn(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      child: Center(
+        child: productsController.productCountShow.value ==
+            productsController.my_products.length ? Center() : GestureDetector(
+          onTap: () {
+            productsController.showMore();
+          },
+          child: Container(
+            width: 90,
+            height: 30,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: App.main2
+            ),
+            child: Center(child: Text(
+              App_Localization.of(context).translate("show_more"),
+              style: TextStyle(fontSize: 12, color: Colors.white),),),
+          ),
+        ),
+      ),
+    );
+  }
+
+    _category(BuildContext context) {
     return Container(
       color: App.main,
       child: Column(
@@ -301,7 +338,6 @@ class CategoryView extends StatelessWidget {
                                     suggestion_list: Global.suggestion_list,
                                     homeController: homeController));
                             homeController.get_products_by_search(result!, context);
-                            print(result);
                           },
                           icon: Icon(
                             Icons.search,
@@ -317,7 +353,7 @@ class CategoryView extends StatelessWidget {
                             homeController.selected_bottom_nav_bar.value=2;
                           },
                           icon: Icon(
-                            Icons.favorite,
+                            Icons.favorite_border,
                             color: Colors.white,
                             size: 25,
                           ),
@@ -341,7 +377,7 @@ class CategoryView extends StatelessWidget {
                           ),
                           Positioned(
                               top: 0,
-                              child: cartController.my_order.value.length==0?Center():Container(
+                              child: cartController.my_order.length==0?Center():Container(
                             width: 15,
                             height: 15,
                             decoration: BoxDecoration(
@@ -350,7 +386,7 @@ class CategoryView extends StatelessWidget {
                             ),
                             child:  Center(child: FittedBox(child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 1),
-                              child: Text(cartController.my_order.value.length.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
+                              child: Text(cartController.my_order.length.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
                             ))),
                           ))
                         ],
@@ -414,7 +450,7 @@ class CategoryView extends StatelessWidget {
                         mainAxisSpacing: 15,
                     ),
                     padding: EdgeInsets.only(left: 10,right: 10),
-                    itemCount:  productsController.my_products.length,
+                    itemCount:  productsController.productCountShow.value,
                     itemBuilder: (context, index){
                       return
                           _products(productsController.my_products[index],
@@ -428,114 +464,98 @@ class CategoryView extends StatelessWidget {
   }
 
   _products(MyProduct product, BuildContext context, int index) {
-    return Padding(
-      padding: EdgeInsets.only(right: 0,bottom: productsController.my_products.length%2==0&&index>=productsController.my_products.length-2?5:index>=productsController.my_products.length-1?5:0),
-      child: GestureDetector(
-        onTap: () {
-          productsController.go_to_product(index);
-        },
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    spreadRadius: 2,
-                    blurRadius: 6,
-                    offset: Offset(0, 5), // changes position of shadow
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                      flex: 6,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.44,
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(product.image == null
-                                ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                                : product.image),
-                          ),
-                        ),
-                      )),
-                  Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: Text(
-                                  product.title.toString(),
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 12),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: Text(
-                                  product.price.toStringAsFixed(2) +
-                                      " " +
-                                      App_Localization.of(context)
-                                          .translate("aed"),
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ))
-                ],
-              ),
+    return GestureDetector(
+      onTap: () {
+        productsController.go_to_product(index);
+      },
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                // BoxShadow(
+                //   color: Colors.grey.withOpacity(0.4),
+                //   spreadRadius: 2,
+                //   blurRadius: 6,
+                //   offset: Offset(0, 5), // changes position of shadow
+                // ),
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
             ),
-            Positioned(child: Obx(() {
-              return IconButton(
-                icon: Icon(
-                  productsController.my_products[index].favorite.value
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  color: App.main2,
-                ),
-                onPressed: () {
-                  if (productsController.my_products[index].favorite.value) {
-                    wishlistController.delete_from_wishlist(
-                        productsController.my_products[index]);
-                  } else {
-                    wishlistController
-                        .add_to_wishlist(productsController.my_products[index]);
-                  }
-                },
-              );
-            }))
-          ],
-        ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                    flex: 6,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.44,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(product.image),
+                        ),
+                      ),
+                    )),
+                Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                product.title.toString(),
+                                maxLines: 2,
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 12),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child:App.price(context, product.price, product.offer_price),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ))
+              ],
+            ),
+          ),
+          Positioned(child: Obx(() {
+            return IconButton(
+              icon: Icon(
+                productsController.my_products[index].favorite.value
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: App.main2,
+              ),
+              onPressed: () {
+                if (productsController.my_products[index].favorite.value) {
+                  wishlistController.delete_from_wishlist(
+                      productsController.my_products[index]);
+                } else {
+                  wishlistController
+                      .add_to_wishlist(productsController.my_products[index]);
+                }
+              },
+            );
+          }))
+        ],
       ),
     );
   }
@@ -595,9 +615,6 @@ class SearchTextField extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestions = suggestion_list.where((name) {
-      return name.toLowerCase().contains(query.toLowerCase());
-    });
     homeController.get_products_by_search(query, context);
     Future.delayed(Duration(milliseconds: 200)).then((value) {
       close(context, query);

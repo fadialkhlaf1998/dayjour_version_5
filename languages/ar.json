@@ -226,5 +226,17 @@
   "password_changed_succ" : "تم تغيير كلمة المرور بنجاح",
   "reaload": "إعادة التحميل",
   "no_net": "لا يوجد اتصال بالشبكة",
-  "remember_pass": "تذكر كلمة المرور"
- }
+  "remember_pass": "تذكر كلمة المرور",
+  "refused": "ملغي",
+  "cancel_order": "إلغاء الطلب",
+  "tax": "الضرائب",
+  "discount": "الحسم",
+  "free": "مجاناً",
+  "coupon": "Coupon",
+  "apply": "تفعيل",
+  "discount_code": "كود الحسم",
+  "discount_code_succ": "تم تفعيل كود الحسم بنجاح",
+  "discount_code_err": "هذا الكود ليس متاح",
+  "included":"(متضمن)",
+  "show_more": "عرض المزيد"
+}

@@ -1,18 +1,11 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
-import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/my_order_controller.dart';
-import 'package:dayjour_version_3/controler/products_controller.dart';
-import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/customer_order.dart';
-import 'package:dayjour_version_3/my_model/my_order.dart';
-import 'package:dayjour_version_3/my_model/my_product.dart';
-import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -191,26 +184,19 @@ class _MyOrderViewState extends State<MyOrderView> {
                 children: [
                   SingleChildScrollView(
                     child: Obx(() {
+
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: myOrderController.my_order.length,
                         itemBuilder: (context, index) {
+
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 15),
                             child: Center(
                               child: GestureDetector(
                                 onTap: () {
-                                  // for(int i = 0; i < myOrderController.my_order.length; i++){
-                                  //   if(myOrderController.my_order[i] != myOrderController.my_order[index]){
-                                  //     myOrderController.my_order[i].openCard.value = false;
-                                  //   }
-                                  // }
-                                  // setState(() {
-                                  //   myOrderController.my_order[index].openCard.value= !myOrderController.my_order[index].openCard.value;
-                                  // });
-                                  // print(myOrderController.my_order[index].openCard.value);
-                                  // print('***');
+
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width - 50,
@@ -243,11 +229,12 @@ class _MyOrderViewState extends State<MyOrderView> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(_date_covert(myOrderController.my_order[index].date.toString()),style: TextStyle(color: Colors.grey,fontSize: 10),),
+                                            // Text(_date_covert(DateTime.now().toString()),style: TextStyle(color: Colors.grey,fontSize: 10),),
                                             Row(
                                               children: [
-                                                Text(myOrderController.my_order[index].deliver==1?App_Localization.of(context).translate("completed"):App_Localization.of(context).translate("process"),style: TextStyle(color: myOrderController.my_order[index].deliver==1?Colors.green:Colors.blue,fontSize: 10),),
+                                                Text(myOrderController.my_order[index].deliver==1?App_Localization.of(context).translate("completed"):myOrderController.my_order[index].deliver==-1?App_Localization.of(context).translate("refused"):App_Localization.of(context).translate("process"),style: TextStyle(color: myOrderController.my_order[index].deliver==1?Colors.green:myOrderController.my_order[index].deliver==-1?Colors.red:Colors.blue,fontSize: 10),),
                                                 SizedBox(width: 5,),
-                                                Icon(myOrderController.my_order[index].deliver==1?Icons.check_circle:Icons.history,size: 15,color: myOrderController.my_order[index].deliver==1?Colors.green:Colors.blue,)
+                                                Icon(myOrderController.my_order[index].deliver==1?Icons.check_circle:myOrderController.my_order[index].deliver==-1?Icons.close:Icons.history,size: 15,color: myOrderController.my_order[index].deliver==1?Colors.green:myOrderController.my_order[index].deliver==-1?Colors.red:Colors.blue,)
                                               ],
                                             )
                                           ],
@@ -286,9 +273,13 @@ class _MyOrderViewState extends State<MyOrderView> {
                                             Text(myOrderController.my_order[index].total.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: Colors.grey,fontSize: 13),),
                                           ],
                                         ),
+
+                                        DateTime.parse(myOrderController.my_order[index].current.toString()).isBefore(DateTime.parse(myOrderController.my_order[index].date.toString()))
+                                            &&myOrderController.my_order[index].isPaid!=1&&myOrderController.my_order[index].deliver==0?
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
+
                                             GestureDetector(
                                               onTap: (){
                                                 myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
@@ -305,7 +296,48 @@ class _MyOrderViewState extends State<MyOrderView> {
                                                   child: Text(App_Localization.of(context).translate("view_order"),style: TextStyle(fontSize: 11,color: Colors.white),),
                                                 ),
                                               ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: (){
+                                                myOrderController.cancel_order(index);
+                                              },
+                                              child: Container(
+                                                width: 75,
+                                                height: 27,
+                                                decoration: BoxDecoration(
+                                                    color: App.main2,
+                                                    border: Border.all(color: App.main2),
+                                                    borderRadius: BorderRadius.circular(5)
+                                                ),
+                                                child: Center(
+                                                  child: Text(App_Localization.of(context).translate("cancel_order"),style: TextStyle(fontSize: 11,color: Colors.white),),
+                                                ),
+                                              ),
                                             )
+                                          ],
+                                        ):
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+
+                                            GestureDetector(
+                                              onTap: (){
+                                                myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
+                                              },
+                                              child: Container(
+                                                width: 75,
+                                                height: 27,
+                                                decoration: BoxDecoration(
+                                                    color: App.main2,
+                                                    border: Border.all(color: App.main2),
+                                                    borderRadius: BorderRadius.circular(5)
+                                                ),
+                                                child: Center(
+                                                  child: Text(App_Localization.of(context).translate("view_order"),style: TextStyle(fontSize: 11,color: Colors.white),),
+                                                ),
+                                              ),
+                                            ),
+
                                           ],
                                         ),
                                       ],

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
@@ -21,6 +23,7 @@ class SignIn extends StatelessWidget {
     print(Global.remember_pass);
     if(Global.remember_pass&&Global.remember_password!="non"){
       password.text=Global.remember_password;
+      email.text=Global.remember_email;
     }
   }
 

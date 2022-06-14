@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
@@ -8,7 +10,6 @@ import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
-import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,14 @@ class ProductSearch extends StatelessWidget {
 
   ProductSearch(this.products,this.text){
     productsController.my_products=this.products;
-    print('**************'+productsController.my_products.length.toString());
     if(text.isNotEmpty){
       productsController.searchIcon.value=!productsController.searchIcon.value;
       productsController.searchController.text=text;
+    }
+    if(productsController.my_products.length>10){
+      productsController.productCountShow = 10.obs;
+    }else{
+      productsController.productCountShow = productsController.my_products.length.obs;
     }
   }
 
@@ -55,7 +60,9 @@ class ProductSearch extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 20 + MediaQuery.of(context).size.height*0.09,),
-                    _body(context)
+                    _body(context),
+                    SizedBox(height: 20,),
+                    showMoreBtn(context),
                   ],
                 ),
               ),
@@ -140,7 +147,6 @@ class ProductSearch extends StatelessWidget {
                                 delegate: SearchTextField(
                                     suggestion_list: Global.suggestion_list, homeController: homeController));
                             get_result(result!, context);
-                            print(result);
                           },
                           icon: Icon(
                             Icons.search,
@@ -157,7 +163,7 @@ class ProductSearch extends StatelessWidget {
                           homeController.selected_bottom_nav_bar.value=2;
                         },
                         icon: Icon(
-                          Icons.favorite,
+                          Icons.favorite_border,
                           color: Colors.white,
                           size: 25,
                         ),
@@ -227,7 +233,34 @@ class ProductSearch extends StatelessWidget {
       }
     });
   }
-
+  showMoreBtn(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      child: Center(
+        child: productsController.productCountShow.value ==
+            productsController.my_products.length ? Center() : GestureDetector(
+          onTap: () {
+            productsController.showMore();
+          },
+          child: Container(
+            width: 90,
+            height: 30,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: App.main2
+            ),
+            child: Center(child: Text(
+              App_Localization.of(context).translate("show_more"),
+              style: TextStyle(fontSize: 12, color: Colors.white),),),
+          ),
+        ),
+      ),
+    );
+  }
   _body(BuildContext context) {
     return productsController.my_products.isEmpty ?
     Container(
@@ -268,7 +301,7 @@ class ProductSearch extends StatelessWidget {
               mainAxisSpacing: 10
           ),
           shrinkWrap: true,
-          itemCount: productsController.my_products.length,
+          itemCount: productsController.productCountShow.value,
           itemBuilder: (context,index){
             return  _products(productsController.my_products[index],context,index);
           }),
@@ -297,7 +330,6 @@ class ProductSearch extends StatelessWidget {
       padding: const EdgeInsets.only(right: 0),
       child: GestureDetector(
         onTap: () {
-          //todo go to product
           productsController.go_to_product(index);
         },
         child: Stack(
@@ -335,8 +367,6 @@ class ProductSearch extends StatelessWidget {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                                product.image == null ?
-                                "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png":
                                 product.image
                             ),
                           ),
@@ -365,14 +395,7 @@ class ProductSearch extends StatelessWidget {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        child: Text(
-                          product.price.toStringAsFixed(2)+ " "+App_Localization.of(context).translate("aed"),
-                          maxLines: 2,
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
+                        child: App.price(context, product.price, product.offer_price)
                       ),
                     ],
                   ),
@@ -456,9 +479,6 @@ class SearchTextField extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestions = suggestion_list.where((name) {
-      return name.toLowerCase().contains(query.toLowerCase());
-    });
     homeController.get_products_by_search(query, context);
     Future.delayed(Duration(milliseconds: 200)).then((value) {
       close(context, query);

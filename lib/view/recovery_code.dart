@@ -1,13 +1,11 @@
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
-import 'package:dayjour_version_3/controler/sign_up_controller.dart';
 import 'package:dayjour_version_3/controler/verification_code_controller.dart';
 import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:dayjour_version_3/view/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 

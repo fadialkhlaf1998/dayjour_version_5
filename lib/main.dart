@@ -9,29 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
-
 void main() {
   runApp(MyApp());
 }
 
-
-// class MyHttpOverrides extends HttpOverrides{
-//   @override
-//   HttpClient createHttpClient(SecurityContext? context){
-//     return super.createHttpClient(context)
-//       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
-//   }
-// }
-
 class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
-
 
   static void set_locale(BuildContext context , Locale locale){
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
     state!.set_locale(locale);
   }
-
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -44,7 +32,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale=locale;
     });
-    /// Instantiate NewVersion manager object (Using GCP Console app as example)
   }
 
 
@@ -53,11 +40,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-    // cartController.load_cart();
-    // wishlistController.load_wishlist();
-    // Instantiate NewVersion manager object (Using GCP Console app as example)
-
     Global.load_language().then((language) {
       setState(() {
         _locale= Locale(language);
@@ -68,8 +50,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //todo remove not secure
-    // HttpOverrides.global = MyHttpOverrides();
     return GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,

@@ -1,10 +1,4 @@
-import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
-import 'package:dayjour_version_3/const/global.dart';
-import 'package:dayjour_version_3/controler/intro_controller.dart';
-// import 'package:dayjour_version_2/view/home.dart';
-// import 'package:dayjour_version_2/view/sign_in.dart';
-// import 'package:dayjour_version_2/view/sign_up.dart';
 import 'package:dayjour_version_3/controler/intro_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

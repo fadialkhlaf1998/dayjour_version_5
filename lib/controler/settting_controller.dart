@@ -1,4 +1,3 @@
-
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/main.dart';
 import 'package:flutter/cupertino.dart';

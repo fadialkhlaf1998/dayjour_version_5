@@ -4,9 +4,6 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/view/policy_page.dart';
-import 'package:dayjour_version_3/view/sign_in.dart';
-import 'package:dayjour_version_3/view/cart.dart';
-import 'package:dayjour_version_3/view/introduction.dart';
 import 'package:dayjour_version_3/view/settings.dart';
 import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +115,6 @@ class DrawerWidget {
                   width: 150,
                   child: GestureDetector(
                     onTap: () {
-                      //todo something
                       App.openwhatsapp(context, App_Localization.of(context).translate("whatsapp_info"));
                     },
                     child: Row(

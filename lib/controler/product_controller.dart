@@ -28,31 +28,23 @@ class ProductController extends GetxController{
   }
 
   add_to_cart(BuildContext context){
-    // if(myProduct!.availability>0){
-    MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability);
+    MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability,offer_price: myProduct!.offer_price,super_category_id: myProduct!.super_category_id,category_id: myProduct!.category_id);
     cartController.add_to_cart(myProduct1, cart_count.value,context);
-    // }else{
-    //   // App_Localization.of(context).translate("out_stock");
-    // }
-
   }
 
   favorite(ProductInfo product){
     product.is_favoirite.value = !product.is_favoirite.value;
     if(product.is_favoirite.value){
-      MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability);
+      MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.category_id,super_category_id: myProduct!.super_category_id);
       wishListController.add_to_wishlist(myProduct1);
     }else{
-      MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability);
+      MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.category_id,super_category_id: myProduct!.super_category_id);
       wishListController.delete_from_wishlist(myProduct1);
     }
   }
 
   add_review(String text ,int product_id,BuildContext context){
-    print(Global.customer);
-    print(text);
     if(Global.customer!=null){
-      //todo change global customer
       MyApi.add_review(Global.customer!.id, product_id, text);
       App.sucss_msg(context, App_Localization.of(context).translate("publish_sucses"));
     }else{

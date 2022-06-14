@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/helper/store.dart';
+import 'package:dayjour_version_3/my_model/auto_discount.dart';
+import 'package:dayjour_version_3/my_model/discount_code.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/my_responce.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/customer.dart';
 import 'package:dayjour_version_3/my_model/product_info.dart';
+import 'package:dayjour_version_3/my_model/shipping.dart';
 import 'package:dayjour_version_3/my_model/slider.dart';
+import 'package:dayjour_version_3/my_model/start_up.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/my_model/customer_order.dart';
 import 'package:dayjour_version_3/my_model/top_category.dart';
@@ -21,6 +25,73 @@ class MyApi {
   // static String url = "http://10.0.2.2:3000/";
   // static String url = "https://phpstack-548447-2377428.cloudwaysapps.com/";
   static String url = "https://app.dayjour.net/";
+  static Future<bool> getShipping()async{
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('GET', Uri.parse(url+'api/shipping'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var list = jsonDecode(json) as List;
+      List<Shipping> shippingList = <Shipping>[];
+      for(int i=0;i<list.length;i++){
+        shippingList.add(Shipping.fromMap(list[i]));
+      }
+      Global.shipping = shippingList.first;
+      return true;
+    }
+    else {
+      return getShipping();
+    }
+  }
+  static Future<StartUp?> startUp()async{
+
+    var request = http.Request('GET', Uri.parse(url+'api/start_up'));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      return StartUp.fromJson(json);
+    }
+    else {
+      return null;
+    }
+
+  }
+
+  static Future<List<MyProduct>> sliderProducts(List<MyProduct> wishlist,int id)async{
+
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/slider_mobile'));
+    request.body = json.encode({
+      "id": id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      List<MyProduct> list = <MyProduct>[];
+
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(MyProduct.fromMap(jsonlist[i]));
+      }
+      return get_favorite(wishlist,list);
+    }
+    else {
+      return <MyProduct>[];
+    }
+
+  }
 
   static Future<List<MyProduct>> getCart(List<int> arr)async{
 
@@ -49,7 +120,29 @@ class MyApi {
       return <MyProduct>[];
     }
   }
+  static Future<bool> cancelOrder(int order_id)async{
 
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('POST', Uri.parse(url+'api/refuse_order'));
+    request.body = json.encode({
+      "id": order_id
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      return true;
+    }
+    else {
+      print(response.reasonPhrase);
+      return false;
+    }
+
+  }
   static Future<List<Brand>> getBrands()async{
 
     var request = http.Request('GET', Uri.parse(url+'api/brand'));
@@ -168,7 +261,6 @@ class MyApi {
     if (response.statusCode == 200) {
       var json = await response.stream.bytesToString();
       var jsonlist = jsonDecode(json) as List;
-      print(jsonlist);
       List<SubCategory> list = <SubCategory>[];
       for(int i=0;i<jsonlist.length;i++){
         list.add(SubCategory.fromMap(jsonlist[i]));
@@ -197,7 +289,6 @@ class MyApi {
     if (response.statusCode == 200) {
       var json = await response.stream.bytesToString();
       var jsonlist = jsonDecode(json) as List;
-      print(jsonlist);
       List<SubCategory> list = <SubCategory>[];
       for(int i=0;i<jsonlist.length;i++){
         list.add(SubCategory.fromMap(jsonlist[i]));
@@ -488,7 +579,6 @@ class MyApi {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-    print(response);
     if (response.statusCode == 200) {
       String json = await response.stream.bytesToString();
       Result result = Result.fromJson(json);
@@ -512,10 +602,8 @@ class MyApi {
       "pass": pass
     });
     request.headers.addAll(headers);
-    print('*-*-*-');
     http.StreamedResponse response = await request.send();
 
-    print(response.statusCode);
     if (response.statusCode == 200) {
       String json = await response.stream.bytesToString();
       Result result = Result.fromJson(json);
@@ -628,10 +716,8 @@ class MyApi {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
     }
     else {
-      print(await response.stream.bytesToString());
       print(response.reasonPhrase);
     }
 
@@ -654,18 +740,17 @@ class MyApi {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
     }
     else {
       print(response.reasonPhrase);
     }
   }
 
-  static Future <bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems)async{
+  static Future <bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems,String discount)async{
     var headers = {
       'Content-Type': 'application/json',
     };
-    var request = http.Request('POST', Uri.parse(url+'api/order'));
+    var request = http.Request('POST', Uri.parse(url+'api/v2/order'));
     request.body = json.encode({
       "customer_id": Global.customer!.id,
       "email":  Global.customer!.email,
@@ -676,19 +761,19 @@ class MyApi {
       "emirate": emirate,
       "phone": "+971"+phone,
       "details": details,
-      "sub_total": sub_total,
+      "sub_total": sub_total.toStringAsFixed(2),
       "shipping": shipping,
-      "total": total,
+      "total": total.toStringAsFixed(2),
       "is_paid": is_paid,
       "address": city+"/"+address,
-      "lineItems": List<dynamic>.from(lineItems.map((x) => x.toMap()))
+      "lineItems": List<dynamic>.from(lineItems.map((x) => x.toMap())),
+      "discount":discount
     });
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
       return true;
     }
     else {
@@ -698,20 +783,23 @@ class MyApi {
 
   }
 
-  static search_sub_category(String title)async{
+  static search_suggestion()async{
     var headers = {
       'Content-Type': 'application/json',
     };
-    var request = http.Request('GET', Uri.parse(url+'api/sub_category/search'));
-    request.body = json.encode({
-      "title": title
-    });
+    var request = http.Request('GET', Uri.parse(url+'api/search_suggestion'));
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      var json = await response.stream.bytesToString();
+      var jsonlist = jsonDecode(json) as List;
+      List<String> list = <String>[];
+      for(int i=0;i<jsonlist.length;i++){
+        list.add(jsonlist[i]["title"].toString());
+      }
+      Global.suggestion_list.addAll(list);
     }
     else {
       print(response.reasonPhrase);
@@ -730,9 +818,7 @@ class MyApi {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-    print('*****');
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
     }
     else {
       print(response.reasonPhrase);
@@ -791,4 +877,61 @@ class MyApi {
     }
 
   }
+
+
+  static Future<List<AutoDiscount>> getAutoDiscount()async{
+
+    var request = http.Request('GET', Uri.parse(url+'api/auto_discount_mobile'));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var list = jsonDecode(json) as List;
+      List<AutoDiscount> brands = <AutoDiscount>[];
+      for(int i=0;i<list.length;i++){
+        brands.add(AutoDiscount.fromMap(list[i]));
+      }
+      return brands;
+    }
+    else {
+      return <AutoDiscount>[];
+    }
+
+  }
+
+  static Future<DiscountCode?> discountCode(String code)async{
+    try{
+      var headers = {
+        'Content-Type': 'application/json'
+      };
+      var request = http.Request('POST', Uri.parse(url+'api/active_discount_code'));
+      request.body = json.encode({
+        "code": code
+      });
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        var json = await response.stream.bytesToString();
+        var list = jsonDecode(json) as List;
+        if(list.isEmpty){
+          return null;
+        }
+        List<DiscountCode> brands = <DiscountCode>[];
+        for(int i=0;i<list.length;i++){
+          brands.add(DiscountCode.fromMap(list[i]));
+        }
+        Store.save_discount_code(code);
+        return brands.first;
+      }
+      else {
+        print(response.reasonPhrase);
+        return null;
+      }
+    }catch(e){
+      return null;
+    }
+
+  }
+
 }

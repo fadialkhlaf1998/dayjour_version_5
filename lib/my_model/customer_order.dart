@@ -25,6 +25,8 @@ class CustomerOrder {
     required this.deliver,
     required this.date,
     required this.code,
+    required this.current,
+    required this.tax,
   });
 
   int id;
@@ -40,10 +42,12 @@ class CustomerOrder {
   double subTotal;
   double shipping;
   double total;
+  double tax;
   int isPaid;
   int deliver;
   var openCard = false.obs;
   var date ;
+  var current ;
   String code;
 
 
@@ -54,21 +58,24 @@ class CustomerOrder {
   factory CustomerOrder.fromMap(Map<String, dynamic> json) => CustomerOrder(
     id: json["id"],
     customerId: json["customer_id"],
-    firstname: json["firstname"],
-    lastname: json["lastname"],
-    address: json["address"],
-    apartment: json["apartment"],
-    country: json["country"],
-    emirate: json["emirate"],
-    phone: json["phone"],
-    details: json["details"],
+    firstname: json["firstname"]??"non",
+    lastname: json["lastname"]??"non",
+    address: json["address"]??"non",
+    apartment: json["apartment"]??"non",
+    country: json["country"]??"non",
+    emirate: json["emirate"]??"non",
+    phone: json["phone"]??"non",
+    details: json["details"]??"non",
     subTotal: double.parse(json["sub_total"].toString()),
     shipping: double.parse(json["shipping"].toString()),
     total: double.parse(json["total"].toString()),
-    isPaid: json["is_paid"],
-    deliver: json["deliver"],
+    tax:json["tax"]==null?0.0: double.parse(json["tax"].toString()),
+    isPaid: json["is_paid"]??"non",
+    deliver: json["deliver"]??"non",
     date: DateTime.parse(json["created_at"]),
-    code: json["code"]
+    current: DateTime.parse(json["current"]),
+
+    code: json["code"]??"non"
   );
 
   Map<String, dynamic> toMap() => {
@@ -86,5 +93,7 @@ class CustomerOrder {
     "shipping": shipping,
     "total": total,
     "is_paid": isPaid,
+    "current":current,
+    "tax":tax,
   };
 }

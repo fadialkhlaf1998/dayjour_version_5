@@ -2,17 +2,13 @@ import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
-import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:dayjour_version_3/view/product.dart';
-// import 'package:dayjour_version_2/view/no_internet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
-// import '../view/product.dart';
 
 class ProductsController extends GetxController{
   List<SubCategory> sub_categories=<SubCategory>[].obs;
@@ -26,8 +22,23 @@ class ProductsController extends GetxController{
   WishListController wishListController = Get.find();
   CartController cartController = Get.find();
 
+  var productCountShow = 10.obs;
 
+  showMore(){
+    if(productCountShow.value+10<=my_products.length){
+      productCountShow.value += 10;
+    }else{
+      productCountShow.value = my_products.length;
+    }
+  }
 
+  updateShowCount(){
+    if(my_products.length>10){
+      productCountShow.value = 10;
+    }else{
+      productCountShow.value = my_products.length;
+    }
+  }
 
   get_products_by_search(String query,BuildContext context){
     MyApi.check_internet().then((internet) {
@@ -40,7 +51,7 @@ class ProductsController extends GetxController{
           }else{
             App.error_msg(context, App_Localization.of(context).translate("fail_search"));
           }
-
+          updateShowCount();
         }).catchError((err){
           loading.value=false;
         });
@@ -62,9 +73,11 @@ class ProductsController extends GetxController{
           my_products.clear();
           my_products.addAll(value);
           loading.value=false;
+          updateShowCount();
         }).catchError((err){
           loading.value=false;
         });
+
       }else{
         Get.to(()=>NoInternet())!.then((value) {
           update_product(index);
@@ -84,10 +97,11 @@ class ProductsController extends GetxController{
             my_products.clear();
             my_products.addAll(value);
             loading.value=false;
+            updateShowCount();
           }).catchError((err){
             loading.value=false;
           });
-
+          updateShowCount();
         }).catchError((err){
           loading.value=false;
         });
@@ -106,9 +120,7 @@ class ProductsController extends GetxController{
     MyApi.check_internet().then((internet) {
       if (internet) {
         MyApi.getProductsInfo(wishListController.wishlist,my_products[index].id).then((value) {
-          // selected_sub_category.value=index;
           loading.value=false;
-          //todo add favorite
           Get.to(()=>ProductView(value!,my_products[index]));
         }).catchError((err){
           loading.value=false;

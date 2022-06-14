@@ -21,6 +21,9 @@ class ProductInfo {
     required this.images,
     required this.reviews,
     required this.availability,
+    required this.offer_price,
+    required this.category_id,
+    required this.super_category_id,
   });
 
   int id;
@@ -36,7 +39,10 @@ class ProductInfo {
   List<Image> images;
   List<Review> reviews;
   int availability;
+  double? offer_price;
   var is_favoirite=false.obs;
+  int category_id;
+  int super_category_id;
 
   factory ProductInfo.fromJson(String str) => ProductInfo.fromMap(json.decode(str));
 
@@ -50,12 +56,16 @@ class ProductInfo {
     subTitle: json["sub_title"],
     description: json["description"],
     price: double.parse(json["price"].toString()),
+    offer_price: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),
     rate:double.parse(json["rate"].toString()),
     image: json["image"],
+
     ratingCount: json["rating_count"],
     images: List<Image>.from(json["images"].map((x) => Image.fromMap(x))),
     reviews: List<Review>.from(json["reviews"].map((x) => Review.fromMap(x))),
-    availability: json["availability"]==null?0:json["availability"],
+      availability: json["availability"]==null?0:json["availability"]<0?0:json["availability"],
+      category_id: json["category_id"],
+      super_category_id: json["super_category_id"]
     // availability: 0,
   );
 
@@ -67,12 +77,15 @@ class ProductInfo {
     "sub_title": subTitle,
     "description": description,
     "price": price,
+    "offer_price": offer_price,
     "rate": rate,
     "image": image,
     "rating_count": ratingCount,
     "images": List<dynamic>.from(images.map((x) => x.toMap())),
     "reviews": List<dynamic>.from(reviews.map((x) => x.toMap())),
-    "availability":availability
+    "availability":availability,
+    "category_id":category_id,
+    "super_category_id":super_category_id
   };
 }
 

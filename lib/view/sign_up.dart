@@ -1,11 +1,10 @@
-import 'dart:ui';
+// ignore_for_file: must_be_immutable
 
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/controler/sign_up_controller.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

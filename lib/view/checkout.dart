@@ -1,4 +1,3 @@
-
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/global.dart';
@@ -7,12 +6,9 @@ import 'package:dayjour_version_3/controler/checkout_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/my_fatoraah.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:my_fatoorah/my_fatoorah.dart';
 
 
 class Checkout extends StatefulWidget {
@@ -805,11 +801,6 @@ class _Checkout2State extends State<Checkout> {
                               fit: BoxFit.fill,
                               image: NetworkImage(cartController
                                   .my_order[index].product.value.image
-                                  .toString() ==
-                                  null
-                                  ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                                  : cartController
-                                  .my_order[index].product.value.image
                                   .toString()),
                             ),
                           ),
@@ -900,41 +891,6 @@ class _Checkout2State extends State<Checkout> {
         //   ),
         // ),
         // const SizedBox(height: 80),
-      ],
-    );
-  }
-  _accepted() {
-    return Column(
-      children: [
-        const SizedBox(height: 40),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: CircleAvatar(
-                child:  SvgPicture.asset('assets/icons/accept_order.svg',
-                    width:MediaQuery.of(context).size.width * 0.55),
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 30),
-        Text(
-            App_Localization.of(context).translate("order_accepted"),
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 23
-            )),
-        const SizedBox(height: 30),
-        Text(
-           App_Localization.of(context).translate("your_order_number") + "22323",
-            style: TextStyle(
-                fontSize: 18
-            )),
-        const SizedBox(height: 50),
       ],
     );
   }

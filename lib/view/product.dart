@@ -1,4 +1,4 @@
-import 'dart:ui';
+// ignore_for_file: must_be_immutable
 
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
@@ -14,20 +14,15 @@ import 'package:dayjour_version_3/my_model/product_info.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/image_show.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dayjour_version_3/view/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import 'package:carousel_slider/carousel_slider.dart';
-
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ProductView extends StatelessWidget {
   TextEditingController textReview = TextEditingController();
@@ -66,19 +61,24 @@ class ProductView extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               color: AppColors.main,
-              child: productController.loading.value?Center(child: CircularProgressIndicator(color: App.main2,),):SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _header(context),
-                    _slider_images(context),
-                    _title(context),
-                    _review(context),
-                    _description(context),
-                    _add_to_cart(context),
-                    _show_review(context),
-                    _recently_product(context)
-                  ],
-                ),
+              child: productController.loading.value?Center(child: CircularProgressIndicator(color: App.main2,),):Stack(
+                children: [
+                  SingleChildScrollView(
+                    child:Column(
+                      children: [
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.09,),
+                        _slider_images(context),
+                        _title(context),
+                        _review(context),
+                        _description(context),
+                        _add_to_cart(context),
+                        _show_review(context),
+                        _recently_product(context)
+                      ],
+                    ),
+                  ),
+                  Positioned(top: 0,child:_header(context),)
+                ],
               ),
             ),
           )),
@@ -148,7 +148,7 @@ class ProductView extends StatelessWidget {
                             homeController.selected_bottom_nav_bar.value=2;
                           },
                           icon: Icon(
-                            Icons.favorite,
+                            Icons.favorite_border,
                             color: Colors.white,
                             size: 25,
                           ),
@@ -206,9 +206,6 @@ class ProductView extends StatelessWidget {
       if (internet) {
         MyApi.getProductsInfo(productController.wishListController.wishlist,product.id).then((value) {
           productController.loading.value=false;
-          //todo add favorite
-         // Get.to(()=>ProductView(value!,product));
-         //  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ProductView(value!,product)));
           productController.selected_slider.value=0;
           products=value!;
           productController.myProduct=value;
@@ -300,9 +297,7 @@ class ProductView extends StatelessWidget {
             color: Colors.white,
             image: DecorationImage(
               fit: BoxFit.contain,
-              image: NetworkImage(path == null
-                  ? "https://www.pngkey.com/png/detail/85-853437_professional-makeup-cosmetics.png"
-                  : path),
+              image: NetworkImage(path),
             ),
           ),
         ),
@@ -365,7 +360,8 @@ class ProductView extends StatelessWidget {
                                         rate: products.rate,
                                         image: products.image,
                                         ratingCount: products.ratingCount
-                                        ,availability: products.availability);
+                                        ,availability: products.availability,
+                                        offer_price: products.offer_price,category_id: products.category_id,super_category_id: products.super_category_id);
                                     wishlistController.add_to_wishlist(p);
                                   } else {
                                     MyProduct p = MyProduct(
@@ -379,7 +375,10 @@ class ProductView extends StatelessWidget {
                                         rate: products.rate,
                                         image: products.image,
                                         ratingCount: products.ratingCount
-                                        ,availability: products.availability);
+                                        ,availability: products.availability,
+                                      offer_price: products.offer_price
+                                        ,super_category_id: products.super_category_id,category_id: products.category_id
+                                    );
                                     wishlistController.delete_from_wishlist(p);
                                   }
                                 },
@@ -413,18 +412,22 @@ class ProductView extends StatelessWidget {
                           height: 50,
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              products.price.toStringAsFixed(2) +
-                                  " " +
-                                  App_Localization.of(context).translate("aed"),
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17),
+                            child: products.offer_price==null?
+                            Text(products.price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),)
+                                :Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(products.price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+                                  SizedBox(width: 10,),
+                                  Text(products.offer_price!.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.grey[700], fontSize: 9, fontWeight: FontWeight.bold,decoration: TextDecoration.lineThrough),),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+
                         Container(
                           decoration: BoxDecoration(
                             color: App.main2,
@@ -489,7 +492,7 @@ class ProductView extends StatelessWidget {
                   ),
                   onRatingUpdate: (rating) {
 
-                    MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: products.availability);
+                    MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: products.availability,offer_price: products.offer_price,super_category_id: products.super_category_id,category_id: products.category_id);
                     wishlistController.add_to_rate(myProduct1, rating);
                     MyApi.rate(productController.myProduct!, rating);
 
@@ -500,7 +503,7 @@ class ProductView extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Global.customer == null
-                      ? App.error_msg(context, App_Localization.of(context).translate('please_login_first'))
+                      ? Get.to(()=>SignIn())
                       : showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -641,28 +644,7 @@ class ProductView extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    MyProduct p = MyProduct(
-                        id: products.id,
-                        subCategoryId: products.subCategoryId,
-                        brandId: products.brandId,
-                        title: products.title,
-                        subTitle: products.subTitle,
-                        description: products.description,
-                        price: products.price,
-                        rate: products.rate,
-                        image: products.image,
-                        ratingCount: products.ratingCount,
-                        availability: products.availability);
-
                     productController.add_to_cart(context);
-                    // showTopSnackBar(
-                    //   context,
-                    //   CustomSnackBar.success(
-                    //     message: App_Localization.of(context)
-                    //         .translate("Just_Added_To_Your_Cart"),
-                    //     //backgroundColor: AppColors.main2,
-                    //   ),
-                    // );
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.55,
@@ -938,7 +920,9 @@ class ProductView extends StatelessWidget {
                           rate: Global.recentlyProduct[index].rate,
                           ratingCount: Global.recentlyProduct[index].ratingCount,
                           subCategoryId: Global.recentlyProduct[index].subCategoryId,
-                          subTitle: Global.recentlyProduct[index].subTitle
+                          subTitle: Global.recentlyProduct[index].subTitle,
+                          offer_price: products.offer_price
+                          ,category_id: products.category_id,super_category_id: products.super_category_id
                       ),context);
                       },
                     child: Container(

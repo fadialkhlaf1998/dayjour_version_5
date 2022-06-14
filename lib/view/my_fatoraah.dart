@@ -169,10 +169,9 @@ class _MyHomePageState extends State<MyFatoraahPage> {
         context,
         request,
         MFAPILanguage.EN,
-            (String invoiceId, MFResult<MFPaymentStatusResponse> result) => {
+           onPaymentResponse:  (String invoiceId, MFResult<MFPaymentStatusResponse> result) => {
           if (result.isSuccess())
             {
-              //todo sucss msg
               setState(() {
                 checkoutController.my_order.addAll(cartController.my_order);
                 checkoutController.is_paid.value=true;
@@ -450,7 +449,7 @@ class _MyHomePageState extends State<MyFatoraahPage> {
   }
 
   void initiateSession() {
-    MFSDK.initiateSession((MFResult<MFInitiateSessionResponse> result) => {
+    MFSDK.initiateSession(null,(MFResult<MFInitiateSessionResponse> result) => {
       if (result.isSuccess())
         {mfPaymentCardView!.load(result.response!)}
       else

@@ -1,15 +1,9 @@
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
-import 'package:dayjour_version_3/const/global.dart';
-import 'package:dayjour_version_3/helper/api.dart';
-import 'package:dayjour_version_3/helper/log_in_api.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
-// import 'package:albassel_version_1/view/home.dart';
-// import 'package:albassel_version_1/view/no_internet.dart';
-// import 'package:albassel_version_1/view/verification_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

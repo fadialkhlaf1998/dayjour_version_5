@@ -6,7 +6,6 @@ import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/my_order.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/view/accepted_order.dart';
-// import 'package:dayjour_version_2/view/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
@@ -50,6 +49,8 @@ class CheckoutController extends GetxController{
         address_err.value=true;
         // selected_operation++;
       }else{
+        Store.save_address( address.text,
+            apartment.text, city.text, country.value, emirate.value, phone.text);
         selected_operation++;
       }
     }else{
@@ -100,34 +101,28 @@ class CheckoutController extends GetxController{
   }
   add_order_payment(BuildContext context){
     cartController.get_total();
-    //todo add order to shpify
-    add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+    add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
     cartController.clear_cart();
-   // App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
   }
   add_order_shopyfi(BuildContext context){
     cartController.get_total();
     if(is_paid.value){
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
-      // Get.offAll(()=>Home());
     }else{
-      //todo add order to shpify
-      add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems);
+      add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2));
       cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
-      // Get.offAll(()=>Home());
     }
   }
 
-  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems){
-    print('9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999');
-    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems).then((succ) {
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems,String discount){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount).then((succ) {
       if(!succ){
-        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
       }
     }).catchError((err){
-      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems);
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount);
     });
   }
 
@@ -140,6 +135,14 @@ class CheckoutController extends GetxController{
         text+=my_order[i].product.value.title+" X "+my_order[i].quantity.value.toString()+"\n";
       }else{
         my_order.removeAt(i);
+      }
+    }
+    for(int i=0;i<cartController.auto_discount.length;i++){
+      if(cartController.auto_discount[i].quantity.value>0&&cartController.auto_discount[i].product.value.availability>0){
+        lineItems.add(LineItem(id: cartController.auto_discount[i].product.value.id, quantity: cartController.auto_discount[i].quantity.value));
+        text+=cartController.auto_discount[i].product.value.title+" X "+cartController.auto_discount[i].quantity.value.toString()+"\n";
+      }else{
+        cartController.auto_discount.removeAt(i);
       }
     }
     return text;
