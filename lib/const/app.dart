@@ -90,6 +90,7 @@ class App{
   }
 
   static String WA_url(String phone,String message) {
+    return "https://wa.me/$phone/?text=${Uri.parse(message)}";
     if (Platform.isAndroid) {
       // add the [https]
       return "https://wa.me/$phone/?text=${Uri.parse(message)}"; // new line
