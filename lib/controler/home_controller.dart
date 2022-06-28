@@ -16,6 +16,8 @@ import 'package:dayjour_version_3/view/my_order.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:dayjour_version_3/view/product.dart';
 import 'package:dayjour_version_3/view/product_search.dart';
+import 'package:dayjour_version_3/view/sign_in.dart';
+import 'package:dayjour_version_3/view/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -308,8 +310,9 @@ class HomeController extends GetxController{
             Get.to(()=>MyOrderView(value));
           });
         }else{
-          App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
+          // App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
           loading.value = false;
+          Get.to(()=>SignIn());
         }
         
       }else{

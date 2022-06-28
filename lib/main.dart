@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 void main() {
   runApp(MyApp());
 }
-//final final
+//final final 2.0.0
 class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
 
