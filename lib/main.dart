@@ -6,6 +6,7 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:dayjour_version_3/view/introduction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
@@ -34,12 +35,34 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
+  ///Facebook
+  // String _deepLinkUrl = 'Unknown';
+  // FlutterFacebookSdk? facebookDeepLinks;
+  // bool isAdvertisingTrackingEnabled = true;
+  //
+  // Future<void> initPlatformState() async {
+  //   String? deepLinkUrl;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     facebookDeepLinks = FlutterFacebookSdk();
+  //     facebookDeepLinks!.onDeepLinkReceived!.listen((event) {
+  //       setState(() {
+  //         _deepLinkUrl = event;
+  //       });
+  //     });
+  //     deepLinkUrl = await facebookDeepLinks!.getDeepLinkUrl;
+  //     setState(() {
+  //       _deepLinkUrl = deepLinkUrl!;
+  //     });
+  //   } on PlatformException {}
+  //   if (!mounted) return;
+  // }
 
 
   @override
   void initState() {
     super.initState();
+    // initPlatformState();
     Global.load_language().then((language) {
       setState(() {
         _locale= Locale(language);
@@ -50,6 +73,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
