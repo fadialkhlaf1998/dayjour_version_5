@@ -746,6 +746,29 @@ class MyApi {
     }
   }
 
+  static Future<bool> deleta_account()async{
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var request = http.Request('DELETE', Uri.parse(url+'api/customer-delete'));
+    request.body = json.encode({
+      "email": Global.customer!.email
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    }
+    else {
+      print(response.reasonPhrase);
+      return false;
+    }
+
+  }
+
   static Future <bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,bool is_paid,List<LineItem> lineItems,String discount)async{
     var headers = {
       'Content-Type': 'application/json',

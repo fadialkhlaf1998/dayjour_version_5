@@ -18,6 +18,7 @@ import 'package:dayjour_version_3/view/product.dart';
 import 'package:dayjour_version_3/view/product_search.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
 import 'package:dayjour_version_3/view/sign_up.dart';
+import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -318,6 +319,32 @@ class HomeController extends GetxController{
       }else{
         Get.to(()=>NoInternet())!.then((value) {
           go_to_my_order(context);
+        });
+      }
+    });
+  }
+
+  delete_account(BuildContext context){
+    loading.value=true;
+    MyApi.check_internet().then((internet) {
+      if (internet) {
+        if(Global.customer!=null){
+          MyApi.deleta_account().then((value) async{
+
+            Global.customer=null;
+            await Store.logout();
+            Get.offAll(Welcome());
+            loading.value=false;
+          });
+        }else{
+          // App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
+          loading.value = false;
+          App.error_msg(context, App_Localization.of(context).translate("wrong"));
+        }
+
+      }else{
+        Get.to(()=>NoInternet())!.then((value) {
+          delete_account(context);
         });
       }
     });

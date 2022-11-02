@@ -238,5 +238,6 @@
   "discount_code_succ": "تم تفعيل كود الحسم بنجاح",
   "discount_code_err": "هذا الكود ليس متاح",
   "included":"(متضمن)",
-  "show_more": "عرض المزيد"
+  "show_more": "عرض المزيد",
+  "delete_account": "حذف الحساب"
 }

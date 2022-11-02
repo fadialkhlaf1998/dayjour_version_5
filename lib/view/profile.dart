@@ -248,6 +248,34 @@ class Profile extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(height: 20),
+              Container(
+                width: MediaQuery.of(context).size.width -20,
+                height: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.red,width: 1)
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        // Get.to(AddressView());
+                        homeController.delete_account(context);
+                      },
+                      child:  Text(
+                        App_Localization.of(context).translate("delete_account"),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.red,
+                            //fontWeight: FontWeight.bold,
+                            fontSize: 14,fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ) :
           Column(
