@@ -607,12 +607,28 @@ class _MyHomePageState extends State<MyFatoraahPage> {
                 Padding(
                   padding: EdgeInsets.all(5.0),
                 ),
-                TextButton(
-                  // color: App.main2,
-                  // textColor: Colors.white,
-                  child: Text('Pay',style: TextStyle(color: Colors.white),),
-                  onPressed: pay,
-                ),
+                // TextButton(
+                //   // color: App.main2,
+                //   // textColor: Colors.white,
+                //   child: Text('Pay',style: TextStyle(color: Colors.white),),
+                //   onPressed: pay,
+                // ),
+                Center(
+                  child: GestureDetector(
+                    onTap: pay,
+                    child: Container(
+                      width: 150,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: App.main2,
+                          borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Center(
+                        child: Text('Pay',style: TextStyle(color:  Colors.white,fontWeight: FontWeight.bold),),
+                      ),
+                    ),
+                  ),
+                )
                 // RaisedButton(
                 //   color: Colors.lightBlue,
                 //   textColor: Colors.white,
