@@ -80,6 +80,8 @@ class Product {
     required this.shopifyId,
     required this.offerPrice,
     required this.count,
+    required this.sub_category,
+    required this.brand,
   });
 
   int id;
@@ -97,6 +99,8 @@ class Product {
   int newArrivials;
   int availability;
   String sku;
+  String sub_category;
+  String brand;
   dynamic shopifyId;
   double? offerPrice;
   int count;
@@ -120,7 +124,9 @@ class Product {
     ratingCount: json["rating_count"],
     newArrivials: json["new_arrivials"],
     availability: json["availability"],
-    sku: json["sku"],
+    sku: json["sku"]??"",
+    sub_category: json["sub_category"]??"",
+    brand: json["brand"]??"",
     shopifyId: json["shopify_id"],
     offerPrice: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),
     count: json["count"],

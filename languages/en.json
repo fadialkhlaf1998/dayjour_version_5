@@ -242,5 +242,6 @@
   "discount_code_err": "Oops This Code Not Valid",
   "included":"(included)",
   "show_more": "Show More",
-  "delete_account": "Delete Account"
+  "delete_account": "Delete Account",
+  "tabby_promotion": "Pay in 4. No interest, no fees."
 }

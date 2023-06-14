@@ -356,7 +356,11 @@ class HomeController extends GetxController{
         if(slider[index].product_id!=null&&slider[index].is_product==1){
           MyApi.getProductsInfo(wishListController.wishlist,slider[index].product_id!).then((value) {
             loading.value=false;
-            MyProduct p = MyProduct(id: value!.id, subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability,offer_price: value.offer_price,category_id: value.category_id,super_category_id: value.super_category_id);
+            MyProduct p = MyProduct(id: value!.id,
+                brand: "",
+                sub_category: "",
+                sku: "",
+                subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability,offer_price: value.offer_price,category_id: value.category_id,super_category_id: value.super_category_id);
             Get.to(()=>ProductView(value,p));
           });
         }else{

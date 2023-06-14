@@ -23,6 +23,9 @@ class MyProduct {
     required this.offer_price,
     required this.category_id,
     required this.super_category_id,
+    required this.sub_category,
+    required this.brand,
+    required this.sku,
   });
 
   int id;
@@ -36,6 +39,9 @@ class MyProduct {
   double? offer_price;
   double rate;
   String image;
+  String sub_category;
+  String brand;
+  String sku;
   int ratingCount;
   var favorite=false.obs;
   int availability;
@@ -53,6 +59,9 @@ class MyProduct {
         brandId: json["brand_id"],
         title: json["title"]??"",
         subTitle: json["sub_title"]??"",
+        sub_category: json["sub_category"]??"",
+        brand: json["brand"]??"",
+        sku: json["sku"]??"",
         description: json["description"]??"",
         price: double.parse(json["price"].toString()),
         offer_price: json["offer_price"]==null?null:double.parse(json["offer_price"].toString()),

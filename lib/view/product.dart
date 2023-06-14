@@ -351,6 +351,9 @@ class ProductView extends StatelessWidget {
                                   if (products.is_favoirite.value) {
                                     MyProduct p = MyProduct(
                                         id: products.id,
+                                        brand: products.brand,
+                                        sku: products.sku,
+                                        sub_category: products.sub_category,
                                         subCategoryId: products.subCategoryId,
                                         brandId: products.brandId,
                                         title: products.title,
@@ -366,6 +369,9 @@ class ProductView extends StatelessWidget {
                                   } else {
                                     MyProduct p = MyProduct(
                                         id: products.id,
+                                        brand: products.brand,
+                                        sku: products.sku,
+                                        sub_category: products.sub_category,
                                         subCategoryId: products.subCategoryId,
                                         brandId: products.brandId,
                                         title: products.title,
@@ -492,7 +498,11 @@ class ProductView extends StatelessWidget {
                   ),
                   onRatingUpdate: (rating) {
 
-                    MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id, subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: products.availability,offer_price: products.offer_price,super_category_id: products.super_category_id,category_id: products.category_id);
+                    MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id,
+                        brand: products.brand,
+                        sku: products.sku,
+                        sub_category: products.sub_category,
+                        subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: products.availability,offer_price: products.offer_price,super_category_id: products.super_category_id,category_id: products.category_id);
                     wishlistController.add_to_rate(myProduct1, rating);
                     MyApi.rate(productController.myProduct!, rating);
 
@@ -912,6 +922,9 @@ class ProductView extends StatelessWidget {
                       go_to_product(MyProduct(
                           description: Global.recentlyProduct[index].description,
                           id: Global.recentlyProduct[index].id,
+                          brand: Global.recentlyProduct[index].brand,
+                          sku: Global.recentlyProduct[index].sku,
+                          sub_category: Global.recentlyProduct[index].sub_category,
                           image: Global.recentlyProduct[index].image,
                           availability: Global.recentlyProduct[index].availability,
                           title: Global.recentlyProduct[index].title,

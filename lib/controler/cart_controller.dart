@@ -107,7 +107,11 @@ class CartController extends GetxController{
                   Global.auto_discounts[i].products[j].availability>=Global.auto_discounts[i].products[j].count){
                 int counter = my_order[k].quantity.value~/Global.auto_discounts[i].minimumQuantity;
                 for(int y=0;y<counter;y++){
-                  MyProduct mp = MyProduct(id: Global.auto_discounts[i].products[j].productId, subCategoryId: Global.auto_discounts[i].products[j].subCategoryId, brandId: -1, title: Global.auto_discounts[i].products[j].title,
+                  MyProduct mp = MyProduct(id: Global.auto_discounts[i].products[j].productId,
+                      brand: Global.auto_discounts[i].products[j].brand,
+                      sub_category: Global.auto_discounts[i].products[j].sub_category,
+                      sku: Global.auto_discounts[i].products[j].sku,
+                      subCategoryId: Global.auto_discounts[i].products[j].subCategoryId, brandId: -1, title: Global.auto_discounts[i].products[j].title,
                       subTitle: Global.auto_discounts[i].products[j].subTitle, description: Global.auto_discounts[i].products[j].description, price: Global.auto_discounts[i].products[j].price,
                       rate: Global.auto_discounts[i].products[j].rate, image: Global.auto_discounts[i].products[j].image, ratingCount: Global.auto_discounts[i].products[j].ratingCount,
                       availability: Global.auto_discounts[i].products[j].availability, offer_price: Global.auto_discounts[i].products[j].offerPrice, category_id: -1, super_category_id: -1);

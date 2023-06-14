@@ -946,7 +946,38 @@ class _Checkout2State extends State<Checkout> {
               title: Text(App_Localization.of(context).translate("payment")),
               subtitle: Text(App_Localization.of(context).translate("c_card")),
             ),
-          )
+          ),
+          SizedBox(height: 10,),
+          double.parse(cartController.total.value) >= 10 &&double.parse(cartController.total.value) <= 4000
+              ?Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              // boxShadow: [
+              //
+              // ]
+            ),
+            child: ListTile(
+              leading: CircleAvatar(
+                  child: Icon(Icons.payments_outlined),
+                  backgroundColor: AppColors.main2
+              ),
+              onTap: (){
+                checkoutController.lunch_order_tabby(context);
+              },
+              title: Row(
+                children: [
+                  Container(
+                    width: 57,
+                    height: 25,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage("assets/icons/tabby.png",),fit: BoxFit.contain)
+                    ),
+                  ),
+                ],
+              ),
+              subtitle: Text(App_Localization.of(context).translate("tabby_promotion")),
+            ),
+          ):Center(),
         ],
       ),
     )

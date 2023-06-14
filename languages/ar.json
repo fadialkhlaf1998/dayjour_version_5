@@ -239,5 +239,6 @@
   "discount_code_err": "هذا الكود ليس متاح",
   "included":"(متضمن)",
   "show_more": "عرض المزيد",
-  "delete_account": "حذف الحساب"
+  "delete_account": "حذف الحساب",
+  "tabby_promotion": "قسّمها على 4. بدون أي فوائد، أو رسوم."
 }

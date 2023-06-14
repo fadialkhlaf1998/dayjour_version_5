@@ -28,17 +28,29 @@ class ProductController extends GetxController{
   }
 
   add_to_cart(BuildContext context){
-    MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability,offer_price: myProduct!.offer_price,super_category_id: myProduct!.super_category_id,category_id: myProduct!.category_id);
+    MyProduct myProduct1 = MyProduct(id: myProduct!.id,
+        brand: myProduct!.brand,
+        sub_category: myProduct!.sub_category,
+        sku: myProduct!.sku,
+        subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability,offer_price: myProduct!.offer_price,super_category_id: myProduct!.super_category_id,category_id: myProduct!.category_id);
     cartController.add_to_cart(myProduct1, cart_count.value,context);
   }
 
   favorite(ProductInfo product){
     product.is_favoirite.value = !product.is_favoirite.value;
     if(product.is_favoirite.value){
-      MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.category_id,super_category_id: myProduct!.super_category_id);
+      MyProduct myProduct1 = MyProduct(id: myProduct!.id,
+          brand: myProduct!.brand,
+          sub_category: myProduct!.sub_category,
+          sku: myProduct!.sku,
+          subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount, availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.category_id,super_category_id: myProduct!.super_category_id);
       wishListController.add_to_wishlist(myProduct1);
     }else{
-      MyProduct myProduct1 = MyProduct(id: myProduct!.id, subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.category_id,super_category_id: myProduct!.super_category_id);
+      MyProduct myProduct1 = MyProduct(id: myProduct!.id,
+          brand: myProduct!.brand,
+          sub_category: myProduct!.sub_category,
+          sku: myProduct!.sku,
+          subCategoryId: myProduct!.subCategoryId, brandId: myProduct!.brandId, title: myProduct!.title, subTitle: myProduct!.subTitle, description: myProduct!.description, price: myProduct!.price, rate: myProduct!.rate, image: myProduct!.image, ratingCount: myProduct!.ratingCount,availability: myProduct!.availability,offer_price: myProduct!.offer_price,category_id: myProduct!.category_id,super_category_id: myProduct!.super_category_id);
       wishListController.delete_from_wishlist(myProduct1);
     }
   }

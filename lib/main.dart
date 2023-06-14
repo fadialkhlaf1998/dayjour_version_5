@@ -9,8 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 
 void main() {
+
+  TabbySDK().setup(
+    withApiKey: 'pk_test_1e0e3651-1f8b-4a0e-8458-0f43711280f5',
+    environment: Environment.production,
+  );
+
   runApp(MyApp());
 }
 //final final 2.0.0
