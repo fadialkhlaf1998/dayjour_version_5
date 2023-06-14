@@ -14,7 +14,7 @@ import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 void main() {
 
   TabbySDK().setup(
-    withApiKey: 'pk_test_1e0e3651-1f8b-4a0e-8458-0f43711280f5',
+    withApiKey: '',
     environment: Environment.production,
   );
 
