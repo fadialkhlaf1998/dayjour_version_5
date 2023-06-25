@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/view/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -375,6 +376,7 @@ class _CartState extends State<Cart> {
             ],
           ),
         ),
+
         const SizedBox(height: 20),
         _sub_totals(),
         const SizedBox(height: 20),
@@ -387,6 +389,15 @@ class _CartState extends State<Cart> {
         double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?_discount():Center(),
         double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?const SizedBox(height: 20):Center(),
         _totals(),
+        const SizedBox(height: 20),
+        Container(
+          width: Get.width * 0.85,
+          child: TabbyPresentationSnippet(
+            price: cartController.total.value,
+            currency: Currency.aed,
+            lang: Global.lang_code == "en"?Lang.en:Lang.ar,
+          ),
+        ),
         SizedBox(height: 20,),
         activateDicountCode(context),
         const SizedBox(height: 60),

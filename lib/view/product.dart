@@ -23,6 +23,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 
 class ProductView extends StatelessWidget {
   TextEditingController textReview = TextEditingController();
@@ -71,7 +72,20 @@ class ProductView extends StatelessWidget {
                         _title(context),
                         _review(context),
                         _description(context),
+
                         _add_to_cart(context),
+                        Container(
+                          width: Get.width * 0.85,
+                          child: Container(
+                            width: Get.width * 0.85,
+                            child: TabbyPresentationSnippet(
+                              price: products.price.toString(),
+                              currency: Currency.aed,
+                              lang: Global.lang_code == "en"?Lang.en:Lang.ar,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10,),
                         _show_review(context),
                         _recently_product(context)
                       ],

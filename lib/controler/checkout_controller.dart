@@ -33,7 +33,6 @@ class CheckoutController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    lunch_session();
   }
 
   /**address controllers*/
@@ -167,11 +166,13 @@ class CheckoutController extends GetxController{
         amount: cartController.total.value,
         currency: Currency.aed,
         buyer: Buyer(
+          // email: "id.card.success@tabby.ai",
+          // email: "card.success@tabby.ai",
+          // email: "rejected.ae@tabby.ai",
 
-          email: "card.success@tabby.ai",
-          // email: Global.customer!.email,
-          phone: "500000001",
-          // phone: phone.text,
+          email: Global.customer!.email,
+          // phone: "500000001",
+          phone: phone.text,
           name: firstname.text+" "+lastname.text,
         ),
         buyerHistory: BuyerHistory(
@@ -218,12 +219,14 @@ class CheckoutController extends GetxController{
           }else if(resultCode.name == "close"){
             Get.back();
             // App.error_msg(context, App_Localization.of(context).translate("wrong"));
+          }else{
+            Get.back();
           }
         },
       );
     }catch(e){
       cashewLoading(false);
-      App.error_msg(context, App_Localization.of(context).translate("wrong"));
+      App.error_msg(context, App_Localization.of(context).translate("tabby_rejection"));
       print(e);
       print('***************');
       e.printError();
@@ -236,13 +239,14 @@ class CheckoutController extends GetxController{
     // cartController.clear_cart();
   }
   add_order_tabby(BuildContext context,String reference){
+    App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
+    Get.offAll(()=>Home());
     my_order.addAll(cartController.my_order.value);
     get_details();
     print(lineItems.length.toString()+"*-*-*-*-*-*");
     add_order(firstname.text, lastname.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -3,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),reference);
     // cartController.clear_cart();
-    App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
-    Get.offAll(()=>Home());
+
   }
   add_order_shopyfi(BuildContext context){
     cartController.get_total();

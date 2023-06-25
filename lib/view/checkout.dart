@@ -29,6 +29,7 @@ class _Checkout2State extends State<Checkout> {
   _Checkout2State(){
     checkoutController.firstname.text=Global.customer!.firstname;
     checkoutController.lastname.text=Global.customer!.lastname;
+    checkoutController.lunch_session();
     if(Global.my_address!=null){
       checkoutController.address.text = Global.my_address!.address;
       checkoutController.apartment.text = Global.my_address!.apartment;
@@ -592,10 +593,12 @@ class _Checkout2State extends State<Checkout> {
                         );
                       }).toList(),
                       onChanged: (newValue) {
-                        setState(() {
-                          checkoutController.emirate.value = newValue.toString();
-                          // checkoutController.emirate_validate.value = true;
-                        });
+                        // setState(() {
+                        //
+                        //   // checkoutController.emirate_validate.value = true;
+                        // });
+
+                        checkoutController.emirate.value = newValue.toString();
                       },
                     ),
                   ),

@@ -243,5 +243,6 @@
   "included":"(included)",
   "show_more": "Show More",
   "delete_account": "Delete Account",
-  "tabby_promotion": "Pay in 4. No interest, no fees."
+  "tabby_promotion": "Pay in 4. No interest, no fees.",
+  "tabby_rejection": "Sorry, Tabby is not available. Please use another payment method"
 }
