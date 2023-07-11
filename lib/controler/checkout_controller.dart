@@ -3,6 +3,7 @@ import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
+import 'package:dayjour_version_3/my_model/customer_order.dart';
 import 'package:dayjour_version_3/my_model/my_order.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/view/accepted_order.dart';
@@ -66,8 +67,8 @@ class CheckoutController extends GetxController{
       }
     }else{
       if(selected.value&&!is_cod.value) {
-        App.error_msg(
-            context, App_Localization.of(context).translate("err_next_step"));
+        // App.error_msg(
+        //     context, App_Localization.of(context).translate("wrong"));
       }else if(selected.value && selected_operation != 2){
         selected_operation++;
       }else if (selected.value && selected_operation == 2){
@@ -110,9 +111,18 @@ class CheckoutController extends GetxController{
       print(e);
     });
   }
+  List<CustomerOrder> tabbyList = <CustomerOrder>[];
   lunch_session()async{
+    var regesterSince = new DateTime.now();
+    tabbyList = await MyApi.get_customer_order(Global.customer!.id);
+    try{
+      regesterSince = DateTime.parse(Global.customer!.created_at);
+    }catch(e){
+      regesterSince = new DateTime.now();
+    }
     var now = new DateTime.now();
     var dateFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(now);
+    var regesterSinceFormated = DateFormat("yyyy-MM-ddTHH:mm:ss").format(regesterSince);
     orderTabbyId = DateTime.now().millisecondsSinceEpoch.toString();
     print(DateTime.now().toIso8601String());
     final mockPayload = Payment(
@@ -123,9 +133,10 @@ class CheckoutController extends GetxController{
         phone: phone.text,
         name: firstname.text+" "+lastname.text,
       ),
+
       buyerHistory: BuyerHistory(
         loyaltyLevel: 0,
-        registeredSince: dateFormatted+"+04:00",
+        registeredSince: regesterSinceFormated+"+04:00",
         wishlistCount: 0,
       ),
       shippingAddress: ShippingAddress(
@@ -146,9 +157,15 @@ class CheckoutController extends GetxController{
           imageUrl:  element.product.value.image
       )).toList()
       ),
-      orderHistory: [
 
-      ],
+      orderHistory: tabbyList.map((element) => OrderHistoryItem(
+          amount: element.total.toString(),
+          purchasedAt:  DateFormat("yyyy-MM-ddTHH:mm:ss").format(element.date)+"+04:00",
+          status: element.deliver == -1
+              ?OrderHistoryItemStatus.canceled
+              :element.deliver == 0?
+                OrderHistoryItemStatus.processing:OrderHistoryItemStatus.complete
+      )).toList(),
     );
     final session = await TabbySDK().createSession(TabbyCheckoutPayload(
       merchantCode: 'DJPP',
@@ -159,9 +176,17 @@ class CheckoutController extends GetxController{
   lunch_order_tabby(BuildContext context)async{
     cashewLoading(true);
     try{
+      var regesterSince = new DateTime.now();
+      try{
+        regesterSince = DateTime.parse(Global.customer!.created_at);
+      }catch(e){
+        regesterSince = new DateTime.now();
+      }
       var now = new DateTime.now();
       var dateFormatted = DateFormat("yyyy-MM-ddTHH:mm:ss").format(now);
-      print(DateTime.now().toIso8601String());
+      var regesterSinceFormated = DateFormat("yyyy-MM-ddTHH:mm:ss").format(regesterSince);
+
+      print(regesterSinceFormated);
       final mockPayload = Payment(
         amount: cartController.total.value,
         currency: Currency.aed,
@@ -177,7 +202,7 @@ class CheckoutController extends GetxController{
         ),
         buyerHistory: BuyerHistory(
           loyaltyLevel: 0,
-          registeredSince: dateFormatted+"+04:00",
+          registeredSince: regesterSinceFormated+"+04:00",
           wishlistCount: 0,
         ),
         shippingAddress: ShippingAddress(
@@ -198,9 +223,14 @@ class CheckoutController extends GetxController{
             imageUrl:  element.product.value.image
         )).toList()
         ),
-        orderHistory: [
-
-        ],
+        orderHistory: tabbyList.map((element) => OrderHistoryItem(
+            amount: element.total.toString(),
+            purchasedAt: DateFormat("yyyy-MM-ddTHH:mm:ss").format(element.date)+"+04:00",
+            status: element.deliver == -1
+                ?OrderHistoryItemStatus.canceled
+                :element.deliver == 0?
+            OrderHistoryItemStatus.processing:OrderHistoryItemStatus.complete
+        )).toList(),
       );
       final session = await TabbySDK().createSession(TabbyCheckoutPayload(
         merchantCode: 'DJPP',
@@ -236,6 +266,7 @@ class CheckoutController extends GetxController{
   add_order_payment(BuildContext context){
     cartController.get_total();
     add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
+    Get.off(Accepted_order(total,sub_total,shipping));
     // cartController.clear_cart();
   }
   add_order_tabby(BuildContext context,String reference){
@@ -265,6 +296,14 @@ class CheckoutController extends GetxController{
       if(!succ){
         add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance);
       }else{
+        selected_operation.value = 0;
+        address_err.value=false;
+        my_order.value = <MyOrder>[];
+        this.is_paid.value=false;
+        selected.value=false;
+        is_cod.value=false;
+        cashewLoading.value=false;
+        my_order.clear();
         cartController.clear_cart();
       }
     }).catchError((err){

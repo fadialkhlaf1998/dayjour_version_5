@@ -42,6 +42,7 @@ class MyCustomer {
     required this.code,
     required this.isActive,
     required this.pass,
+    required this.created_at,
   });
 
   int id;
@@ -51,6 +52,7 @@ class MyCustomer {
   int code;
   int isActive;
   String pass;
+  String created_at;
 
   factory MyCustomer.fromJson(String str) => MyCustomer.fromMap(json.decode(str));
 
@@ -64,6 +66,7 @@ class MyCustomer {
     code: json["code"],
     isActive: json["is_active"],
     pass: json["pass"],
+    created_at: json["created_at"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -74,5 +77,6 @@ class MyCustomer {
     "code": code,
     "is_active": isActive,
     "pass": pass,
+    "created_at": created_at,
   };
 }

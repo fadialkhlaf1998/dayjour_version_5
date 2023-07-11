@@ -27,6 +27,7 @@ class CustomerOrder {
     required this.code,
     required this.current,
     required this.tax,
+    required this.reference,
   });
 
   int id;
@@ -49,6 +50,7 @@ class CustomerOrder {
   var date ;
   var current ;
   String code;
+  String reference;
 
 
   factory CustomerOrder.fromJson(String str) => CustomerOrder.fromMap(json.decode(str));
@@ -72,6 +74,7 @@ class CustomerOrder {
     tax:json["tax"]==null?0.0: double.parse(json["tax"].toString()),
     isPaid: json["is_paid"]??"non",
     deliver: json["deliver"]??"non",
+    reference: json["reference"]??"",
     date: DateTime.parse(json["created_at"]),
     current: DateTime.parse(json["current"]),
 

@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyFatoraahPage> {
     }
 
     // TODO, don't forget to init the MyFatoorah Plugin with the following line
-    MFSDK.init(mAPIKey, MFCountry.UNITED_ARAB_EMIRATES, MFEnvironment.LIVE);
+    MFSDK.init(mAPIKey, MFCountry.UNITED_ARAB_EMIRATES, MFEnvironment.TEST);
     // (Optional) un comment the following lines if you want to set up properties of AppBar.
 
 //    MFSDK.setUpAppBar(
@@ -173,6 +173,7 @@ class _MyHomePageState extends State<MyFatoraahPage> {
           if (result.isSuccess())
             {
               setState(() {
+
                 checkoutController.my_order.addAll(cartController.my_order);
                 checkoutController.is_paid.value=true;
                 checkoutController.add_order_payment(context);
