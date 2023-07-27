@@ -654,7 +654,7 @@ class _CartState extends State<Cart> {
           ),
           SizedBox(width: 10),
           Text(
-            double.parse(cartController.total.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+            (double.parse(cartController.total.value)-double.parse(cartController.shipping.value)).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -669,60 +669,65 @@ class _CartState extends State<Cart> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            App_Localization.of(context).translate("shipping"),
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 13,
-              fontWeight: FontWeight.bold
-            ),
-          ),
-          SizedBox(width: 10),
-          Flexible(
-            child: Container(
-              child: LayoutBuilder(
-                builder: (BuildContext context,
-                    BoxConstraints constraints) {
-                  final boxWidth = constraints.constrainWidth();
-                  final dashWidth = 4.0;
-                  final dashHeight = 2.0;
-                  final dashCount =
-                  (boxWidth / (2 * dashWidth)).floor();
-                  return Flex(
-                    children: List.generate(dashCount, (_) {
-                      return SizedBox(
-                        width: dashWidth,
-                        height: dashHeight,
-                        child: const DecoratedBox(
-                          decoration:
-                          BoxDecoration(color: Colors.grey),
-                        ),
-                      );
-                    }),
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    direction: Axis.horizontal,
-                  );
-                },
-              ),
-            ),
-          ),
-          SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                cartController.shipping.value+ " "+App_Localization.of(context).translate("aed"),
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13
-                ),
-              )
-            ],
-          ),
+          Text(App_Localization.of(context).translate("Shipping_will_be_calculated_at_checkout"),style: TextStyle(
+            color: Colors.black,
+            fontSize: 13,
+          fontWeight: FontWeight.bold
+        ),)
+          // Text(
+          //   App_Localization.of(context).translate("shipping"),
+          //   style: TextStyle(
+          //       color: Colors.black,
+          //       fontSize: 13,
+          //     fontWeight: FontWeight.bold
+          //   ),
+          // ),
+          // SizedBox(width: 10),
+          // Flexible(
+          //   child: Container(
+          //     child: LayoutBuilder(
+          //       builder: (BuildContext context,
+          //           BoxConstraints constraints) {
+          //         final boxWidth = constraints.constrainWidth();
+          //         final dashWidth = 4.0;
+          //         final dashHeight = 2.0;
+          //         final dashCount =
+          //         (boxWidth / (2 * dashWidth)).floor();
+          //         return Flex(
+          //           children: List.generate(dashCount, (_) {
+          //             return SizedBox(
+          //               width: dashWidth,
+          //               height: dashHeight,
+          //               child: const DecoratedBox(
+          //                 decoration:
+          //                 BoxDecoration(color: Colors.grey),
+          //               ),
+          //             );
+          //           }),
+          //           mainAxisAlignment:
+          //           MainAxisAlignment.spaceBetween,
+          //           direction: Axis.horizontal,
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(width: 10),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.end,
+          //   children: [
+          //     Text(
+          //       cartController.shipping.value+ " "+App_Localization.of(context).translate("aed"),
+          //       style: TextStyle(
+          //           color: Colors.black,
+          //           fontWeight: FontWeight.bold,
+          //           fontSize: 13
+          //       ),
+          //     )
+          //   ],
+          // ),
         ],
       ),
     );

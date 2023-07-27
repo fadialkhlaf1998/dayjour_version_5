@@ -241,5 +241,6 @@
   "show_more": "عرض المزيد",
   "delete_account": "حذف الحساب",
   "tabby_promotion": "قسّمها على 4. بدون أي فوائد، أو رسوم.",
-  "tabby_rejection": "عذرًا ، Tabby غير متوفر. الرجاء استخدام طريقة دفع أخرى"
+  "tabby_rejection": "عذرًا ، Tabby غير متوفر. الرجاء استخدام طريقة دفع أخرى",
+  "Shipping_will_be_calculated_at_checkout": "سيتم احتساب الشحن عند السداد"
 }

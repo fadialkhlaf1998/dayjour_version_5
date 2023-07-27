@@ -8,7 +8,8 @@ import 'package:dayjour_version_3/my_model/customer.dart';
 import '../my_model/shipping.dart';
 
 class Global{
-  static Shipping shipping = Shipping(amount: 10, minAmountFree: 250);
+  static Shipping shipping = Shipping(amount: 10, minAmountFree: 250,emirate: "");
+  static List<Shipping> new_shipping = <Shipping>[];
   static List<AutoDiscount> auto_discounts = <AutoDiscount>[];
   static String lang_code="en";
   static bool remember_pass=false;

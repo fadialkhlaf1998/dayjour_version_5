@@ -582,13 +582,13 @@ class _Checkout2State extends State<Checkout> {
                       ),
                       value: checkoutController.emirate.value =="non" ? null: checkoutController.emirate.value,
                       icon: Icon(Icons.keyboard_arrow_down , size: 30,),
-                      items: checkoutController.emirates.map((newvalue) {
+                      items: Global.new_shipping.map((newvalue) {
                         return DropdownMenuItem(
-                          value: newvalue,
+                          value: newvalue.emirate,
                           child: Container(
                             width: MediaQuery.of(context).size.width*0.45,
                             padding: const EdgeInsets.only(left: 3),
-                            child: Text(newvalue),
+                            child: Text(newvalue.emirate+" Shipping:"+newvalue.amount.toString()+"AED",style: TextStyle(fontSize: 12),),
                           ),
                         );
                       }).toList(),
@@ -664,6 +664,8 @@ class _Checkout2State extends State<Checkout> {
       ],
     );
   }
+
+
   _payment_body() {
     return Column(
       children: [
@@ -767,6 +769,169 @@ class _Checkout2State extends State<Checkout> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 10),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    App_Localization.of(context).translate("sub_totals"),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Container(
+                      child: LayoutBuilder(
+                        builder: (BuildContext context,
+                            BoxConstraints constraints) {
+                          final boxWidth = constraints.constrainWidth();
+                          final dashWidth = 4.0;
+                          final dashHeight = 2.0;
+                          final dashCount =
+                          (boxWidth / (2 * dashWidth)).floor();
+                          return Flex(
+                            children: List.generate(dashCount, (_) {
+                              return SizedBox(
+                                width: dashWidth,
+                                height: dashHeight,
+                                child: const DecoratedBox(
+                                  decoration:
+                                  BoxDecoration(color: Colors.grey),
+                                ),
+                              );
+                            }),
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            direction: Axis.horizontal,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    checkoutController.sub_total.toString() + " "+App_Localization.of(context).translate("aed"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    App_Localization.of(context).translate("shipping"),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Container(
+                      child: LayoutBuilder(
+                        builder: (BuildContext context,
+                            BoxConstraints constraints) {
+                          final boxWidth = constraints.constrainWidth();
+                          final dashWidth = 4.0;
+                          final dashHeight = 2.0;
+                          final dashCount =
+                          (boxWidth / (2 * dashWidth)).floor();
+                          return Flex(
+                            children: List.generate(dashCount, (_) {
+                              return SizedBox(
+                                width: dashWidth,
+                                height: dashHeight,
+                                child: const DecoratedBox(
+                                  decoration:
+                                  BoxDecoration(color: Colors.grey),
+                                ),
+                              );
+                            }),
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            direction: Axis.horizontal,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    checkoutController.shipping.toString() + " "+App_Localization.of(context).translate("aed"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text(
+                    App_Localization.of(context).translate("total"),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Container(
+                      child: LayoutBuilder(
+                        builder: (BuildContext context,
+                            BoxConstraints constraints) {
+                          final boxWidth = constraints.constrainWidth();
+                          final dashWidth = 4.0;
+                          final dashHeight = 2.0;
+                          final dashCount =
+                          (boxWidth / (2 * dashWidth)).floor();
+                          return Flex(
+                            children: List.generate(dashCount, (_) {
+                              return SizedBox(
+                                width: dashWidth,
+                                height: dashHeight,
+                                child: const DecoratedBox(
+                                  decoration:
+                                  BoxDecoration(color: Colors.grey),
+                                ),
+                              );
+                            }),
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            direction: Axis.horizontal,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    checkoutController.total.toString() + " "+App_Localization.of(context).translate("aed"),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

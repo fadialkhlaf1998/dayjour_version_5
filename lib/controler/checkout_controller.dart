@@ -49,13 +49,33 @@ class CheckoutController extends GetxController{
   List<String> emirates=["Abu Dhabi","Ajman","Dubai","Fujairah","Ras Al Khaimah","Sharjah","Umm Al Quwain"];
 
 
+  getShippingAmount(String emirate){
+    for(int i=0 ; i < Global.new_shipping.length; i++){
+      if(emirate == Global.new_shipping[i].emirate){
+        return Global.new_shipping[i].amount;
+      }
+    }
+    return Global.new_shipping.first.amount;
+  }
+
+  getMinValueForFree(String emirate){
+    for(int i=0 ; i < Global.new_shipping.length; i++){
+      if(emirate == Global.new_shipping[i].emirate){
+        return Global.new_shipping[i].minAmountFree;
+      }
+    }
+    return Global.new_shipping.first.minAmountFree;
+  }
   next(BuildContext context) async{
-    cartController.get_total();
+    cartController.get_total(min_amount_for_free: getMinValueForFree(emirate.value.toString()),
+        shipping_amount: getShippingAmount(emirate.value.toString()));
     get_details();
+    shipping = cartController.shipping.value;
     if(selected_operation==0){
       shipping=cartController.shipping.value;
       sub_total=cartController.sub_total.value;
       total=cartController.total.value;
+
       if(address.value.text.isEmpty||firstname.value.text.isEmpty||lastname.value.text.isEmpty||
           apartment.value.text.isEmpty||city.value.text.isEmpty||phone.value.text.isEmpty||country=="non"||emirate=="non"||phone.value.text.length<9){
         address_err.value=true;
@@ -264,7 +284,8 @@ class CheckoutController extends GetxController{
   }
 
   add_order_payment(BuildContext context){
-    cartController.get_total();
+    cartController.get_total(min_amount_for_free: getMinValueForFree(emirate.value.toString()),
+        shipping_amount: getShippingAmount(emirate.value.toString()));
     add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
     Get.off(Accepted_order(total,sub_total,shipping));
     // cartController.clear_cart();
@@ -280,7 +301,8 @@ class CheckoutController extends GetxController{
 
   }
   add_order_shopyfi(BuildContext context){
-    cartController.get_total();
+    cartController.get_total(min_amount_for_free: getMinValueForFree(emirate.value.toString()),
+        shipping_amount: getShippingAmount(emirate.value.toString()));
     if(is_paid.value){
       // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
