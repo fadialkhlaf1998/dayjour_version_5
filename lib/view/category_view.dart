@@ -499,6 +499,7 @@ class CategoryView extends StatelessWidget {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(product.image),
+                          opacity: product.availability > 0 ?1:0.5
                         ),
                       ),
                     )),
@@ -554,7 +555,8 @@ class CategoryView extends StatelessWidget {
                 }
               },
             );
-          }))
+          })),
+          App.outOfStock(product.availability),
         ],
       ),
     );

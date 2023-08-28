@@ -2,7 +2,7 @@ import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
+// import 'package:photo_view/photo_view.dart';
 
 class ImageShow extends StatelessWidget {
 
@@ -30,12 +30,19 @@ class ImageShow extends StatelessWidget {
                       color: Colors.white,
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height * 0.1),
-                      child: PhotoView(
-                       imageProvider: NetworkImage(image),
-                        backgroundDecoration: BoxDecoration(
-                          color: Colors.white
-                        ),
+                      child: InteractiveViewer(
+                        panEnabled: false, // Set it to false to prevent panning.
+                        boundaryMargin: EdgeInsets.all(80),
+                        minScale: 0.5,
+                        maxScale: 4,
+                        child: Image.network(image),
                       ),
+                      // child: PhotoView(
+                      //  imageProvider: NetworkImage(image),
+                      //   backgroundDecoration: const BoxDecoration(
+                      //     color: Colors.white
+                      //   ),
+                      // ),
                     ),
                   ],
                 ),

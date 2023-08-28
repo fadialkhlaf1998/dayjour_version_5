@@ -369,6 +369,7 @@ class ProductSearch extends StatelessWidget {
                             image: NetworkImage(
                                 product.image
                             ),
+                              opacity: product.availability > 0 ?1:0.5
                           ),
                         ),
                       ),
@@ -414,7 +415,8 @@ class ProductSearch extends StatelessWidget {
 
                 },
               );
-            }))
+            })),
+            App.outOfStock(product.availability),
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,6 +36,22 @@ class App{
         style: textNormal(Colors.grey, 14),
       ),
     );
+  }
+  static outOfStock(int availability,{double? width}){
+    return availability > 0?Center():Positioned(
+        top: 70,
+        child: Transform.rotate(
+          angle: 0.45,
+          child: Container(
+            width: width==null?Get.width * 0.45:width,
+            height: 80,
+            decoration: BoxDecoration(
+              // color: Colors.red,
+              // color: Colors.white.withOpacity(0.5),
+                image: DecorationImage(image: AssetImage("assets/images/out_of_stock.png"))
+            ),
+          ),
+        ));
   }
   static checkoutTextField(TextEditingController controller,String translate,BuildContext context,double width,double height,bool err){
     return Column(

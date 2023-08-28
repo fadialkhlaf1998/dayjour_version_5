@@ -144,7 +144,8 @@ class Home extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: NetworkImage(homeController.bestSellers[index].image),
-                                        fit: BoxFit.contain
+                                        fit: BoxFit.contain,
+                                        opacity: homeController.bestSellers[index].availability > 0?1:0.5
                                       )
                                     ),
                                   )),
@@ -174,7 +175,8 @@ class Home extends StatelessWidget {
 
                               },
                             );
-                          }))
+                          })),
+                          App.outOfStock(homeController.bestSellers[index].availability,width: MediaQuery.of(context).size.height*0.25, ),
                         ],
                       ),
                     );
@@ -311,7 +313,8 @@ class Home extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: NetworkImage(homeController.newArrivals[index].image),
-                                                fit: BoxFit.contain
+                                                fit: BoxFit.contain,
+                                                opacity: homeController.newArrivals[index].availability > 0?1:0.5
                                             )
                                         ),
                                       )),
@@ -342,7 +345,8 @@ class Home extends StatelessWidget {
 
                                 },
                               );
-                            }))
+                            })),
+                            App.outOfStock(homeController.newArrivals[index].availability,width: MediaQuery.of(context).size.height*0.27 , ),
                           ],
                         ),
                       );
