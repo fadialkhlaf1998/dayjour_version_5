@@ -556,7 +556,7 @@ class SearchTextField extends SearchDelegate<String> {
       ),
       hintColor: Colors.white,
       textTheme: TextTheme(
-        headline6: TextStyle(
+        headlineSmall: TextStyle(
             color: Colors.white
         ),
       ),

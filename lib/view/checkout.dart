@@ -1086,7 +1086,7 @@ class _Checkout2State extends State<Checkout> {
                 checkoutController.next(context);
               },
               leading: CircleAvatar(
-                child: Icon(Icons.delivery_dining),
+                child: Icon(Icons.delivery_dining,color: Colors.white,),
                 backgroundColor: AppColors.main2,
               ),
               title: Text(App_Localization.of(context).translate("cod")),
@@ -1103,7 +1103,7 @@ class _Checkout2State extends State<Checkout> {
             ),
             child: ListTile(
               leading: CircleAvatar(
-                child: Icon(Icons.credit_card),
+                child: Icon(Icons.credit_card,color: Colors.white),
                   backgroundColor: AppColors.main2  
               ),
               onTap: (){
@@ -1126,7 +1126,7 @@ class _Checkout2State extends State<Checkout> {
             ),
             child: ListTile(
               leading: CircleAvatar(
-                  child: Icon(Icons.payments_outlined),
+                  child: Icon(Icons.payments_outlined,color: Colors.white),
                   backgroundColor: AppColors.main2
               ),
               onTap: (){

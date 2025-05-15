@@ -207,7 +207,7 @@ class SignUp extends StatelessWidget {
             },
             label: Text(
               App_Localization.of(context).translate("sign_up"),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15,color: Colors.white),
             ),
           ),
         ),

@@ -245,7 +245,7 @@ class ProductView extends StatelessWidget {
                 ? Stack(
                     children: [
                       CarouselSlider.builder(
-                        carouselController: controller,
+                        // carouselController: controller,
                         options: CarouselOptions(
                             height: MediaQuery.of(context).size.width,
                             autoPlay:

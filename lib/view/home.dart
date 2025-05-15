@@ -18,8 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:new_version/new_version.dart';
+// import 'package:new_version/new_version.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'chat_view.dart';
 
@@ -35,16 +36,17 @@ class Home extends StatelessWidget {
   CartController cartController = Get.put(CartController());
   WishListController wishlistController = Get.put(WishListController());
 
-  _checkVersion(BuildContext context)async{
-    final newVersion = NewVersion(
-      iOSId: 'com.MaxArt.Dayjour',
-      androidId: 'com.maxart.dayjour_version_3',
-    );
-    final state = await newVersion.getVersionStatus();
-    if(state!.canUpdate){
-      newVersion.showUpdateDialog(context: context, versionStatus: state);
-    }
-  }
+  // _checkVersion(BuildContext context)async{
+  //   final newVersion = NewVersion(
+  //     iOSId: 'com.MaxArt.Dayjour',
+  //     androidId: 'com.maxart.dayjour_version_3',
+  //   );
+  //   final state = await newVersion.getVersionStatus();
+  //   if(state!.canUpdate){
+  //     newVersion.showUpdateDialog(context: context, versionStatus: state);
+  //   }
+  // }
+  String appcastURL = "https://app.dayjour.net/appcast.xml";
 
   @override
   Widget build(BuildContext context) {
@@ -53,30 +55,42 @@ class Home extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     Future.delayed(Duration(milliseconds: 300)).then((value) {
-      _checkVersion(context);
+      // _checkVersion(context);
     });
-    return Obx((){
-      return  Scaffold(
-        backgroundColor: App.main2,
-        key: _key,
-        drawer: DrawerWidget.drawer(context),
-        bottomNavigationBar: _btnNavBar(context),
-        body:  homeController.selected_bottom_nav_bar.value == 0 ? _home(context) :
-          homeController.selected_bottom_nav_bar.value == 1 ? CategoryView2() :
-          homeController.selected_bottom_nav_bar.value == 2 ? Wishlist() :
-          homeController.selected_bottom_nav_bar.value ==3 ? Cart() : Profile(),
+    return UpgradeAlert(
+      upgrader: Upgrader(
+          storeController: UpgraderStoreController(
+            onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),
+            oniOS: () => UpgraderAppcastStore(appcastURL: appcastURL),
+          ),
+          debugDisplayOnce: false,
+          // durationUntilAlertAgain: Duration(milliseconds: 1000)
+      ),
 
-        floatingActionButton:
-        FloatingActionButton(
-          heroTag: "btn1",
-          backgroundColor: AppColors.main2,
-          onPressed: (){
-            Get.to(()=>ChatView());
-          },
-          child: Icon(Icons.chat),
-        ),
-      );
-    });
+      dialogStyle: UpgradeDialogStyle.cupertino,
+      child: Obx((){
+        return  Scaffold(
+          backgroundColor: App.main2,
+          key: _key,
+          drawer: DrawerWidget.drawer(context),
+          bottomNavigationBar: _btnNavBar(context),
+          body:  homeController.selected_bottom_nav_bar.value == 0 ? _home(context) :
+            homeController.selected_bottom_nav_bar.value == 1 ? CategoryView2() :
+            homeController.selected_bottom_nav_bar.value == 2 ? Wishlist() :
+            homeController.selected_bottom_nav_bar.value ==3 ? Cart() : Profile(),
+
+          floatingActionButton:
+          FloatingActionButton(
+            heroTag: "btn1",
+            backgroundColor: AppColors.main2,
+            onPressed: (){
+              Get.to(()=>ChatView());
+            },
+            child: Icon(Icons.chat,color: Colors.white,),
+          ),
+        );
+      }),
+    );
   }
 
   _best_sellers(BuildContext context){
@@ -433,6 +447,7 @@ class Home extends StatelessWidget {
           ),
     );
   }
+
   _home(BuildContext context) {
     return SafeArea(
       child: Stack(
@@ -668,7 +683,7 @@ class Home extends StatelessWidget {
             Stack(
               children: [
                 CarouselSlider.builder(
-                  carouselController: controller,
+                  // carouselController: controller,
                   options: CarouselOptions(
                       height:  MediaQuery.of(context).size.width*0.5,
                       autoPlay: homeController.slider.length == 1 ? false : true,
@@ -932,7 +947,7 @@ class SearchTextField extends SearchDelegate<String> {
       ),
       hintColor: Colors.white,
       textTheme: TextTheme(
-        headline6: TextStyle(
+        headlineSmall: TextStyle(
             color: Colors.white
         ),
       ),

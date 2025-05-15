@@ -804,7 +804,7 @@ class _CartState extends State<Cart> {
         onPressed: () {
           if(cartController.my_order.isEmpty) {
             return showTopSnackBar(
-              context,
+              Overlay.of(context),
               CustomSnackBar.error(
                 message: App_Localization.of(context).translate("empty_cart"),
               ),
@@ -822,6 +822,7 @@ class _CartState extends State<Cart> {
           App_Localization.of(context).translate("check_out"),
           style: TextStyle(
               fontWeight: FontWeight.bold,
+              color: Colors.white,
               fontSize: 15
           ),
         ),

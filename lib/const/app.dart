@@ -231,7 +231,7 @@ class App{
 
   static sucss_msg(BuildContext context,String msg){
     return showTopSnackBar(
-      context,
+      Overlay.of(context),
       CustomSnackBar.success(
         message:
         msg,
@@ -240,7 +240,7 @@ class App{
   }
   static error_msg(BuildContext context,String err){
     return showTopSnackBar(
-      context,
+      Overlay.of(context),
       CustomSnackBar.error(
         message:
         err,
