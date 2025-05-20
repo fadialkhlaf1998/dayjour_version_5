@@ -9,6 +9,7 @@ import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
+import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/top_category.dart';
 import 'package:dayjour_version_3/view/cart.dart';
 import 'package:dayjour_version_3/view/category_view2.dart';
@@ -903,7 +904,7 @@ class Home extends StatelessWidget {
 
 
 class SearchTextField extends SearchDelegate<String> {
-  final List<String> suggestion_list;
+  final List<MyProduct> suggestion_list;
   String? result;
   HomeController homeController;
 
@@ -970,8 +971,8 @@ class SearchTextField extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = suggestion_list.where((name) {
-      return name.toLowerCase().contains(query.toLowerCase());
+    final suggestions = suggestion_list.where((item) {
+      return item.title.toLowerCase().contains(query.toLowerCase());
     });
     return Container(
       color: AppColors.main,
@@ -979,12 +980,29 @@ class SearchTextField extends SearchDelegate<String> {
         itemCount: suggestions.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(suggestions.elementAt(index).image,),
+            ),
             title: Text(
-              suggestions.elementAt(index),
+              suggestions.elementAt(index).title,
               style: TextStyle(color: AppColors.main2),
             ),
+            // subtitle: Row(
+            //   children: [
+            //     Text(
+            //       suggestions.elementAt(index).sub_category+',',
+            //       style: TextStyle(color: Colors.grey),
+            //     ),
+            //     SizedBox(width: 5,),
+            //     Text(
+            //       suggestions.elementAt(index).brand,
+            //       style: TextStyle(color: Colors.grey),
+            //     ),
+            //
+            //   ],
+            // ),
             onTap: () {
-              query = suggestions.elementAt(index);
+              query = suggestions.elementAt(index).title;
               close(context, query);
             },
           );

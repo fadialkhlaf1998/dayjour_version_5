@@ -15,6 +15,7 @@ class ProductsController extends GetxController{
   List<MyProduct> my_products=<MyProduct>[].obs;
   List<SubCategory> category=<SubCategory>[].obs;
   var loading = false.obs;
+  var fake = false.obs;
   var searchIcon = true.obs;
   TextEditingController searchController = TextEditingController();
   Rx<int> selected_sub_category = 0.obs;
@@ -45,13 +46,16 @@ class ProductsController extends GetxController{
       if (internet) {
         loading.value=true;
         MyApi.getProductsSearch(wishListController.wishlist,query).then((value) {
-          loading.value=false;
+          print('ssssssssssssssssssssssss');
+          print(value.length);
+
           if(value.isNotEmpty){
             my_products=value;
           }else{
             App.error_msg(context, App_Localization.of(context).translate("fail_search"));
           }
           updateShowCount();
+          loading.value=false;
         }).catchError((err){
           loading.value=false;
         });

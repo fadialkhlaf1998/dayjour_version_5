@@ -10,6 +10,8 @@ import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
+import 'package:dayjour_version_3/view/category_view2.dart';
+import 'package:dayjour_version_3/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -562,94 +564,94 @@ class CategoryView extends StatelessWidget {
     );
   }
 }
-
-class SearchTextField extends SearchDelegate<String> {
-  final List<String> suggestion_list;
-  String? result;
-  HomeController homeController;
-
-  SearchTextField(
-      {required this.suggestion_list, required this.homeController});
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      query.isEmpty
-          ? Visibility(
-        child: Text(''),
-        visible: false,
-      )
-          : IconButton(
-        icon: Icon(Icons.search, color: Colors.white,),
-        onPressed: () {
-          close(context, query);
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        Get.back();
-      },
-    );
-  }
-
-
-  @override
-  ThemeData appBarTheme(BuildContext context) {
-    return super.appBarTheme(context).copyWith(
-      appBarTheme: AppBarTheme(
-        color: AppColors.main2, //new AppBar color
-        elevation: 0,
-      ),
-      hintColor: Colors.white,
-      textTheme: TextTheme(
-        headlineSmall: TextStyle(
-            color: Colors.white
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    homeController.get_products_by_search(query, context);
-    Future.delayed(Duration(milliseconds: 200)).then((value) {
-      close(context, query);
-    });
-    return Center(
-      child: CircularProgressIndicator(
-        color: AppColors.main2,
-      ),
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final suggestions = suggestion_list.where((name) {
-      return name.toLowerCase().contains(query.toLowerCase());
-    });
-    return Container(
-      color: AppColors.main,
-      child: query.isEmpty?Center():ListView.builder(
-        itemCount: suggestions.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(
-              suggestions.elementAt(index),
-              style: TextStyle(color: AppColors.main2),
-            ),
-            onTap: () {
-              query = suggestions.elementAt(index);
-              close(context, query);
-            },
-          );
-        },
-      ),
-    );
-  }
-}
+//
+// class SearchTextField extends SearchDelegate<String> {
+//   final List<String> suggestion_list;
+//   String? result;
+//   HomeController homeController;
+//
+//   SearchTextField(
+//       {required this.suggestion_list, required this.homeController});
+//
+//   @override
+//   List<Widget> buildActions(BuildContext context) {
+//     return [
+//       query.isEmpty
+//           ? Visibility(
+//         child: Text(''),
+//         visible: false,
+//       )
+//           : IconButton(
+//         icon: Icon(Icons.search, color: Colors.white,),
+//         onPressed: () {
+//           close(context, query);
+//         },
+//       )
+//     ];
+//   }
+//
+//   @override
+//   Widget buildLeading(BuildContext context) {
+//     return IconButton(
+//       icon: Icon(Icons.arrow_back),
+//       onPressed: () {
+//         Get.back();
+//       },
+//     );
+//   }
+//
+//
+//   @override
+//   ThemeData appBarTheme(BuildContext context) {
+//     return super.appBarTheme(context).copyWith(
+//       appBarTheme: AppBarTheme(
+//         color: AppColors.main2, //new AppBar color
+//         elevation: 0,
+//       ),
+//       hintColor: Colors.white,
+//       textTheme: TextTheme(
+//         headlineSmall: TextStyle(
+//             color: Colors.white
+//         ),
+//       ),
+//     );
+//   }
+//
+//   @override
+//   Widget buildResults(BuildContext context) {
+//     homeController.get_products_by_search(query, context);
+//     Future.delayed(Duration(milliseconds: 200)).then((value) {
+//       close(context, query);
+//     });
+//     return Center(
+//       child: CircularProgressIndicator(
+//         color: AppColors.main2,
+//       ),
+//     );
+//   }
+//
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     final suggestions = suggestion_list.where((name) {
+//       return name.toLowerCase().contains(query.toLowerCase());
+//     });
+//     return Container(
+//       color: AppColors.main,
+//       child: query.isEmpty?Center():ListView.builder(
+//         itemCount: suggestions.length,
+//         itemBuilder: (BuildContext context, int index) {
+//           return ListTile(
+//             title: Text(
+//               suggestions.elementAt(index),
+//               style: TextStyle(color: AppColors.main2),
+//             ),
+//             onTap: () {
+//               query = suggestions.elementAt(index);
+//               close(context, query);
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

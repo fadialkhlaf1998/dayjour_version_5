@@ -839,7 +839,7 @@ class MyApi {
 
   }
 
-  static search_suggestion()async{
+  static Future<List<MyProduct>> search_suggestion()async{
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -849,16 +849,18 @@ class MyApi {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
+
       var json = await response.stream.bytesToString();
       var jsonlist = jsonDecode(json) as List;
-      List<String> list = <String>[];
+
       for(int i=0;i<jsonlist.length;i++){
-        list.add(jsonlist[i]["title"].toString());
+        Global.suggestion_list.add(MyProduct.fromMap(jsonlist[i]));
       }
-      Global.suggestion_list.addAll(list);
+      return Global.suggestion_list;
     }
     else {
       print(response.reasonPhrase);
+      return [];
     }
 
   }
