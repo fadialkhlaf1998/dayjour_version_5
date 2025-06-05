@@ -4,6 +4,7 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/auto_discount.dart';
 import 'package:dayjour_version_3/my_model/discount_code.dart';
+import 'package:dayjour_version_3/my_model/marquee.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/my_responce.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
@@ -159,6 +160,26 @@ class MyApi {
     }
     else {
       return <Brand>[];
+    }
+
+  }
+  static Future<List<Marquee>> getMarquee()async{
+
+    var request = http.Request('GET', Uri.parse(url+'api/marquee'));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var json = await response.stream.bytesToString();
+      var list = jsonDecode(json) as List;
+      List<Marquee> marquee = <Marquee>[];
+      for(int i=0;i<list.length;i++){
+        marquee.add(Marquee.fromMap(list[i]));
+      }
+      return marquee;
+    }
+    else {
+      return <Marquee>[];
     }
 
   }
@@ -805,6 +826,7 @@ class MyApi {
     var headers = {
       'Content-Type': 'application/json',
     };
+
     var request = http.Request('POST', Uri.parse(url+'api/v2/order'));
     request.body = json.encode({
       "customer_id": Global.customer!.id,

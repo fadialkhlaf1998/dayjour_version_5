@@ -22,7 +22,7 @@ import 'package:get/get.dart';
 // import 'package:new_version/new_version.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:upgrader/upgrader.dart';
-
+import 'package:marquee/marquee.dart';
 import 'chat_view.dart';
 
 // ignore: must_be_immutable
@@ -462,6 +462,17 @@ class Home extends StatelessWidget {
                 children: [
 
                   SizedBox(height: MediaQuery.of(context).size.height * 0.09,),
+
+                  homeController.marqueeText.isEmpty?Center():
+                  Container(
+                    height: 30,
+                    child: Marquee(
+                      text: homeController.marqueeText,
+                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+                    ),
+                    color: Colors.black,
+
+                  ),
                   SizedBox(height: 10,),
                   homeController.category.isEmpty ?
                   Container(

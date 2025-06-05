@@ -6,6 +6,7 @@ import 'package:dayjour_version_3/controler/intro_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
+import 'package:dayjour_version_3/my_model/marquee.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
@@ -30,6 +31,7 @@ class HomeController extends GetxController{
   List<MyProduct> bestSellers=<MyProduct>[];
   List<MyProduct> newArrivals=<MyProduct>[];
   List<MyProduct> specialDeals=<MyProduct>[];
+  String marqueeText = "";
 
   var searchIcon = true.obs;
   var selected_category = 0.obs;
@@ -182,6 +184,14 @@ class HomeController extends GetxController{
     try{
       MyApi.check_internet().then((internet) {
         if (internet) {
+          marqueeText="";
+          for(int i=0;i<introController.marquee.length;i++){
+            if(i<introController.marquee.length-1){
+              marqueeText+=introController.marquee[i].text+" | ";
+            }else{
+              marqueeText+=introController.marquee[i].text;
+            }
+          }
           if(introController.category.length>0){
             category.clear();
             category.addAll(introController.category);

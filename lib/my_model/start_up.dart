@@ -4,6 +4,7 @@
 
 import 'package:dayjour_version_3/my_model/auto_discount.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
+import 'package:dayjour_version_3/my_model/marquee.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/slider.dart';
 import 'package:dayjour_version_3/my_model/top_category.dart';
@@ -19,6 +20,7 @@ class StartUp {
     required this.slider,
     required this.bestSellers,
     required this.brand,
+    required this.marquee,
   });
 
   List<Category> category;
@@ -28,6 +30,7 @@ class StartUp {
   List<MySlider> slider;
   List<MyProduct> bestSellers;
   List<Brand> brand;
+  List<Marquee> marquee;
 
   factory StartUp.fromJson(String str) => StartUp.fromMap(json.decode(str));
 
@@ -41,6 +44,7 @@ class StartUp {
     slider: List<MySlider>.from(json["slider"].map((x) => MySlider.fromMap(x))),
     bestSellers: List<MyProduct>.from(json["best_sellers"].map((x) => MyProduct.fromMap(x))),
     brand: List<Brand>.from(json["brand"].map((x) => Brand.fromMap(x))),
+    marquee: List<Marquee>.from(json["marquee"].map((x) => Marquee.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {

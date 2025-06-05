@@ -5,6 +5,7 @@ import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
+import 'package:dayjour_version_3/my_model/marquee.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/slider.dart';
@@ -26,6 +27,7 @@ class IntroController extends GetxController{
   List<MyProduct> bestSellers=<MyProduct>[];
   List<MyProduct> specialDeals=<MyProduct>[];
   List<MyProduct> newArrivals=<MyProduct>[];
+  List<Marquee> marquee = <Marquee>[];
   CartController cartController = Get.put(CartController());
   WishListController wishListController = Get.put(WishListController());
   CheckoutController checkoutController = Get.put(CheckoutController());
@@ -101,6 +103,7 @@ class IntroController extends GetxController{
     sliders = value.slider;
     topCategory = value.topCategories;
     bestSellers = value.bestSellers;
+    marquee = value.marquee;
     return true;
   }
   get_nav(){
