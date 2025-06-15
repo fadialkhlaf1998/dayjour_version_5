@@ -14,6 +14,7 @@ import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/recovery_code.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../my_model/top_category.dart';
 import '../view/no_internet.dart';
 
@@ -113,9 +114,10 @@ class IntroController extends GetxController{
       }else{
         Store.load_verificat().then((verify){
           if(verify){
-            MyApi.check_internet().then((internet) {
+            MyApi.check_internet().then((internet) async {
               if(internet){
-                MyApi.login(info.email,info.pass).then((value) {
+                final packageInfo = await PackageInfo.fromPlatform();
+                MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
                   if(value.state==200){
                     Get.offAll(()=>Home());
                   }else{

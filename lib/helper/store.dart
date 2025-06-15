@@ -120,6 +120,7 @@ class Store{
       prefs.remove("email");
       prefs.remove("pass");
       prefs.remove("verificat");
+      prefs.remove("discount_code");
     });
   }
 

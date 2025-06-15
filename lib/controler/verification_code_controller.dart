@@ -1,11 +1,13 @@
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
+import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class VerificationCodeController extends GetxController{
 
@@ -50,9 +52,10 @@ class VerificationCodeController extends GetxController{
             code_vaildate.value=true;
             loading.value=true;
             Store.loadLogInInfo().then((info) {
-              MyApi.verify_code(info.email,code).then((result) {
+              MyApi.verify_code(info.email,code).then((result) async{
                 loading.value=false;
-                MyApi.login(info.email,info.pass);
+                final packageInfo = await PackageInfo.fromPlatform();
+                MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version);
                 if(result.succses){
                   App.sucss_msg(context, App_Localization.of(context).translate("user_verified_successfully"));
                   Store.save_verificat();

@@ -461,18 +461,9 @@ class Home extends StatelessWidget {
               child: Column(
                 children: [
 
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.09,),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.09+20,),
 
-                  homeController.marqueeText.isEmpty?Center():
-                  Container(
-                    height: 30,
-                    child: Marquee(
-                      text: homeController.marqueeText,
-                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
-                    ),
-                    color: Colors.black,
 
-                  ),
                   SizedBox(height: 10,),
                   homeController.category.isEmpty ?
                   Container(
@@ -538,7 +529,7 @@ class Home extends StatelessWidget {
   _header(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.09,
+      height: MediaQuery.of(context).size.height * 0.09+20,
       color: AppColors.main2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -597,8 +588,17 @@ class Home extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 7),
+          Spacer(),
+          homeController.marqueeText.isEmpty?Center():
+          Container(
+            height: 30,
+            child: Marquee(
+              text: homeController.marqueeText,
+              style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+            ),
+            color: Colors.black,
 
+          ),
         ],
       ),
     );

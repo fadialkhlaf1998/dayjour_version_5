@@ -3,19 +3,62 @@ import 'dart:math';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/global.dart';
+import 'package:dayjour_version_3/firebase_options.dart';
 import 'package:dayjour_version_3/view/welcome.dart';
 import 'package:dayjour_version_3/view/introduction.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 
-void main() {
 
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description:  'This channel is used for important notifications.', // description
+  importance: Importance.max,
+);
+///final from Fadi Alkhlaf
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackhroundHadler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('backgrounf message ${message.messageId}');
+}
+
+
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   TabbySDK().setup(
     withApiKey: '',
     environment: Environment.production,
+  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackhroundHadler);
+  // FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    sound: true,
+    alert: true,
+    badge: true,
   );
 
   runApp(MyApp());
@@ -41,6 +84,8 @@ class _MyAppState extends State<MyApp> {
       _locale=locale;
     });
   }
+
+
 
   ///Facebook
   // String _deepLinkUrl = 'Unknown';
@@ -75,6 +120,36 @@ class _MyAppState extends State<MyApp> {
         _locale= Locale(language);
         Get.updateLocale(Locale(language));
       });
+    });
+    FirebaseMessaging.instance.getToken().then((value) {
+      setState(() {
+        if(value!=null){
+          Global.firebase_token = value;
+        }
+        print(value);
+      });
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      RemoteNotification notification = message.notification!;
+      AndroidNotification androd = message.notification!.android!;
+
+      if(notification != null && androd !=null){
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+              android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  playSound: true,
+                  icon: "@mipmap/ic_launcher"
+              )
+          ),
+        );
+      }
     });
   }
 

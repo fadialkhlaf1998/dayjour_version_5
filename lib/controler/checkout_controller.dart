@@ -286,7 +286,7 @@ class CheckoutController extends GetxController{
   add_order_payment(BuildContext context){
     cartController.get_total(min_amount_for_free: getMinValueForFree(emirate.value.toString()),
         shipping_amount: getShippingAmount(emirate.value.toString()));
-    add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
+    add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"",cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
     Get.off(Accepted_order(total,sub_total,shipping));
     // cartController.clear_cart();
   }
@@ -296,7 +296,7 @@ class CheckoutController extends GetxController{
     my_order.addAll(cartController.my_order.value);
     get_details();
     print(lineItems.length.toString()+"*-*-*-*-*-*");
-    add_order(firstname.text, lastname.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -3,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),reference);
+    add_order(firstname.text, lastname.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value),double.parse(cartController.total.value), -3,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),reference,cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
     // cartController.clear_cart();
 
   }
@@ -307,16 +307,16 @@ class CheckoutController extends GetxController{
       // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     }else{
-      add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"");
+      add_order(firstname.value.text, lastname.value.text, address.text, apartment.text, city.text, country.value, emirate.value, phone.text, get_details(), double.parse(cartController.sub_total.value)+double.parse(cartController.couponAutoDiscount.value), double.parse(cartController.shipping.value), double.parse(cartController.total.value), is_paid.value?1:0,lineItems,(double.parse(cartController.coupon.value)+double.parse(cartController.couponAutoDiscount.value)).toStringAsFixed(2),"",cartController.discountCode == null?null:cartController.discountCode!.id,cartController.discountCode == null?null:cartController.discountCode!.code);
       // cartController.clear_cart();
       App.sucss_msg(context, App_Localization.of(context).translate("s_order"));
     }
   }
 
-  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String referance){
-    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance).then((succ) {
+  add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String referance,int? discount_id,String? dicount_code){
+    MyApi.add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance,discount_id,dicount_code).then((succ) {
       if(!succ){
-        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance);
+        add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance,discount_id,dicount_code);
       }else{
         selected_operation.value = 0;
         address_err.value=false;
@@ -329,7 +329,7 @@ class CheckoutController extends GetxController{
         cartController.clear_cart();
       }
     }).catchError((err){
-      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance);
+      add_order(first, last, address, apartment, city, country, emirate, phone, details, sub_total, shipping,  total, is_paid,lineItems,discount,referance,discount_id,dicount_code);
     });
   }
 

@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SignInController extends GetxController{
 
@@ -31,14 +32,15 @@ class SignInController extends GetxController{
           pass_vaildate.value=false;
         }
       }else{
-        MyApi.check_internet().then((net) {
+        MyApi.check_internet().then((net) async{
           if(net){
             loading.value=true;
-            MyApi.login(email, pass).then((value) {
+            final packageInfo = await PackageInfo.fromPlatform();
+            MyApi.login(email, pass,Global.firebase_token,packageInfo.version).then((value) {
               if(value.state==200){
                 Store.saveLoginInfo(email, pass);
                 App.sucss_msg(context,App_Localization.of(context).translate("login_has_been_successfully") );
-                MyApi.login(email,pass).then((result){
+                MyApi.login(email,pass,Global.firebase_token,packageInfo.version).then((result){
                   loading.value=false;
                   Global.customer=result.data.first;
                   Get.offAll(()=>Home());
