@@ -211,6 +211,7 @@ class _CartState extends State<Cart> {
                       width: MediaQuery.of(context).size.width * 0.62,
                       //height: MediaQuery.of(context).size.height * 0.3,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -244,6 +245,18 @@ class _CartState extends State<Cart> {
                           ),
                           SizedBox(height: 7),
                           _price(context, index),
+                          SizedBox(height: 10),
+                          cartController.discountCode != null&&
+                              cartController.amountOfCanDiscount < cartController.discountCode!.minimumQuantity&&
+                              !cartController.canDicount(cartController.my_order[index])?
+                          Text(App_Localization.of(context).translate("this_product_illegal"),style: const TextStyle(color: Colors.red,fontSize: 12),):Center(),
+
+                          cartController.discountCode != null&&
+                          cartController.amountOfCanDiscount > cartController.discountCode!.minimumQuantity&&
+                          double.parse(cartController.my_order[index].discount.value)> 0?
+                          Text(App_Localization.of(context).translate("you_saved")
+                              +" "+cartController.my_order[index].discount.value+" "+App_Localization.of(context).translate("aed")+" "
+                              +App_Localization.of(context).translate("on_this_item"),style: const TextStyle(color: Colors.green,fontSize: 12),):Center(),
                           SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -389,6 +402,12 @@ class _CartState extends State<Cart> {
         double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?_discount():Center(),
         double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?const SizedBox(height: 20):Center(),
         _totals(),
+        cartController.discountCode != null&&cartController.amountOfCanDiscount < cartController.discountCode!.minimumQuantity?Container(
+          width: MediaQuery.of(context).size.width * 0.85,
+          child: Text(
+            App_Localization.of(context).translate("you_did_not_reach_min_amount")+" "+
+                cartController.discountCode!.minimumQuantity.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: App.textNormal(Colors.red, 14),overflow: TextOverflow.clip,),
+        ):const Center(),
         const SizedBox(height: 20),
         Container(
           width: Get.width * 0.85,

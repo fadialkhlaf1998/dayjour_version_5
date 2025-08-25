@@ -54,14 +54,26 @@ class IntroController extends GetxController{
     Store.load_wishlist().then((wishlist) {
       wishListController.wishlist=wishlist.obs;
 
+      print('*****');
       MyApi.check_internet().then((internet) async{
+        print(internet);
         if(internet){
           MyApi.getShipping();
+          print('----');
           MyApi.getAutoDiscount().then((value) {
+            print(value);
             Global.auto_discounts = value ;
+
+            cartController.get_total();
+          }).catchError((err){
+            print(err);
+          });
+          //to wait login
+          Future.delayed(Duration(milliseconds: 2000)).then((val){
             Store.load_discount_code().then((code) {
               if(code!="non"){
                 MyApi.discountCode(code).then((value) {
+                  print(value);
                   if(value!=null){
                     cartController.discountCode = value;
                     cartController.discount.value  = value.persent.toString();
@@ -70,7 +82,6 @@ class IntroController extends GetxController{
                 });
               }
             });
-            cartController.get_total();
           });
           MyApi.search_suggestion();
 
