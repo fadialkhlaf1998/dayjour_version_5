@@ -311,7 +311,7 @@ class CategoryView2 extends StatelessWidget {
                   onTap: () {
                     // homeController.get_products(subCategory.id,index,context);
                     homeController
-                        .go_to_product(homeController.specialDeals[index]);
+                        .go_to_product(homeController.specialDeals[index].id);
                   },
                   child: Column(
                     children: [

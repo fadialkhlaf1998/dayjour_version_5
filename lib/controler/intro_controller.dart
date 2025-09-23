@@ -2,7 +2,9 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/checkout_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/helper/api_v2.dart';
 import 'package:dayjour_version_3/helper/store.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/marquee.dart';
@@ -25,9 +27,9 @@ class IntroController extends GetxController{
   List<MySlider> sliders=<MySlider>[];
 
   List<TopCategory> topCategory=<TopCategory>[];
-  List<MyProduct> bestSellers=<MyProduct>[];
-  List<MyProduct> specialDeals=<MyProduct>[];
-  List<MyProduct> newArrivals=<MyProduct>[];
+  List<Product> bestSellers=<Product>[];
+  List<Product> specialDeals=<Product>[];
+  List<Product> newArrivals=<Product>[];
   List<Marquee> marquee = <Marquee>[];
   CartController cartController = Get.put(CartController());
   WishListController wishListController = Get.put(WishListController());
@@ -37,74 +39,76 @@ class IntroController extends GetxController{
   Future<void> onInit() async {
     super.onInit();
     get_data();
-    await Store.load_address();
+    // await Store.load_address();
   }
 
   get_data(){
     Store.load_remember();
-    Store.load_order().then((my_order) {
-      cartController.my_order.value = my_order;
-    });
-    Store.load_rate().then((my_order) {
-      wishListController.rate = my_order;
-    });
-    Store.load_recently().then((my_order) {
-      wishListController.recently = my_order;
-    });
-    Store.load_wishlist().then((wishlist) {
-      wishListController.wishlist=wishlist.obs;
+    // Store.load_order().then((my_order) {
+    //   cartController.my_order.value = my_order;
+    // });
+    // Store.load_rate().then((my_order) {
+    //   wishListController.rate = my_order;
+    // });
+    // Store.load_recently().then((my_order) {
+    //   wishListController.recently = my_order;
+    // });
+    // Store.load_wishlist().then((wishlist) {
+    //   wishListController.wishlist=wishlist.obs;
+    //
+    //   print('*****');
+    //
+    // });
 
-      print('*****');
-      MyApi.check_internet().then((internet) async{
-        print(internet);
-        if(internet){
-          MyApi.getShipping();
-          print('----');
-          MyApi.getAutoDiscount().then((value) {
-            print(value);
-            Global.auto_discounts = value ;
+    MyApi.check_internet().then((internet) async{
+      print(internet);
+      if(internet){
+        MyApi.getShipping();
+        print('----');
+        MyApi.getAutoDiscount().then((value) {
+          print(value);
+          Global.auto_discounts = value ;
 
-            cartController.get_total();
-          }).catchError((err){
-            print(err);
+          // cartController.get_total();
+        }).catchError((err){
+          print(err);
+        });
+        //to wait login
+        Future.delayed(Duration(milliseconds: 2000)).then((val){
+          Store.load_discount_code().then((code) {
+            if(code!="non"){
+              MyApi.discountCode(code).then((value) {
+                print(value);
+                if(value!=null){
+                  // cartController.discountCode = value;
+                  // cartController.discount.value  = value.persent.toString();
+                  // cartController.get_total();
+                }
+              });
+            }
           });
-          //to wait login
-          Future.delayed(Duration(milliseconds: 2000)).then((val){
-            Store.load_discount_code().then((code) {
-              if(code!="non"){
-                MyApi.discountCode(code).then((value) {
-                  print(value);
-                  if(value!=null){
-                    cartController.discountCode = value;
-                    cartController.discount.value  = value.persent.toString();
-                    cartController.get_total();
-                  }
-                });
-              }
-            });
-          });
-          MyApi.search_suggestion();
+        });
+        ApiV2.searchSuggestions();
 
-          var val = await getHomeData();
+        var val = await getHomeData();
 
-          Future.delayed(Duration(milliseconds: 2500),(){
-               //    App.sucss_msg(context, "nav");
-                  get_nav();
-          });
-          }else{
-          // App.error_msg(context, "err");
-          Get.to(()=>NoInternet())!.then((value) {
-            get_data();
-          });
-        }
+        Future.delayed(Duration(milliseconds: 2500),(){
+          //    App.sucss_msg(context, "nav");
+          get_nav();
+        });
+      }else{
+        // App.error_msg(context, "err");
+        Get.to(()=>NoInternet())!.then((value) {
+          get_data();
+        });
+      }
 
 
-      });
     });
 
   }
   Future<bool> getHomeData()async{
-    StartUp? value = await MyApi.startUp();
+    StartUp? value = await ApiV2.startUp();
     if(value == null){
       return await getHomeData();
     }
@@ -123,32 +127,30 @@ class IntroController extends GetxController{
       if(info.email=="non"){
         Get.offAll(()=>Home());
       }else{
-        Store.load_verificat().then((verify){
-          if(verify){
-            MyApi.check_internet().then((internet) async {
-              if(internet){
-                final packageInfo = await PackageInfo.fromPlatform();
-                MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
-                  if(value.state==200){
-                    Get.offAll(()=>Home());
-                  }else{
-                    Get.offAll(()=>Home());
-                  }
-                }).catchError((err){
-                  print(err.toString());
-                });
-
+        MyApi.check_internet().then((internet) async {
+          if(internet){
+            final packageInfo = await PackageInfo.fromPlatform();
+            MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
+              cartController.getData(null);
+              wishListController.getData();
+              if(value.state==200 && value.data[0].isActive == 0){
+                Get.offAll(RecoveryCode());
+              }else if(value.data[0].isActive == 1){
+                Get.offAll(()=>Home());
               }else{
-                Get.to(()=>NoInternet())!.then((value) {
-                  get_nav();
-                });
+                Get.offAll(()=>Home());
               }
+            }).catchError((err){
+              print(err.toString());
             });
 
           }else{
-            Get.offAll(RecoveryCode());
+            Get.to(()=>NoInternet())!.then((value) {
+              get_nav();
+            });
           }
         });
+
       }
     });
   }

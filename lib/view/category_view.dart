@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/view/category_view2.dart';
@@ -22,7 +23,7 @@ class CategoryView extends StatelessWidget {
   CartController cartController = Get.find();
   HomeController homeController = Get.find();
   Global global = Global();
-  List<MyProduct> products;
+  List<Product> products;
   List<SubCategory> subCategory;
   List<SubCategory> category;
   int selected;
@@ -379,7 +380,7 @@ class CategoryView extends StatelessWidget {
                           ),
                           Positioned(
                               top: 0,
-                              child: cartController.my_order.length==0?Center():Container(
+                              child: cartController.cartLength.value==0?Center():Container(
                             width: 15,
                             height: 15,
                             decoration: BoxDecoration(
@@ -388,7 +389,7 @@ class CategoryView extends StatelessWidget {
                             ),
                             child:  Center(child: FittedBox(child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 1),
-                              child: Text(cartController.my_order.length.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
+                              child: Text(cartController.cartLength.value.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
                             ))),
                           ))
                         ],
@@ -465,7 +466,7 @@ class CategoryView extends StatelessWidget {
           );
   }
 
-  _products(MyProduct product, BuildContext context, int index) {
+  _products(Product product, BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
         productsController.go_to_product(index);
@@ -530,7 +531,7 @@ class CategoryView extends StatelessWidget {
                           children: [
                             Container(
                               width: MediaQuery.of(context).size.width * 0.4,
-                              child:App.price(context, product.price, product.offer_price),
+                              child:App.price(context, product.price, product.offerPrice),
                             ),
                           ],
                         ),
@@ -541,20 +542,17 @@ class CategoryView extends StatelessWidget {
           ),
           Positioned(child: Obx(() {
             return IconButton(
-              icon: Icon(
+              icon:
+              productsController.my_products[index].wishlistLoading.value
+                  ?CircularProgressIndicator(color: App.main2,)
+                  :Icon(
                 productsController.my_products[index].favorite.value
                     ? Icons.favorite
                     : Icons.favorite_border,
                 color: App.main2,
               ),
               onPressed: () {
-                if (productsController.my_products[index].favorite.value) {
-                  wishlistController.delete_from_wishlist(
-                      productsController.my_products[index]);
-                } else {
-                  wishlistController
-                      .add_to_wishlist(productsController.my_products[index]);
-                }
+                wishlistController.wishlistAction(productsController.my_products[index], context);
               },
             );
           })),

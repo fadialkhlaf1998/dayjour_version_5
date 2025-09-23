@@ -4,13 +4,14 @@ import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class OrderItems extends StatelessWidget {
-  List<MyProduct> products;
+  List<Product> products;
   String code;
 
   HomeController homeController = Get.find();
@@ -62,7 +63,7 @@ class OrderItems extends StatelessWidget {
 
                                     GestureDetector(
                                       onTap: (){
-                                        homeController.go_to_product(products[index]);
+                                        homeController.go_to_product(products[index].id);
                                       },
                                       child: Container(
                                         width:120,
@@ -103,13 +104,13 @@ class OrderItems extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   Text(App_Localization.of(context).translate("count")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                  Text(products[index].count==null?"1":products[index].count!.toString(),style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                                  Text(products[index].countForOrderItem==null?"1":products[index].countForOrderItem!.toString(),style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
                                                 ],
                                               ),
                                               Row(
                                                 children: [
                                                   Text(App_Localization.of(context).translate("total")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                  Text((products[index].count!*products[index].price).toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.main2,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                                  Text((products[index].countForOrderItem!*products[index].price).toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.main2,fontSize: 12,overflow: TextOverflow.ellipsis),),
                                                 ],
                                               ),
                                             ],

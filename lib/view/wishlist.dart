@@ -1,10 +1,13 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:dayjour_version_3/app_localization.dart';
+import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
+import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/wedgits/plz_signin_signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -77,7 +80,7 @@ class Wishlist extends StatelessWidget {
                                   padding: const EdgeInsets.only(left: 5 , top: 5),
                                   child: GestureDetector(
                                     onTap: () {
-                                      wishlistController.delete_from_wishlist(wishlistController.wishlist[index]);
+                                      wishlistController.deleteFromWishlist(wishlistController.wishlist[index].id,context);
                                     },
                                     child: Icon(
                                       Icons.delete,
@@ -115,12 +118,12 @@ class Wishlist extends StatelessWidget {
                     MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          if(wishlistController.wishlist[index].availability>0){
-                            if(cartController.add_to_cart(wishlistController.wishlist[index],1,context)) {
-                              wishlistController.delete_from_wishlist(wishlistController.wishlist[index]);
-                            }
+                        onTap: () async{
+                          wishlistController.wishlist[index].cartLoading(true);
+                          if(await cartController.addOrUpdateCart(wishlistController.wishlist[index].id,null,1,context)) {
+                            wishlistController.deleteFromWishlist(wishlistController.wishlist[index].id,context);
                           }
+                          wishlistController.wishlist[index].cartLoading(false);
                         },
                         child: Container(
                           height: 30,
@@ -225,6 +228,9 @@ class Wishlist extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.92,
                         ),
                       SizedBox(height: 10),
+                      wishlistController.loading.value?
+                      Container(height: 300,width: Get.width,child: Center(child: CircularProgressIndicator(color: App.main2,),),)
+                          :Global.customer == null?PlzSigninSignup():
                       wishlistController.wishlist.isEmpty ? _emptyMessage(context) : _wishlist(context)
                     ],
                   ),

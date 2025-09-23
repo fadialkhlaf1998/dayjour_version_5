@@ -5,6 +5,7 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/view/checkout.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
+import 'package:dayjour_version_3/wedgits/plz_signin_signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,150 +25,150 @@ class _CartState extends State<Cart> {
   CartController cartController = Get.find();
 
 
-  _CartState(){
-    cartController.get_total();
-    if(cartController.discountCode!=null){
-      cartController.discountCodeController.text = cartController.discountCode!.code;
-    }
-  }
+  // _CartState(){
+  //   cartController.get_total();
+  //   if(cartController.discountCode!=null){
+  //     cartController.discountCodeController.text = cartController.discountCode!.code;
+  //   }
+  // }
 
   _autoDiscountList(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.95,
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: cartController.auto_discount.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Container(
-                // height: MediaQuery.of(context).size.height * 0.18,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.width * 0.3,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.contain,
-                          image: NetworkImage(cartController
-                              .auto_discount[index].product.value.image
-                              .toString().replaceAll("localhost", "10.0.2.2")),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.62,
-                      //height: MediaQuery.of(context).size.height * 0.3,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  //cartController.remove_from_cart(cartController.auto_discount[index]);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 5,top: 5),
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.transparent,
-                                    size: 20,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 4,),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            child: Text(
-                              cartController.auto_discount[index].product.value.title.toString(),
-                              style: TextStyle(
-                                  overflow: TextOverflow.clip,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 11),
-                            ),
-                          ),
-                          SizedBox(height: 7),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            child: Text(double.parse(cartController.auto_discount[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
-                              style: TextStyle(
-                                  color: Colors.black26,
-                                  fontSize: 16,
-                                  // decoration: TextDecoration.lineThrough,
-                                  decoration: TextDecoration.lineThrough,
-                                  decorationColor: AppColors.main2,
-                                  decorationStyle: TextDecorationStyle.solid,
-                                  decorationThickness: 1.5,
-                                  fontWeight:
-                                  FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10,top: 5,bottom: 15),
-                                child:
-                                cartController.auto_discount[index].product.value.availability==0?
-                                Container(
-                                  height: 34,
-                                  width: MediaQuery.of(context).size.width * 0.35,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12,
-                                    border: Border.all(color: App.main2),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(App_Localization.of(context).translate("out_stock"),style: TextStyle(color: App.main2,fontSize: 12),),
-                                  ),
-                                )
-                                    :Container(
-                                  height: 34,
-                                  width: MediaQuery.of(context).size.width * 0.35,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.main2,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(cartController.auto_discount[index].quantity.value.toString()+" X "+App_Localization.of(context).translate("free"),style: TextStyle(color: Colors.white),),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
-          );
-          //return _cart_item(context, index);
-        },
-      ),
-    );
+    // return Container(
+    //   width: MediaQuery.of(context).size.width * 0.95,
+    //   child: ListView.builder(
+    //     shrinkWrap: true,
+    //     physics: const NeverScrollableScrollPhysics(),
+    //     itemCount: cartController.auto_discount.length,
+    //     itemBuilder: (context, index) {
+    //       return Column(
+    //         children: [
+    //           Container(
+    //             // height: MediaQuery.of(context).size.height * 0.18,
+    //             decoration: BoxDecoration(
+    //               color: Colors.white,
+    //               boxShadow: [
+    //                 BoxShadow(
+    //                   color: Colors.grey.withOpacity(0.5),
+    //                   spreadRadius: 1,
+    //                   blurRadius: 5,
+    //                   offset: const Offset(0, 3), // changes position of shadow
+    //                 ),
+    //               ],
+    //             ),
+    //             child: Row(
+    //               children: [
+    //                 Container(
+    //                   width: MediaQuery.of(context).size.width * 0.3,
+    //                   height: MediaQuery.of(context).size.width * 0.3,
+    //                   decoration: BoxDecoration(
+    //                     image: DecorationImage(
+    //                       fit: BoxFit.contain,
+    //                       image: NetworkImage(cartController
+    //                           .auto_discount[index].product.value.image
+    //                           .toString().replaceAll("localhost", "10.0.2.2")),
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 SizedBox(width: 5),
+    //                 Container(
+    //                   width: MediaQuery.of(context).size.width * 0.62,
+    //                   //height: MediaQuery.of(context).size.height * 0.3,
+    //                   child: Column(
+    //                     children: [
+    //                       Row(
+    //                         mainAxisAlignment: MainAxisAlignment.end,
+    //                         children: [
+    //                           GestureDetector(
+    //                             onTap: () {
+    //                               //cartController.remove_from_cart(cartController.auto_discount[index]);
+    //                             },
+    //                             child: Padding(
+    //                               padding: const EdgeInsets.only(right: 5,top: 5),
+    //                               child: Icon(
+    //                                 Icons.delete,
+    //                                 color: Colors.transparent,
+    //                                 size: 20,
+    //                               ),
+    //                             ),
+    //                           )
+    //                         ],
+    //                       ),
+    //                       SizedBox(height: 4,),
+    //                       Container(
+    //                         width: MediaQuery.of(context).size.width * 0.6,
+    //                         child: Text(
+    //                           cartController.auto_discount[index].product.value.title.toString(),
+    //                           style: TextStyle(
+    //                               overflow: TextOverflow.clip,
+    //                               color: Colors.black,
+    //                               fontWeight: FontWeight.bold,
+    //                               fontSize: 11),
+    //                         ),
+    //                       ),
+    //                       SizedBox(height: 7),
+    //                       Container(
+    //                         width: MediaQuery.of(context).size.width * 0.6,
+    //                         child: Text(double.parse(cartController.auto_discount[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+    //                           style: TextStyle(
+    //                               color: Colors.black26,
+    //                               fontSize: 16,
+    //                               // decoration: TextDecoration.lineThrough,
+    //                               decoration: TextDecoration.lineThrough,
+    //                               decorationColor: AppColors.main2,
+    //                               decorationStyle: TextDecorationStyle.solid,
+    //                               decorationThickness: 1.5,
+    //                               fontWeight:
+    //                               FontWeight.bold),
+    //                         ),
+    //                       ),
+    //                       SizedBox(height: 10),
+    //                       Row(
+    //                         mainAxisAlignment: MainAxisAlignment.end,
+    //                         children: [
+    //                           Padding(
+    //                             padding: const EdgeInsets.only(right: 10,top: 5,bottom: 15),
+    //                             child:
+    //                             cartController.auto_discount[index].product.value.availability==0?
+    //                             Container(
+    //                               height: 34,
+    //                               width: MediaQuery.of(context).size.width * 0.35,
+    //                               decoration: BoxDecoration(
+    //                                 color: Colors.black12,
+    //                                 border: Border.all(color: App.main2),
+    //                                 borderRadius: BorderRadius.circular(10),
+    //                               ),
+    //                               child: Center(
+    //                                 child: Text(App_Localization.of(context).translate("out_stock"),style: TextStyle(color: App.main2,fontSize: 12),),
+    //                               ),
+    //                             )
+    //                                 :Container(
+    //                               height: 34,
+    //                               width: MediaQuery.of(context).size.width * 0.35,
+    //                               decoration: BoxDecoration(
+    //                                 color: AppColors.main2,
+    //                                 borderRadius: BorderRadius.circular(10),
+    //                               ),
+    //                               child: Center(
+    //                                 child: Text(cartController.auto_discount[index].quantity.value.toString()+" X "+App_Localization.of(context).translate("free"),style: TextStyle(color: Colors.white),),
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //
+    //               ],
+    //             ),
+    //           ),
+    //           const SizedBox(height: 20),
+    //         ],
+    //       );
+    //       //return _cart_item(context, index);
+    //     },
+    //   ),
+    // );
   }
   _cart(BuildContext context) {
     return Container(
@@ -175,8 +176,9 @@ class _CartState extends State<Cart> {
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: cartController.my_order.length,
+        itemCount: cartController.cart!.cartList.length,
         itemBuilder: (context, index) {
+          var elm = cartController.cart!.cartList[index];
           return Column(
             children: [
               Container(
@@ -200,8 +202,7 @@ class _CartState extends State<Cart> {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: NetworkImage(cartController
-                              .my_order[index].product.value.image
+                          image: NetworkImage(elm.image
                               .toString().replaceAll("localhost", "10.0.2.2")),
                         ),
                       ),
@@ -218,7 +219,7 @@ class _CartState extends State<Cart> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  cartController.remove_from_cart(cartController.my_order[index]);
+                                  cartController.deleteFromCart(elm.cartId,context);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 5,top: 5),
@@ -235,7 +236,7 @@ class _CartState extends State<Cart> {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.6,
                             child: Text(
-                              cartController.my_order[index].product.value.title.toString(),
+                              elm.title,
                               style: TextStyle(
                                   overflow: TextOverflow.clip,
                                   color: Colors.black,
@@ -246,17 +247,16 @@ class _CartState extends State<Cart> {
                           SizedBox(height: 7),
                           _price(context, index),
                           SizedBox(height: 10),
-                          cartController.discountCode != null&&
-                              cartController.amountOfCanDiscount < cartController.discountCode!.minimumQuantity&&
-                              !cartController.canDicount(cartController.my_order[index])?
+                          cartController.cart!.discountCode != null&&
+                              !elm.includeDiscount?
                           Text(App_Localization.of(context).translate("this_product_illegal"),style: const TextStyle(color: Colors.red,fontSize: 12),):Center(),
 
-                          cartController.discountCode != null&&
-                          cartController.amountOfCanDiscount > cartController.discountCode!.minimumQuantity&&
-                          double.parse(cartController.my_order[index].discount.value)> 0?
-                          Text(App_Localization.of(context).translate("you_saved")
-                              +" "+cartController.my_order[index].discount.value+" "+App_Localization.of(context).translate("aed")+" "
-                              +App_Localization.of(context).translate("on_this_item"),style: const TextStyle(color: Colors.green,fontSize: 12),):Center(),
+                          // cartController.discountCode != null&&
+                          // cartController.amountOfCanDiscount > cartController.discountCode!.minimumQuantity&&
+                          // double.parse(cartController.my_order[index].discount.value)> 0?
+                          // Text(App_Localization.of(context).translate("you_saved")
+                          //     +" "+cartController.my_order[index].discount.value+" "+App_Localization.of(context).translate("aed")+" "
+                          //     +App_Localization.of(context).translate("on_this_item"),style: const TextStyle(color: Colors.green,fontSize: 12),):Center(),
                           SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -264,7 +264,7 @@ class _CartState extends State<Cart> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 10,top: 5,bottom: 15),
                                 child:
-                                cartController.my_order[index].product.value.availability==0?
+                                elm.availability==0?
                                 Container(
                                   height: 34,
                                   width: MediaQuery.of(context).size.width * 0.35,
@@ -277,9 +277,20 @@ class _CartState extends State<Cart> {
                                     child: Text(App_Localization.of(context).translate("out_stock"),style: TextStyle(color: App.main2,fontSize: 12),),
                                   ),
                                 )
-                                :Container(
+                                :elm.isAutoDiscount?Container(
                                   height: 34,
                                   width: MediaQuery.of(context).size.width * 0.35,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.main2,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(elm.count.toString()+" X "+App_Localization.of(context).translate("free"),style: TextStyle(color: Colors.white),),
+                                  ),
+                                ):
+                                Container(
+                                  height: 34,
+                                  width: 135,
                                   decoration: BoxDecoration(
                                     color: Colors.black12,
                                     borderRadius: BorderRadius.circular(10),
@@ -290,19 +301,21 @@ class _CartState extends State<Cart> {
                                       children: [
                                         IconButton(
                                             onPressed: () {
-                                              cartController.decrease(cartController.my_order[index], index);
+                                              cartController.addOrUpdateCart(
+                                                  elm.productId,elm.optionId,-1,context);
                                             },
                                             icon: Icon(
                                               Icons.remove,
                                               size: 20,
                                             )),
                                         Text(
-                                          cartController.my_order[index].quantity.toString(),
+                                          elm.count.toString(),
                                           style: TextStyle(fontSize: 15),
                                         ),
                                         IconButton(
                                             onPressed: () {
-                                              cartController.increase(cartController.my_order[index], index);
+                                              cartController.addOrUpdateCart(
+                                                  elm.productId,elm.optionId,1,context);
                                             },
                                             icon: Icon(
                                               Icons.add,
@@ -332,38 +345,9 @@ class _CartState extends State<Cart> {
     );
   }
   _price(BuildContext context , int index){
-    return double.parse(cartController.my_order[index].discount.value)>0&&
-        cartController.canDiscountCode.value?
-    Container(
+    return Container(
       width: MediaQuery.of(context).size.width * 0.6,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text( (double.parse(cartController.my_order[index].price.value)-double.parse(cartController.my_order[index].discount.value)).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
-            style: TextStyle(
-                color: AppColors.main2,
-                fontSize: 16,
-                fontWeight:
-                FontWeight.bold),
-          ),
-          Text( double.parse(cartController.my_order[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
-            style: TextStyle(
-                color: Colors.black26,
-                decoration: TextDecoration.lineThrough,
-                decorationColor: AppColors.main2,
-                decorationStyle: TextDecorationStyle.solid,
-                decorationThickness: 1.5,
-                fontSize: 16,
-                fontWeight:
-                FontWeight.bold),
-          ),
-
-        ],
-      ),
-    )
-        :Container(
-      width: MediaQuery.of(context).size.width * 0.6,
-      child: Text( double.parse(cartController.my_order[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+      child: Text( cartController.cart!.cartList[index].totalPrice.toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
         style: TextStyle(
             color: AppColors.main2,
             fontSize: 16,
@@ -371,6 +355,46 @@ class _CartState extends State<Cart> {
             FontWeight.bold),
       ),
     );
+
+    //   double.parse(cartController.my_order[index].discount.value)>0&&
+    //     cartController.canDiscountCode.value?
+    // Container(
+    //   width: MediaQuery.of(context).size.width * 0.6,
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Text( (double.parse(cartController.my_order[index].price.value)-double.parse(cartController.my_order[index].discount.value)).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+    //         style: TextStyle(
+    //             color: AppColors.main2,
+    //             fontSize: 16,
+    //             fontWeight:
+    //             FontWeight.bold),
+    //       ),
+    //       Text( double.parse(cartController.my_order[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+    //         style: TextStyle(
+    //             color: Colors.black26,
+    //             decoration: TextDecoration.lineThrough,
+    //             decorationColor: AppColors.main2,
+    //             decorationStyle: TextDecorationStyle.solid,
+    //             decorationThickness: 1.5,
+    //             fontSize: 16,
+    //             fontWeight:
+    //             FontWeight.bold),
+    //       ),
+    //
+    //     ],
+    //   ),
+    // )
+    //     :Container(
+    //   width: MediaQuery.of(context).size.width * 0.6,
+    //   child: Text( double.parse(cartController.my_order[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+    //     style: TextStyle(
+    //         color: AppColors.main2,
+    //         fontSize: 16,
+    //         fontWeight:
+    //         FontWeight.bold),
+    //   ),
+    // );
   }
   _total_amount(BuildContext context) {
     return Column(
@@ -397,22 +421,22 @@ class _CartState extends State<Cart> {
         const SizedBox(height: 20),
         _tax(),
         const SizedBox(height: 20),
-        double.parse(cartController.coupon.value)>0&&cartController.canDiscountCode.value?_coupon():Center(),
-        double.parse(cartController.coupon.value)>0&&cartController.canDiscountCode.value?const SizedBox(height: 20):Center(),
-        double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?_discount():Center(),
-        double.parse(cartController.discount.value)>0&&cartController.canDiscountCode.value?const SizedBox(height: 20):Center(),
+        cartController.cart!.coupon>0?_coupon():Center(),
+        cartController.cart!.coupon>0?const SizedBox(height: 20):Center(),
+        cartController.cart!.discount>0?_discount():Center(),
+        cartController.cart!.discount>0?const SizedBox(height: 20):Center(),
         _totals(),
-        cartController.discountCode != null&&cartController.amountOfCanDiscount < cartController.discountCode!.minimumQuantity?Container(
-          width: MediaQuery.of(context).size.width * 0.85,
-          child: Text(
-            App_Localization.of(context).translate("you_did_not_reach_min_amount")+" "+
-                cartController.discountCode!.minimumQuantity.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: App.textNormal(Colors.red, 14),overflow: TextOverflow.clip,),
-        ):const Center(),
+        cartController.cart!.discountCode != null&&cartController.cart!.discountErrorMsg.length > 0?
+        cartController.cart!.discountErrorMsg == "you_did_not_reach_min_amount"?
+        Text(
+          App_Localization.of(context).translate("you_did_not_reach_min_amount")+" "+
+              cartController.cart!.discountCode!.minimumQuantity.toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: App.textNormal(Colors.red, 14),overflow: TextOverflow.clip,) :
+        Text(cartController.cart!.discountErrorMsg ,style: App.textNormal(Colors.red, 14),overflow: TextOverflow.clip,):const Center(),
         const SizedBox(height: 20),
         Container(
           width: Get.width * 0.85,
           child: TabbyPresentationSnippet(
-            price: cartController.total.value,
+            price: cartController.cart!.total.toString(),
             currency: Currency.aed,
             lang: Global.lang_code == "en"?Lang.en:Lang.ar,
           ),
@@ -502,7 +526,7 @@ class _CartState extends State<Cart> {
           ),
           SizedBox(width: 10),
           Text(
-            double.parse(cartController.discount.value).toStringAsFixed(2) + " %",
+            cartController.cart!.discount.toStringAsFixed(2) + " %",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -559,7 +583,7 @@ class _CartState extends State<Cart> {
           ),
           SizedBox(width: 10),
           Text(
-            double.parse(cartController.coupon.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+            cartController.cart!.coupon.toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -616,7 +640,7 @@ class _CartState extends State<Cart> {
           ),
           SizedBox(width: 10),
          Text(
-           double.parse(cartController.sub_total.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+           cartController.cart!.subTotal.toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
            style: TextStyle(
                color: Colors.black,
                fontWeight: FontWeight.bold,
@@ -673,7 +697,7 @@ class _CartState extends State<Cart> {
           ),
           SizedBox(width: 10),
           Text(
-            (double.parse(cartController.total.value)-double.parse(cartController.shipping.value)).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
+            cartController.cart!.total.toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -801,7 +825,7 @@ class _CartState extends State<Cart> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                double.parse(cartController.tax.value).toStringAsFixed(2)+ " "+App_Localization.of(context).translate("aed"),
+                cartController.cart!.tax.toStringAsFixed(2)+ " "+App_Localization.of(context).translate("aed"),
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -821,7 +845,7 @@ class _CartState extends State<Cart> {
       child: FloatingActionButton.extended(
         backgroundColor: AppColors.main2,
         onPressed: () {
-          if(cartController.my_order.isEmpty) {
+          if(cartController.cart!.cartList.isEmpty) {
             return showTopSnackBar(
               Overlay.of(context),
               CustomSnackBar.error(
@@ -870,7 +894,7 @@ class _CartState extends State<Cart> {
   _cart_info(){
     return Column(
       children: [
-        _autoDiscountList(context),
+        // _autoDiscountList(context),
         _cart(context),
         _total_amount(context),
         _checkout(),
@@ -912,25 +936,34 @@ class _CartState extends State<Cart> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    cartController.my_order.isEmpty ?
+                    cartController.loading.value?Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 300,
+                      color: AppColors.main.withOpacity(0.6),
+                      child: Center(
+                        child: CircularProgressIndicator(color: AppColors.main2,),
+                      ),
+                    ):
+                    Global.customer == null?PlzSigninSignup():
+                    cartController.cart == null || cartController.cart!.cartList.isEmpty ?
                     _emptyMessage(context) : _cart_info(),
                     const SizedBox(height: 60),
                   ],
                 ),
               ),
             ),
-            Positioned(child: cartController.loading.value?Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: AppColors.main.withOpacity(0.6),
-              child: Center(
-                child: CircularProgressIndicator(color: AppColors.main2,),
-              ),
-            ):Container(
-              width: MediaQuery.of(context).size.width,
-              height: 0,
-              color: AppColors.main,
-            ))
+            // Positioned(child: cartController.loading.value?Container(
+            //   width: MediaQuery.of(context).size.width,
+            //   height: MediaQuery.of(context).size.height,
+            //   color: AppColors.main.withOpacity(0.6),
+            //   child: Center(
+            //     child: CircularProgressIndicator(color: AppColors.main2,),
+            //   ),
+            // ):Container(
+            //   width: MediaQuery.of(context).size.width,
+            //   height: 0,
+            //   color: AppColors.main,
+            // ))
           ],
         ))
       ),

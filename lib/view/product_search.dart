@@ -8,6 +8,8 @@ import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/helper/api_v2.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/view/home.dart';
@@ -21,7 +23,7 @@ class ProductSearch extends StatelessWidget {
   HomeController homeController = Get.find();
   CartController cartController = Get.find();
   WishListController wishlistController = Get.find();
-  List<MyProduct> products;
+  List<Product> products;
   Global global = Global();
   ScrollController scrollController = ScrollController();
   String text;
@@ -193,7 +195,7 @@ class ProductSearch extends StatelessWidget {
                         ),
                         Positioned(
                             top: 0,
-                            child: cartController.my_order.value.length==0?Center():Container(
+                            child: cartController.cartLength.value==0?Center():Container(
                               width: 15,
                               height: 15,
                               decoration: BoxDecoration(
@@ -202,7 +204,7 @@ class ProductSearch extends StatelessWidget {
                               ),
                               child:  Center(child: FittedBox(child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 1),
-                                child: Text(cartController.my_order.value.length.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
+                                child: Text(cartController.cartLength.value.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
                               ))),
                             ))
                       ],
@@ -221,7 +223,7 @@ class ProductSearch extends StatelessWidget {
     MyApi.check_internet().then((internet) {
       if (internet) {
         productsController.loading.value=true;
-        MyApi.getProductsSearch(homeController.wishListController.wishlist,query).then((value) {
+        ApiV2.search(query).then((value) {
           productsController.loading.value=false;
           if(value.isNotEmpty){
             productsController.my_products=this.products=value;
@@ -331,7 +333,7 @@ class ProductSearch extends StatelessWidget {
       ),
     );
   }
-  _products( MyProduct product , BuildContext context , int index) {
+  _products( Product product , BuildContext context , int index) {
     return Padding(
       padding: const EdgeInsets.only(right: 0),
       child: GestureDetector(
@@ -402,7 +404,7 @@ class ProductSearch extends StatelessWidget {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        child: App.price(context, product.price, product.offer_price)
+                        child: App.price(context, product.price, product.offerPrice)
                       ),
                     ],
                   ),
@@ -411,13 +413,12 @@ class ProductSearch extends StatelessWidget {
             ),
             Positioned(child: Obx((){
               return IconButton(
-                icon: Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.main2,),
+                icon:
+                productsController.my_products[index].wishlistLoading.value
+                    ?CircularProgressIndicator(color: App.main2,)
+                    :Icon(productsController.my_products[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.main2,),
                 onPressed: (){
-                  if(productsController.my_products[index].favorite.value){
-                    wishlistController.delete_from_wishlist(productsController.my_products[index]);
-                  }else{
-                    wishlistController.add_to_wishlist(productsController.my_products[index]);
-                  }
+                  wishlistController.wishlistAction(productsController.my_products[index], context);
 
                 },
               );

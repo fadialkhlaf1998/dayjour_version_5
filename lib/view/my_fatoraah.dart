@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyFatoraahPage> {
       print(object.invoiceStatus!);
       if(object.invoiceStatus != null && object.invoiceStatus == 'Paid'){
         //todo successfully payment
-        checkoutController.my_order.addAll(cartController.my_order);
+        // checkoutController.my_order.addAll(cartController.my_order);
         checkoutController.is_paid.value=true;
         checkoutController.add_order_payment(context);
         checkoutController.selected_operation++;

@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/my_model/top_category.dart';
@@ -47,7 +48,7 @@ class Home extends StatelessWidget {
   //     newVersion.showUpdateDialog(context: context, versionStatus: state);
   //   }
   // }
-  String appcastURL = "https://app.dayjour.net/appcast.xml";
+  String appcastURL = "https://dayjourstore.com/appcast.xml";
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,7 @@ class Home extends StatelessWidget {
                   itemBuilder: (context,index){
                     return GestureDetector(
                       onTap: (){
-                        homeController.go_to_product(homeController.bestSellers[index]);
+                        homeController.go_to_product(homeController.bestSellers[index].id);
                       },
                       child: Stack(
                         children: [
@@ -170,7 +171,7 @@ class Home extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(homeController.bestSellers[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
-                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offer_price)
+                                        App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offerPrice)
                                       ],
                                     ),
                                   ))
@@ -180,14 +181,11 @@ class Home extends StatelessWidget {
                           ),
                           Positioned(child: Obx((){
                             return IconButton(
-                              icon: Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.main2,),
+                              icon: homeController.bestSellers[index].wishlistLoading.value
+                                  ?CircularProgressIndicator(color: App.main2,)
+                                  :Icon(homeController.bestSellers[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.main2,),
                               onPressed: (){
-                                if(homeController.bestSellers[index].favorite.value){
-                                  wishlistController.delete_from_wishlist(homeController.bestSellers[index]);
-                                }else{
-                                  wishlistController.add_to_wishlist(homeController.bestSellers[index]);
-                                }
-
+                                wishlistController.wishlistAction(homeController.bestSellers[index], context);
                               },
                             );
                           })),
@@ -299,7 +297,7 @@ class Home extends StatelessWidget {
                     itemBuilder: (context,index){
                       return GestureDetector(
                         onTap: (){
-                          homeController.go_to_product(homeController.newArrivals[index]);
+                          homeController.go_to_product(homeController.newArrivals[index].id);
                         },
                         child: Stack(
                           children: [
@@ -340,7 +338,7 @@ class Home extends StatelessWidget {
                                           children: [
                                             Text(homeController.newArrivals[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
                                             // Text(homeController.newArrivals[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
-                                            App.price(context, homeController.newArrivals[index].price, homeController.newArrivals[index].offer_price)
+                                            App.price(context, homeController.newArrivals[index].price, homeController.newArrivals[index].offerPrice)
                                           ],
                                         ),
                                       ))
@@ -350,14 +348,11 @@ class Home extends StatelessWidget {
                             ),
                             Positioned(child: Obx((){
                               return IconButton(
-                                icon: Icon(homeController.newArrivals[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.main2,),
+                                icon: homeController.newArrivals[index].wishlistLoading.value
+                                    ?CircularProgressIndicator(color: App.main2,)
+                                    :Icon(homeController.newArrivals[index].favorite.value?Icons.favorite:Icons.favorite_border,color: App.main2,),
                                 onPressed: (){
-                                  if(homeController.newArrivals[index].favorite.value){
-                                    wishlistController.delete_from_wishlist(homeController.newArrivals[index]);
-                                  }else{
-                                    wishlistController.add_to_wishlist(homeController.newArrivals[index]);
-                                  }
-
+                                  wishlistController.wishlistAction(homeController.newArrivals[index], context);
                                 },
                               );
                             })),
@@ -389,7 +384,7 @@ class Home extends StatelessWidget {
               iconSize: 25,
               currentIndex: homeController.selected_bottom_nav_bar.value,
               onTap: (index) {
-                cartController.get_total();
+                // cartController.get_total();
                 homeController.selected_bottom_nav_bar.value=index;
               },
               items: [
@@ -437,11 +432,11 @@ class Home extends StatelessWidget {
                 width: 15,
                 height: 15,
                 decoration: BoxDecoration(
-                  color: cartController.my_order.length==0?Colors.transparent:Colors.white,
+                  color: cartController.cartLength.value==0?Colors.transparent:Colors.white,
                   shape: BoxShape.circle
                 ),
                 child: Center(
-                  child: Text(cartController.my_order.length.toString(),style: TextStyle(color: cartController.my_order.length==0?Colors.transparent:App.main2,fontSize: 9),),
+                  child: Text(cartController.cartLength.value.toString(),style: TextStyle(color: cartController.cartLength.value==0?Colors.transparent:App.main2,fontSize: 9),),
                 ),
               ))
             ],
@@ -915,7 +910,7 @@ class Home extends StatelessWidget {
 
 
 class SearchTextField extends SearchDelegate<String> {
-  final List<MyProduct> suggestion_list;
+  final List<Product> suggestion_list;
   String? result;
   HomeController homeController;
 

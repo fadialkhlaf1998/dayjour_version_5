@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
@@ -66,6 +68,7 @@ class SignIn extends StatelessWidget {
             ),
           ),
         ),
+
       ],
     );
   }
@@ -180,7 +183,7 @@ class SignIn extends StatelessWidget {
   }
   _sign_in(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.9,
       child: FloatingActionButton.extended(
         backgroundColor: App.main2,
         onPressed: () {
@@ -277,6 +280,60 @@ class SignIn extends StatelessWidget {
                         _header(context),
                         _body(context),
                         _sign_in(context),
+                        SizedBox(height: 17,),
+                        Platform.isAndroid?
+                        GestureDetector(
+                          onTap: (){
+                            signInController.signInWithGoogle(context);
+                          },
+                          child: Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: Colors.black)
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/icons/google.png",height: 35,),
+                                  SizedBox(width: 15,),
+                                  Text(
+                                    App_Localization.of(context)
+                                        .translate("signin_google"),
+                                    style: App.textNormal(Colors.black, 16),
+                                  ),
+                                ],
+                              )
+                          ),
+                        )
+                            :GestureDetector(
+                          onTap: (){
+                            signInController.signInWithApple(context);
+                          },
+                          child: Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(color: Colors.black)
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.apple,size: 40,),
+                                  SizedBox(width: 15,),
+                                  Text(
+                                    App_Localization.of(context)
+                                        .translate("signin_apple"),
+                                    style: App.textNormal(Colors.black, 16),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
                         _sign_up(context)
                       ],
                     ),

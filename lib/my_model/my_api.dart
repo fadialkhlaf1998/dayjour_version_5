@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dayjour_version_3/const/global.dart';
+import 'package:dayjour_version_3/helper/api_v2.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/auto_discount.dart';
 import 'package:dayjour_version_3/my_model/discount_code.dart';
@@ -48,78 +49,78 @@ class MyApi {
       return getShipping();
     }
   }
-  static Future<StartUp?> startUp()async{
+  // static Future<StartUp?> startUp()async{
+  //
+  //   var request = http.Request('GET', Uri.parse(url+'api/start_up'));
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     return StartUp.fromJson(json);
+  //   }
+  //   else {
+  //     return null;
+  //   }
+  //
+  // }
 
-    var request = http.Request('GET', Uri.parse(url+'api/start_up'));
+  // static Future<List<MyProduct>> sliderProducts(List<MyProduct> wishlist,int id)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/slider_mobile'));
+  //   request.body = json.encode({
+  //     "id": id
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist,list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
 
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      return StartUp.fromJson(json);
-    }
-    else {
-      return null;
-    }
-
-  }
-
-  static Future<List<MyProduct>> sliderProducts(List<MyProduct> wishlist,int id)async{
-
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/slider_mobile'));
-    request.body = json.encode({
-      "id": id
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist,list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
-
-  static Future<List<MyProduct>> getCart(List<int> arr)async{
-
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/cart_info'));
-    request.body = json.encode({
-      "arr": arr
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return list;
-    }
-    else {
-      return <MyProduct>[];
-    }
-  }
+  // static Future<List<MyProduct>> getCart(List<int> arr)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/cart_info'));
+  //   request.body = json.encode({
+  //     "arr": arr
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return list;
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  // }
   static Future<bool> cancelOrder(int order_id)async{
 
     var headers = {
@@ -203,28 +204,28 @@ class MyApi {
     }
 
   }
-  static Future<List<MyProduct>> getBestSellers(List<MyProduct> wishlist)async{
-
-    var request = http.Request('GET', Uri.parse(url+'api/best_sellers_mobile'));
-
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist, list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
+  // static Future<List<MyProduct>> getBestSellers(List<MyProduct> wishlist)async{
+  //
+  //   var request = http.Request('GET', Uri.parse(url+'api/best_sellers_mobile'));
+  //
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist, list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
   static Future<List<Category>> getCategory()async{
 
     var request = http.Request('GET', Uri.parse(url+'api/category'));
@@ -373,192 +374,192 @@ class MyApi {
     }
 
   }
-  static Future<List<MyProduct>> getProducts(List<MyProduct> wishlist,int sub_category_id)async{
+  // static Future<List<MyProduct>> getProducts(List<MyProduct> wishlist,int sub_category_id)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/product_sub_category'));
+  //   request.body = json.encode({
+  //     "id": sub_category_id
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist,list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
 
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/product_sub_category'));
-    request.body = json.encode({
-      "id": sub_category_id
-    });
-    request.headers.addAll(headers);
+  // static Future<List<MyProduct>> getOrderItems(int order_id)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/order_item'));
+  //   request.body = json.encode({
+  //     "id": order_id
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return list;
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
+  //
+  // static List<MyProduct> get_favorite(List<MyProduct> wishlist,List<MyProduct> prods){
+  //   for(int i=0 ; i<wishlist.length;i++){
+  //     for(int j=0 ; j<prods.length;j++){
+  //       if(prods[j].id==wishlist[i].id){
+  //         prods[j].favorite.value=true;
+  //         wishlist[i]=prods[j];
+  //       }
+  //     }
+  //   }
+  //   return prods;
+  // }
 
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist,list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
-
-  static Future<List<MyProduct>> getOrderItems(int order_id)async{
-
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/order_item'));
-    request.body = json.encode({
-      "id": order_id
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return list;
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
-
-  static List<MyProduct> get_favorite(List<MyProduct> wishlist,List<MyProduct> prods){
-    for(int i=0 ; i<wishlist.length;i++){
-      for(int j=0 ; j<prods.length;j++){
-        if(prods[j].id==wishlist[i].id){
-          prods[j].favorite.value=true;
-          wishlist[i]=prods[j];
-        }
-      }
-    }
-    return prods;
-  }
-
-  static Future<List<MyProduct>> getProductsSearch(List<MyProduct> wishlist,String q)async{
-
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/product/search'));
-    request.body = json.encode({
-      "title": q
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var jsonString = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(jsonString) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist, list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
-  static Future<List<MyProduct>> getProductsByBrand(List<MyProduct> wishlist,int brand_id)async{
-
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/product_brand'));
-    request.body = json.encode({
-      "id": brand_id
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist, list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
-  static Future<List<MyProduct>> getProductsNewArrivals(List<MyProduct> wishlist)async{
-
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('GET', Uri.parse(url+'api/product/new_arivvial'));
-
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist, list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
-
-  static Future<ProductInfo?> getProductsInfo(List<MyProduct> wishlist,int id)async{
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('POST', Uri.parse(url+'api/product_info'));
-    request.body = json.encode({
-      "id": id
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<ProductInfo> list = <ProductInfo>[];
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(ProductInfo.fromMap(jsonlist[i]));
-      }
-      for(int i=0;i<wishlist.length;i++){
-        if(wishlist[i].id==list.first.id){
-          list.first.is_favoirite.value=true;
-        }
-      }
-      return list.first;
-    }
-    else {
-      return null;
-    }
-
-  }
-
+  // static Future<List<MyProduct>> getProductsSearch(List<MyProduct> wishlist,String q)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/product/search'));
+  //   request.body = json.encode({
+  //     "title": q
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var jsonString = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(jsonString) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist, list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
+  // static Future<List<MyProduct>> getProductsByBrand(List<MyProduct> wishlist,int brand_id)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/product_brand'));
+  //   request.body = json.encode({
+  //     "id": brand_id
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist, list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
+  // static Future<List<MyProduct>> getProductsNewArrivals(List<MyProduct> wishlist)async{
+  //
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('GET', Uri.parse(url+'api/product/new_arivvial'));
+  //
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist, list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
+  //
+  // static Future<ProductInfo?> getProductsInfo(List<MyProduct> wishlist,int id)async{
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var request = http.Request('POST', Uri.parse(url+'api/product_info'));
+  //   request.body = json.encode({
+  //     "id": id
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<ProductInfo> list = <ProductInfo>[];
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(ProductInfo.fromMap(jsonlist[i]));
+  //     }
+  //     for(int i=0;i<wishlist.length;i++){
+  //       if(wishlist[i].id==list.first.id){
+  //         list.first.is_favoirite.value=true;
+  //       }
+  //     }
+  //     return list.first;
+  //   }
+  //   else {
+  //     return null;
+  //   }
+  //
+  // }
+  //
 
   ///-------------logIn-------------
   static Future<MyReult> resend_code(String email)async{
@@ -630,7 +631,8 @@ class MyApi {
       String json = await response.stream.bytesToString();
       Result result = Result.fromJson(json);
       Global.customer=result.data.first;
-      Store.save_verificat();
+      ApiV2.token=result.data.first.token;
+      // Store.save_verificat();
       return result;
     }
     else {
@@ -778,28 +780,28 @@ class MyApi {
 
   }
 
-  static rate(ProductInfo productInfo , double rate)async{
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    double x= productInfo.rate*productInfo.ratingCount;
-    double result = (x+rate)/(productInfo.ratingCount+1);
-    var request = http.Request('POST', Uri.parse(url+'api/rate'));
-    request.body = json.encode({
-      "rate": result,
-      "rating_count": productInfo.ratingCount++,
-      "id": productInfo.id
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-    }
-    else {
-      print(response.reasonPhrase);
-    }
-  }
+  // static rate(ProductInfo productInfo , double rate)async{
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   double x= productInfo.rate*productInfo.ratingCount;
+  //   double result = (x+rate)/(productInfo.ratingCount+1);
+  //   var request = http.Request('POST', Uri.parse(url+'api/rate'));
+  //   request.body = json.encode({
+  //     "rate": result,
+  //     "rating_count": productInfo.ratingCount++,
+  //     "id": productInfo.id
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //   }
+  //   else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
 
   static Future<bool> deleta_account()async{
     var headers = {
@@ -824,72 +826,47 @@ class MyApi {
 
   }
 
-  static Future <bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference,int? discount_id,String? dicount_code)async{
-    var headers = {
-      'Content-Type': 'application/json',
-    };
+  // static Future <bool> add_order(String first,String last,String address,String apartment,String city,String country,String emirate,String phone,String details,double sub_total,double shipping, double total,int is_paid,List<LineItem> lineItems,String discount,String reference,int? discount_id,String? dicount_code)async{
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //
+  //   var request = http.Request('POST', Uri.parse(url+'api/v2/order'));
+  //   request.body = json.encode({
+  //     "customer_id": Global.customer!.id,
+  //     "email":  Global.customer!.email,
+  //     "apartment": apartment,
+  //     "firstname": first,
+  //     "lastname": last,
+  //     "country": country,
+  //     "emirate": emirate,
+  //     "phone": "+971"+phone,
+  //     "details": details,
+  //     "sub_total": sub_total.toStringAsFixed(2),
+  //     "shipping": shipping,
+  //     "total": total.toStringAsFixed(2),
+  //     "is_paid": is_paid,
+  //     "address": city+"/"+address,
+  //     "lineItems": List<dynamic>.from(lineItems.map((x) => x.toMap())),
+  //     "discount":discount,
+  //     "reference":reference,
+  //     "discount_id":discount_id,
+  //     "discount_code":dicount_code,
+  //   });
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     return true;
+  //   }
+  //   else {
+  //     print(response.reasonPhrase);
+  //     return false;
+  //   }
+  //
+  // }
 
-    var request = http.Request('POST', Uri.parse(url+'api/v2/order'));
-    request.body = json.encode({
-      "customer_id": Global.customer!.id,
-      "email":  Global.customer!.email,
-      "apartment": apartment,
-      "firstname": first,
-      "lastname": last,
-      "country": country,
-      "emirate": emirate,
-      "phone": "+971"+phone,
-      "details": details,
-      "sub_total": sub_total.toStringAsFixed(2),
-      "shipping": shipping,
-      "total": total.toStringAsFixed(2),
-      "is_paid": is_paid,
-      "address": city+"/"+address,
-      "lineItems": List<dynamic>.from(lineItems.map((x) => x.toMap())),
-      "discount":discount,
-      "reference":reference,
-      "discount_id":discount_id,
-      "discount_code":dicount_code,
-    });
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      return true;
-    }
-    else {
-      print(response.reasonPhrase);
-      return false;
-    }
-
-  }
-
-  static Future<List<MyProduct>> search_suggestion()async{
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var request = http.Request('GET', Uri.parse(url+'api/search_suggestion'));
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-
-      for(int i=0;i<jsonlist.length;i++){
-        Global.suggestion_list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return Global.suggestion_list;
-    }
-    else {
-      print(response.reasonPhrase);
-      return [];
-    }
-
-  }
 
   static search_product(String title)async{
     var headers = {
@@ -939,28 +916,28 @@ class MyApi {
 
 
 
-  static Future<List<MyProduct>> getSpecialDeals(List<MyProduct> wishlist)async{
-
-    var request = http.Request('GET', Uri.parse(url+'api/special_deals_mobile'));
-
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var json = await response.stream.bytesToString();
-      var jsonlist = jsonDecode(json) as List;
-      List<MyProduct> list = <MyProduct>[];
-
-      for(int i=0;i<jsonlist.length;i++){
-        list.add(MyProduct.fromMap(jsonlist[i]));
-      }
-      return get_favorite(wishlist, list);
-    }
-    else {
-      return <MyProduct>[];
-    }
-
-  }
+  // static Future<List<MyProduct>> getSpecialDeals(List<MyProduct> wishlist)async{
+  //
+  //   var request = http.Request('GET', Uri.parse(url+'api/special_deals_mobile'));
+  //
+  //
+  //   http.StreamedResponse response = await request.send();
+  //
+  //   if (response.statusCode == 200) {
+  //     var json = await response.stream.bytesToString();
+  //     var jsonlist = jsonDecode(json) as List;
+  //     List<MyProduct> list = <MyProduct>[];
+  //
+  //     for(int i=0;i<jsonlist.length;i++){
+  //       list.add(MyProduct.fromMap(jsonlist[i]));
+  //     }
+  //     return get_favorite(wishlist, list);
+  //   }
+  //   else {
+  //     return <MyProduct>[];
+  //   }
+  //
+  // }
 
 
   static Future<List<AutoDiscount>> getAutoDiscount()async{
@@ -1006,6 +983,7 @@ class MyApi {
         for(int i=0;i<list.length;i++){
           brands.add(DiscountCode.fromMap(list[i]));
         }
+        Global.discountCode=code;
         Store.save_discount_code(code);
         return brands.first;
       }

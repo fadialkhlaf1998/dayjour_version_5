@@ -42,11 +42,13 @@ class MyCustomer {
     required this.code,
     required this.isActive,
     required this.pass,
+    required this.token,
     required this.created_at,
   });
 
   int id;
   String email;
+  String token;
   String firstname;
   String lastname;
   int code;
@@ -66,6 +68,7 @@ class MyCustomer {
     code: json["code"],
     isActive: json["is_active"],
     pass: json["pass"],
+    token: json["token"],
     created_at: json["created_at"],
   );
 

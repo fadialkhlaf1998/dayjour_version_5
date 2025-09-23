@@ -8,9 +8,10 @@ import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/product_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
+import 'package:dayjour_version_3/helper/api_v2.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
-import 'package:dayjour_version_3/my_model/product_info.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/image_show.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
@@ -29,8 +30,8 @@ class ProductView extends StatelessWidget {
   TextEditingController textReview = TextEditingController();
   ProductController productController =
       Get.put<ProductController>(ProductController());
-  ProductInfo products;
-  MyProduct old_init_products;
+  // ProductInfo products;
+  // MyProduct old_init_products;
   WishListController wishlistController = Get.find();
   HomeController homeController = Get.find();
   double product_rating=0;
@@ -39,14 +40,8 @@ class ProductView extends StatelessWidget {
 
   final controller = CarouselController();
 
-  ProductView(this.products, this.old_init_products) {
-    productController.myProduct = this.products;
-    Global.add_to_recently(products);
-    for(int i=0;i<wishlistController.rate.length;i++){
-      if( productController.myProduct!.id==wishlistController.rate[i].id){
-        product_rating=wishlistController.rate[i].rate;
-      }
-    }
+  ProductView(int productId) {
+    productController.getData(productId);
   }
 
   @override
@@ -79,7 +74,7 @@ class ProductView extends StatelessWidget {
                           child: Container(
                             width: Get.width * 0.85,
                             child: TabbyPresentationSnippet(
-                              price: products.price.toString(),
+                              price: productController.myProduct!.price.toString(),
                               currency: Currency.aed,
                               lang: Global.lang_code == "en"?Lang.en:Lang.ar,
                             ),
@@ -187,7 +182,7 @@ class ProductView extends StatelessWidget {
                           ),
                           Positioned(
                               top: 0,
-                              child: cartController.my_order.value.length==0?Center():Container(
+                              child: cartController.cartLength.value==0?Center():Container(
                                 width: 15,
                                 height: 15,
                                 decoration: BoxDecoration(
@@ -196,7 +191,7 @@ class ProductView extends StatelessWidget {
                                 ),
                                 child: Center(child: FittedBox(child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 1),
-                                  child: Text(cartController.my_order.value.length.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
+                                  child: Text(cartController.cartLength.value.toString(),style: TextStyle(color: App.main2,fontSize: 10),),
                                 ))),
                               ))
                         ],
@@ -214,24 +209,24 @@ class ProductView extends StatelessWidget {
     );
   }
 
-  go_to_product(MyProduct product,BuildContext context){
-    productController.loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        MyApi.getProductsInfo(productController.wishListController.wishlist,product.id).then((value) {
-          productController.loading.value=false;
-          productController.selected_slider.value=0;
-          products=value!;
-          productController.myProduct=value;
-          old_init_products=product;
-        });
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          go_to_product(product,context);
-        });
-      }
-    });
-  }
+  // go_to_product(MyProduct product,BuildContext context){
+  //   productController.loading.value=true;
+  //   MyApi.check_internet().then((internet) {
+  //     if (internet) {
+  //       MyApi.getProductsInfo(productController.wishListController.wishlist,product.id).then((value) {
+  //         productController.loading.value=false;
+  //         productController.selected_slider.value=0;
+  //         products=value!;
+  //         productController.myProduct=value;
+  //         old_init_products=product;
+  //       });
+  //     }else{
+  //       Get.to(()=>NoInternet())!.then((value) {
+  //         go_to_product(product,context);
+  //       });
+  //     }
+  //   });
+  // }
 
   _slider_images(BuildContext context) {
     return Container(
@@ -241,7 +236,7 @@ class ProductView extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
-            products.images.isNotEmpty
+            productController.myProduct!.images.isNotEmpty
                 ? Stack(
                     children: [
                       CarouselSlider.builder(
@@ -249,7 +244,7 @@ class ProductView extends StatelessWidget {
                         options: CarouselOptions(
                             height: MediaQuery.of(context).size.width,
                             autoPlay:
-                                products.images.length <= 1 ? false : true,
+                            productController.myProduct!.images.length <= 1 ? false : true,
                             viewportFraction: 1,
                             enlargeCenterPage: true,
                             enlargeStrategy: CenterPageEnlargeStrategy.height,
@@ -257,11 +252,11 @@ class ProductView extends StatelessWidget {
                             onPageChanged: (index, reason) {
                               productController.selected_slider.value = index;
                             }),
-                        itemCount: products.images.length,
+                        itemCount: productController.myProduct!.images.length,
                         itemBuilder:
                             (BuildContext context, int index, int realIndex) {
                           return _products(
-                              products.images[index].link, context);
+                              productController.myProduct!.images[index].link, context);
                         },
                       ),
                       Positioned(
@@ -273,7 +268,7 @@ class ProductView extends StatelessWidget {
                             child: AnimatedSmoothIndicator(
                               activeIndex:
                                   productController.selected_slider.value,
-                              count: products.images.length,
+                              count: productController.myProduct!.images.length,
                               effect: SlideEffect(
                                 dotWidth: 10,
                                 dotHeight: 10,
@@ -292,7 +287,7 @@ class ProductView extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         image: DecorationImage(
-                            image: NetworkImage(products.image))),
+                            image: NetworkImage(productController.myProduct!.image))),
                   ),
           ],
         ),
@@ -340,7 +335,7 @@ class ProductView extends StatelessWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.75,
                                 child: Text(
-                                  products.title.toString(),
+                                  productController.myProduct!.title.toString(),
                                   overflow: TextOverflow.clip,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -357,52 +352,13 @@ class ProductView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  products.is_favoirite.value =
-                                      !products.is_favoirite.value;
-                                  old_init_products.favorite.value =
-                                      products.is_favoirite.value;
-                                  if (products.is_favoirite.value) {
-                                    MyProduct p = MyProduct(
-                                        id: products.id,
-                                        brand: products.brand,
-                                        sku: products.sku,
-                                        sub_category: products.sub_category,
-                                        subCategoryId: products.subCategoryId,
-                                        brandId: products.brandId,
-                                        title: products.title,
-                                        subTitle: products.subTitle,
-                                        description: products.description,
-                                        price: products.price,
-                                        rate: products.rate,
-                                        image: products.image,
-                                        ratingCount: products.ratingCount
-                                        ,availability: products.availability,
-                                        offer_price: products.offer_price,category_id: products.category_id,super_category_id: products.super_category_id);
-                                    wishlistController.add_to_wishlist(p);
-                                  } else {
-                                    MyProduct p = MyProduct(
-                                        id: products.id,
-                                        brand: products.brand,
-                                        sku: products.sku,
-                                        sub_category: products.sub_category,
-                                        subCategoryId: products.subCategoryId,
-                                        brandId: products.brandId,
-                                        title: products.title,
-                                        subTitle: products.subTitle,
-                                        description: products.description,
-                                        price: products.price,
-                                        rate: products.rate,
-                                        image: products.image,
-                                        ratingCount: products.ratingCount
-                                        ,availability: products.availability,
-                                      offer_price: products.offer_price
-                                        ,super_category_id: products.super_category_id,category_id: products.category_id
-                                    );
-                                    wishlistController.delete_from_wishlist(p);
-                                  }
+                                onTap: () async{
+                                  wishlistController.wishlistAction(productController.myProduct!, context);
                                 },
-                                child: !products.is_favoirite.value
+                                child:
+                                productController.myProduct!.wishlistLoading.value
+                                    ?CircularProgressIndicator(color: App.main2,)
+                                    :(!productController.myProduct!.favorite.value)
                                     ? Icon(
                                         Icons.favorite_border,
                                         color: Colors.black45,
@@ -432,16 +388,16 @@ class ProductView extends StatelessWidget {
                           height: 50,
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: products.offer_price==null?
-                            Text(products.price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),)
+                            child: productController.myProduct!.offerPrice==null?
+                            Text(productController.myProduct!.price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),)
                                 :Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text(products.price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
+                                  Text(productController.myProduct!.price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
                                   SizedBox(width: 10,),
-                                  Text(products.offer_price!.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.grey[700], fontSize: 9, fontWeight: FontWeight.bold,decoration: TextDecoration.lineThrough),),
+                                  Text(productController.myProduct!.offerPrice!.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.grey[700], fontSize: 9, fontWeight: FontWeight.bold,decoration: TextDecoration.lineThrough),),
                                 ],
                               ),
                             ),
@@ -512,13 +468,7 @@ class ProductView extends StatelessWidget {
                   ),
                   onRatingUpdate: (rating) {
 
-                    MyProduct myProduct1 = MyProduct(id: productController.myProduct!.id,
-                        brand: products.brand,
-                        sku: products.sku,
-                        sub_category: products.sub_category,
-                        subCategoryId: productController.myProduct!.subCategoryId, brandId: productController.myProduct!.brandId, title: productController.myProduct!.title, subTitle: productController.myProduct!.subTitle, description: productController.myProduct!.description, price: productController.myProduct!.price, rate: productController.myProduct!.rate, image: productController.myProduct!.image, ratingCount: productController.myProduct!.ratingCount,availability: products.availability,offer_price: products.offer_price,super_category_id: products.super_category_id,category_id: products.category_id);
-                    wishlistController.add_to_rate(myProduct1, rating);
-                    MyApi.rate(productController.myProduct!, rating);
+                    ApiV2.rateProduct(productController.myProduct!.id, rating);
 
                   },
                 ),
@@ -556,7 +506,7 @@ class ProductView extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(text: App_Localization.of(context).translate('available') + ": ", style: TextStyle(fontSize: 16, color: AppColors.main2, fontWeight: FontWeight.bold)),
-              TextSpan(text: products.availability.toString(), style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold) )
+              TextSpan(text: productController.myProduct!.availability.toString(), style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold) )
             ]
           ),
         ),
@@ -583,7 +533,7 @@ class ProductView extends StatelessWidget {
               children: [
                 Container(
                     width: MediaQuery.of(context).size.width * 1-40,
-                    child: Html(data: products.description)),
+                    child: Html(data: productController.myProduct!.description)),
               ],
             ),
           ],
@@ -667,10 +617,17 @@ class ProductView extends StatelessWidget {
             Column(
               children: [
                 GestureDetector(
-                  onTap: () {
-                    productController.add_to_cart(context);
+                  onTap: () async{
+                    productController.myProduct!.cartLoading(true);
+                    await cartController.addOrUpdateCart(productController.myProduct!.id,null,productController.cart_count.value,context);
+                    productController.myProduct!.cartLoading(false);
                   },
-                  child: Container(
+                  child:
+                  productController.myProduct!.cartLoading.value?Container(
+                      width: Get.width * 0.55,
+                      height: 40,
+                      child: Center(child: LinearProgressIndicator(color: App.main2,))):
+                  Container(
                     width: MediaQuery.of(context).size.width * 0.55,
                     height: 40,
                     decoration: BoxDecoration(
@@ -687,7 +644,9 @@ class ProductView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Center(
-                      child: Row(
+                      child:
+
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SvgPicture.asset(
@@ -820,15 +779,7 @@ class ProductView extends StatelessWidget {
                   onTap: () {
                     if (Global.customer != null) {
                       if (textReview.text.isNotEmpty) {
-                        List<Review> reviews = <Review>[];
-                        reviews.add(Review(
-                            customerName: Global.customer!.firstname,
-                            body: textReview.text,
-                            customerId: Global.customer!.id,
-                            id: -1,
-                            priductId: productController.myProduct!.id));
-                        reviews.addAll(productController.myProduct!.reviews);
-                        productController.myProduct!.reviews = reviews;
+
                         productController.add_review(
                             textReview.text, productController.myProduct!.id,
                             context);
@@ -875,13 +826,13 @@ class ProductView extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            child: products.reviews.isEmpty ? Center() : Text(App_Localization.of(context).translate("reviews"),style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
+            child: productController.myProduct!.reviews.isEmpty ? Center() : Text(App_Localization.of(context).translate("reviews"),style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
           ),
           ListView.builder(
             padding: EdgeInsets.only(top: 0),
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: products.reviews.length,
+            itemCount: productController.myProduct!.reviews.length,
             itemBuilder: (context, index){
               return Container(
                 //color: AppColors.background_box,
@@ -898,8 +849,8 @@ class ProductView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                         child: ListTile(
-                          title: Text(products.reviews[index].customerName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),maxLines: 4,),
-                          subtitle: Text(products.reviews[index].body, style: TextStyle(fontSize: 17)),
+                          title: Text(productController.myProduct!.reviews[index].customerName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),maxLines: 4,),
+                          subtitle: Text(productController.myProduct!.reviews[index].body, style: TextStyle(fontSize: 17)),
                         ),
                       ),
                     ),
@@ -920,12 +871,12 @@ class ProductView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Global.recentlyProduct.isEmpty ? Center() : Text(App_Localization.of(context).translate("recently_products"),style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
+          productController.myProduct!.recently.isEmpty ? Center() : Text(App_Localization.of(context).translate("recently_products"),style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.start,),
           SizedBox(height: 15,),
           Container(
             height: MediaQuery.of(context).size.height*0.2,
             child: ListView.builder(
-                itemCount: Global.recentlyProduct.length,
+                itemCount: productController.myProduct!.recently.length,
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context,index){
@@ -933,25 +884,8 @@ class ProductView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: GestureDetector(
                     onTap: (){
-                      go_to_product(MyProduct(
-                          description: Global.recentlyProduct[index].description,
-                          id: Global.recentlyProduct[index].id,
-                          brand: Global.recentlyProduct[index].brand,
-                          sku: Global.recentlyProduct[index].sku,
-                          sub_category: Global.recentlyProduct[index].sub_category,
-                          image: Global.recentlyProduct[index].image,
-                          availability: Global.recentlyProduct[index].availability,
-                          title: Global.recentlyProduct[index].title,
-                          brandId: Global.recentlyProduct[index].brandId,
-                          price: Global.recentlyProduct[index].price,
-                          rate: Global.recentlyProduct[index].rate,
-                          ratingCount: Global.recentlyProduct[index].ratingCount,
-                          subCategoryId: Global.recentlyProduct[index].subCategoryId,
-                          subTitle: Global.recentlyProduct[index].subTitle,
-                          offer_price: products.offer_price
-                          ,category_id: products.category_id,super_category_id: products.super_category_id
-                      ),context);
-                      },
+                      productController.getData(productController.myProduct!.recently[index].id);
+                    },
                     child: Container(
                       width: MediaQuery.of(context).size.height*0.15,
                       child: Column(
@@ -962,7 +896,7 @@ class ProductView extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                               image: DecorationImage(
-                                image: NetworkImage(Global.recentlyProduct[index].image),
+                                image: NetworkImage(productController.myProduct!.recently[index].image),
                               )
                             ),
                           )),
@@ -972,7 +906,7 @@ class ProductView extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(Global.recentlyProduct[index].title,style: TextStyle(fontSize: 9),maxLines: 2,textAlign: TextAlign.center),
+                                    Text(productController.myProduct!.recently[index].title,style: TextStyle(fontSize: 9),maxLines: 2,textAlign: TextAlign.center),
                                   ],
                                 ),
                               ))

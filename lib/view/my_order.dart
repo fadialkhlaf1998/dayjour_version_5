@@ -282,7 +282,8 @@ class _MyOrderViewState extends State<MyOrderView> {
 
                                             GestureDetector(
                                               onTap: (){
-                                                myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
+                                                // myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
+                                                myOrderController.getDetailsData(myOrderController.my_order[index].id);
                                               },
                                               child: Container(
                                                 width: 75,
@@ -322,8 +323,9 @@ class _MyOrderViewState extends State<MyOrderView> {
 
                                             GestureDetector(
                                               onTap: (){
-                                                myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
-                                              },
+                                                // myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
+                                                myOrderController.getDetailsData(myOrderController.my_order[index].id);
+                                                },
                                               child: Container(
                                                 width: 75,
                                                 height: 27,

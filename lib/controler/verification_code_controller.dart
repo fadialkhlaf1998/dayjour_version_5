@@ -1,6 +1,8 @@
 import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
+import 'package:dayjour_version_3/controler/cart_controller.dart';
+import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/view/home.dart';
@@ -58,8 +60,12 @@ class VerificationCodeController extends GetxController{
                 MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version);
                 if(result.succses){
                   App.sucss_msg(context, App_Localization.of(context).translate("user_verified_successfully"));
-                  Store.save_verificat();
+                  // Store.save_verificat();
                   Get.offAll(()=>Home());
+                  CartController cartController= Get.find();
+                  WishListController wishListController= Get.find();
+                  cartController.getData(null);
+                  wishListController.getData();
                 }else{
                   App.error_msg(context, App_Localization.of(context).translate("the_code_is_wrong"));
                 }

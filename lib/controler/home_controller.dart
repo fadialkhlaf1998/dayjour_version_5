@@ -3,7 +3,9 @@ import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/controler/intro_controller.dart';
+import 'package:dayjour_version_3/helper/api_v2.dart';
 import 'package:dayjour_version_3/helper/store.dart';
+import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/marquee.dart';
@@ -28,9 +30,9 @@ class HomeController extends GetxController{
   List<Brand> brands=<Brand>[];
   List<MySlider> slider=<MySlider>[];
   List<TopCategory> topCategory=<TopCategory>[];
-  List<MyProduct> bestSellers=<MyProduct>[];
-  List<MyProduct> newArrivals=<MyProduct>[];
-  List<MyProduct> specialDeals=<MyProduct>[];
+  List<Product> bestSellers=<Product>[];
+  List<Product> newArrivals=<Product>[];
+  List<Product> specialDeals=<Product>[];
   String marqueeText = "";
 
   var searchIcon = true.obs;
@@ -104,7 +106,7 @@ class HomeController extends GetxController{
     });
   }
 
-  view_all(List<MyProduct> products,String title){
+  view_all(List<Product> products,String title){
     Get.to(()=>ProductSearch(products, title));
   }
 
@@ -113,7 +115,7 @@ class HomeController extends GetxController{
       if (internet) {
         loading.value=true;
         MyApi.getSubCategory(sub_category).then((value0){
-          MyApi.getProducts(wishListController.wishlist,value0.first.id).then((value) {
+          ApiV2.getProductsBySubCategory(value0.first.id).then((value) {
             loading.value=false;
             Get.to(()=>CategoryView(value0, value,0,sub_Category,index,category[selected_category].title));
           }).catchError((err){
@@ -133,7 +135,7 @@ class HomeController extends GetxController{
     MyApi.check_internet().then((internet) {
       if (internet) {
         loading.value=true;
-        MyApi.getProductsSearch(wishListController.wishlist,query).then((value) {
+        ApiV2.search(query).then((value) {
           loading.value=false;
           if(value.isNotEmpty){
             Get.to(()=>ProductSearch(value,query));
@@ -161,7 +163,7 @@ class HomeController extends GetxController{
     MyApi.check_internet().then((internet) {
       if (internet) {
         loading.value=true;
-        MyApi.getProductsByBrand(wishListController.wishlist,brand_id).then((value) {
+        ApiV2.getProductsByBrand(brand_id).then((value) {
           loading.value=false;
           if(value.isNotEmpty){
             Get.to(()=>ProductSearch(value,""));
@@ -272,7 +274,7 @@ class HomeController extends GetxController{
           sub_Category.addAll(value);
           if(sub_Category.isNotEmpty){
             MyApi.getSubCategory(sub_Category.first.id).then((sub_cate) {
-              MyApi.getProducts(wishListController.wishlist, sub_cate.first.id).then((value) {
+              ApiV2.getProductsBySubCategory(sub_cate.first.id).then((value) {
                 loading.value=false;
                 Get.to(()=>CategoryView(sub_cate, value, 0,sub_Category,0,category[selected_category].title));
               });
@@ -296,20 +298,8 @@ class HomeController extends GetxController{
     });
   }
 
-  go_to_product(MyProduct product){
-    loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        MyApi.getProductsInfo(wishListController.wishlist,product.id).then((value) {
-          loading.value=false;
-          Get.to(()=>ProductView(value!,product));
-        });
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          go_to_product(product);
-        });
-      }
-    });
+  go_to_product(int productId){
+    Get.to(()=>ProductView(productId));
   }
   go_to_my_order(BuildContext context){
     loading.value=true;
@@ -364,17 +354,10 @@ class HomeController extends GetxController{
     MyApi.check_internet().then((internet) {
       if (internet) {
         if(slider[index].product_id!=null&&slider[index].is_product==1){
-          MyApi.getProductsInfo(wishListController.wishlist,slider[index].product_id!).then((value) {
-            loading.value=false;
-            MyProduct p = MyProduct(id: value!.id,
-                brand: "",
-                sub_category: "",
-                sku: "",
-                subCategoryId: value.subCategoryId, brandId:value.brandId, title: value.title, subTitle: value.subTitle, description: value.description, price: value.price, rate: value.rate, image: value.image, ratingCount: value.ratingCount, availability: value.availability,offer_price: value.offer_price,category_id: value.category_id,super_category_id: value.super_category_id);
-            Get.to(()=>ProductView(value,p));
-          });
+          loading.value=false;
+          Get.to(()=>ProductView(slider[index].product_id!));
         }else{
-          MyApi.sliderProducts(wishListController.wishlist,slider[index].id).then((value) {
+          ApiV2.getProductsBySlider(slider[index].id).then((value) {
             loading.value=false;
             if(value.isNotEmpty){
               Get.to(()=>ProductSearch(value,slider[index].title));
