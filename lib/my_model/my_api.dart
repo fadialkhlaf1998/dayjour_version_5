@@ -595,7 +595,7 @@ class MyApi {
       "email": email,
       "pass": pass,
       "firstname":firstname,
-      "lastname":lastname
+      "lastname":lastname,
     });
     request.headers.addAll(headers);
 

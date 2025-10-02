@@ -11,6 +11,7 @@ import 'package:dayjour_version_3/my_model/category.dart';
 import 'package:dayjour_version_3/my_model/marquee.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
+import 'package:dayjour_version_3/my_model/start_up.dart';
 import 'package:dayjour_version_3/my_model/sub_category.dart';
 import 'package:dayjour_version_3/my_model/slider.dart';
 import 'package:dayjour_version_3/my_model/top_category.dart';
@@ -33,9 +34,11 @@ class HomeController extends GetxController{
   List<Product> bestSellers=<Product>[];
   List<Product> newArrivals=<Product>[];
   List<Product> specialDeals=<Product>[];
+  List<Marquee> marquee = <Marquee>[];
   String marqueeText = "";
 
   var searchIcon = true.obs;
+  var showFloatActionBtn = true.obs;
   var selected_category = 0.obs;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var selected_bottom_nav_bar = 0.obs;
@@ -53,7 +56,7 @@ class HomeController extends GetxController{
   @override
   Future<void> onInit() async {
     super.onInit();
-    get_data();
+    getHomeData();
   }
 
 
@@ -182,82 +185,104 @@ class HomeController extends GetxController{
     });
   }
 
-  get_data(){
-    try{
-      MyApi.check_internet().then((internet) {
-        if (internet) {
-          marqueeText="";
-          for(int i=0;i<introController.marquee.length;i++){
-            if(i<introController.marquee.length-1){
-              marqueeText+=introController.marquee[i].text+" | ";
-            }else{
-              marqueeText+=introController.marquee[i].text;
-            }
-          }
-          if(introController.category.length>0){
-            category.clear();
-            category.addAll(introController.category);
-            loading.value=false;
-            if(introController.topCategory.isNotEmpty){
-              topCategory.clear();
-              topCategory.addAll(introController.topCategory);
-              loading.value=false;
-            }else{
-              introController.get_data();
-              get_data();
-            }
-            if(introController.bestSellers.isNotEmpty){
-              bestSellers.clear();
-              bestSellers.addAll(introController.bestSellers);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-            if(introController.newArrivals.isNotEmpty){
-              newArrivals.clear();
-              newArrivals.addAll(introController.newArrivals);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-            if(introController.specialDeals.isNotEmpty){
-              specialDeals.clear();
-              specialDeals.addAll(introController.specialDeals);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-
-            if(introController.brands.isNotEmpty){
-              brands.clear();
-              brands.addAll(introController.brands);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-            if(introController.sliders.isNotEmpty){
-              slider.clear();
-              slider.addAll(introController.sliders);
-            }else{
-              introController.get_data();
-              get_data();
-            }
-          }else{
-            introController.get_data();
-            get_data();
-          }
-
-        }else{
-          Get.to(NoInternet())!.then((value) {
-            get_data();
-          });
-        }
-      });
-    }catch (e){
-      print(e);
-      get_data();
+  Future<bool> getHomeData()async{
+    loading(true);
+    StartUp? value = await ApiV2.startUp();
+    if(value == null){
+      return await getHomeData();
     }
+    category = value.category;
+    brands = value.brand;
+    newArrivals = value.newArrivals;
+    specialDeals = value.specialDeals;
+    slider = value.slider;
+    topCategory = value.topCategories;
+    bestSellers = value.bestSellers;
+    marquee = value.marquee;
+    marqueeText="";
+    for(int i=0;i<marquee.length;i++){
+      marqueeText+=marquee[i].text+" | ";
+    }
+    loading(false);
+    return true;
   }
+
+  // get_data(){
+  //   try{
+  //     MyApi.check_internet().then((internet) {
+  //       if (internet) {
+  //         marqueeText="";
+  //         for(int i=0;i<introController.marquee.length;i++){
+  //           if(i<introController.marquee.length-1){
+  //             marqueeText+=introController.marquee[i].text+" | ";
+  //           }else{
+  //             marqueeText+=introController.marquee[i].text;
+  //           }
+  //         }
+  //         if(introController.category.length>0){
+  //           category.clear();
+  //           category.addAll(introController.category);
+  //           loading.value=false;
+  //           if(introController.topCategory.isNotEmpty){
+  //             topCategory.clear();
+  //             topCategory.addAll(introController.topCategory);
+  //             loading.value=false;
+  //           }else{
+  //             introController.get_data();
+  //             get_data();
+  //           }
+  //           if(introController.bestSellers.isNotEmpty){
+  //             bestSellers.clear();
+  //             bestSellers.addAll(introController.bestSellers);
+  //           }else{
+  //             introController.get_data();
+  //             get_data();
+  //           }
+  //           if(introController.newArrivals.isNotEmpty){
+  //             newArrivals.clear();
+  //             newArrivals.addAll(introController.newArrivals);
+  //           }else{
+  //             introController.get_data();
+  //             get_data();
+  //           }
+  //           if(introController.specialDeals.isNotEmpty){
+  //             specialDeals.clear();
+  //             specialDeals.addAll(introController.specialDeals);
+  //           }else{
+  //             introController.get_data();
+  //             get_data();
+  //           }
+  //
+  //           if(introController.brands.isNotEmpty){
+  //             brands.clear();
+  //             brands.addAll(introController.brands);
+  //           }else{
+  //             introController.get_data();
+  //             get_data();
+  //           }
+  //           if(introController.sliders.isNotEmpty){
+  //             slider.clear();
+  //             slider.addAll(introController.sliders);
+  //           }else{
+  //             introController.get_data();
+  //             get_data();
+  //           }
+  //         }else{
+  //           introController.get_data();
+  //           get_data();
+  //         }
+  //
+  //       }else{
+  //         Get.to(NoInternet())!.then((value) {
+  //           get_data();
+  //         });
+  //       }
+  //     });
+  //   }catch (e){
+  //     print(e);
+  //     get_data();
+  //   }
+  // }
 
 
   set_bottom_bar(int index){
@@ -301,54 +326,7 @@ class HomeController extends GetxController{
   go_to_product(int productId){
     Get.to(()=>ProductView(productId));
   }
-  go_to_my_order(BuildContext context){
-    loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        if(Global.customer!=null){
-          MyApi.get_customer_order(Global.customer!.id).then((value) {
-            loading.value=false;
-            Get.to(()=>MyOrderView(value));
-          });
-        }else{
-          // App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
-          loading.value = false;
-          Get.to(()=>SignIn());
-        }
-        
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          go_to_my_order(context);
-        });
-      }
-    });
-  }
 
-  delete_account(BuildContext context){
-    loading.value=true;
-    MyApi.check_internet().then((internet) {
-      if (internet) {
-        if(Global.customer!=null){
-          MyApi.deleta_account().then((value) async{
-
-            Global.customer=null;
-            await Store.logout();
-            Get.offAll(Welcome());
-            loading.value=false;
-          });
-        }else{
-          // App.error_msg(context, App_Localization.of(context).translate("you_must_login"));
-          loading.value = false;
-          App.error_msg(context, App_Localization.of(context).translate("wrong"));
-        }
-
-      }else{
-        Get.to(()=>NoInternet())!.then((value) {
-          delete_account(context);
-        });
-      }
-    });
-  }
   go_to_product_slider(int index,BuildContext context){
     loading.value=true;
     MyApi.check_internet().then((internet) {

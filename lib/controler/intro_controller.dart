@@ -21,16 +21,16 @@ import '../my_model/top_category.dart';
 import '../view/no_internet.dart';
 
 class IntroController extends GetxController{
-  List<Category> category=<Category>[];
-  List<SubCategory> sub_Category=<SubCategory>[];
-  List<Brand> brands=<Brand>[];
-  List<MySlider> sliders=<MySlider>[];
-
-  List<TopCategory> topCategory=<TopCategory>[];
-  List<Product> bestSellers=<Product>[];
-  List<Product> specialDeals=<Product>[];
-  List<Product> newArrivals=<Product>[];
-  List<Marquee> marquee = <Marquee>[];
+  // List<Category> category=<Category>[];
+  // List<SubCategory> sub_Category=<SubCategory>[];
+  // List<Brand> brands=<Brand>[];
+  // List<MySlider> sliders=<MySlider>[];
+  //
+  // List<TopCategory> topCategory=<TopCategory>[];
+  // List<Product> bestSellers=<Product>[];
+  // List<Product> specialDeals=<Product>[];
+  // List<Product> newArrivals=<Product>[];
+  // List<Marquee> marquee = <Marquee>[];
   CartController cartController = Get.put(CartController());
   WishListController wishListController = Get.put(WishListController());
   CheckoutController checkoutController = Get.put(CheckoutController());
@@ -90,7 +90,7 @@ class IntroController extends GetxController{
         });
         ApiV2.searchSuggestions();
 
-        var val = await getHomeData();
+        // var val = await getHomeData();
 
         Future.delayed(Duration(milliseconds: 2500),(){
           //    App.sucss_msg(context, "nav");
@@ -102,26 +102,24 @@ class IntroController extends GetxController{
           get_data();
         });
       }
-
-
     });
 
   }
-  Future<bool> getHomeData()async{
-    StartUp? value = await ApiV2.startUp();
-    if(value == null){
-      return await getHomeData();
-    }
-    category = value.category;
-    brands = value.brand;
-    newArrivals = value.newArrivals;
-    specialDeals = value.specialDeals;
-    sliders = value.slider;
-    topCategory = value.topCategories;
-    bestSellers = value.bestSellers;
-    marquee = value.marquee;
-    return true;
-  }
+  // Future<bool> getHomeData()async{
+  //   StartUp? value = await ApiV2.startUp();
+  //   if(value == null){
+  //     return await getHomeData();
+  //   }
+  //   category = value.category;
+  //   brands = value.brand;
+  //   newArrivals = value.newArrivals;
+  //   specialDeals = value.specialDeals;
+  //   sliders = value.slider;
+  //   topCategory = value.topCategories;
+  //   bestSellers = value.bestSellers;
+  //   marquee = value.marquee;
+  //   return true;
+  // }
   get_nav(){
     Store.loadLogInInfo().then((info) {
       if(info.email=="non"){

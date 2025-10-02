@@ -73,7 +73,11 @@ class App{
       ],
     );
   }
-
+  static void launchURL(BuildContext context,String url) async {
+    if (!await launch(url)){
+      App.error_msg(context, App_Localization.of(context).translate("wrong"));
+    }
+  }
   static price(BuildContext context ,double price,double? offer){
     return offer==null?
     Text(price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),)

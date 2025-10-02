@@ -4,6 +4,7 @@ import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
+import 'package:dayjour_version_3/controler/my_order_controller.dart';
 import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class OrderItems extends StatelessWidget {
-  List<Product> products;
   String code;
 
-  HomeController homeController = Get.find();
+  MyOrderController myOrderController = Get.find();
 
-  OrderItems(this.products,this.code);
+  OrderItems(int orderId,this.code){
+    myOrderController.getDetailsData(orderId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,124 +27,119 @@ class OrderItems extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return Scaffold(
-      backgroundColor: AppColors.main,
+      backgroundColor: AppColors.main2,
       body: SafeArea(
           child: Obx((){
-            return Stack(
+            return Column(
               children: [
-                Column(
-                  children: [
-                    _header(context),
-                    Container(
-                      color: App.main,
-                      height: MediaQuery.of(context).size.height*0.89-MediaQuery.of(context).padding.top,
-                      child: ListView.builder(
+                _header(context),
+                Expanded(
+                  child:
+                  myOrderController.detailsPageLoading.value?Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    color: AppColors.main.withOpacity(0.6),
+                    child: Center(
+                      child: CircularProgressIndicator(color: AppColors.main2,),
+                    ),
+                  ):
+                  Container(
+                    color: App.main,
+                    height: MediaQuery.of(context).size.height*0.89-MediaQuery.of(context).padding.top,
+                    child: ListView.builder(
 
-                          itemCount: products.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context,index){
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  color: App.main,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 4,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 5), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
+                        itemCount: myOrderController.orderDetails.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context,index){
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                color: App.main,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 4,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 5), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
 
-                                    GestureDetector(
-                                      onTap: (){
-                                        homeController.go_to_product(products[index].id);
-                                      },
-                                      child: Container(
-                                        width:120,
-                                        height: 120,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10)),
-                                            image: DecorationImage(
-                                                image: NetworkImage(products[index].image)
-                                            )
-                                        ),
+                                  GestureDetector(
+                                    onTap: (){
+                                      // homeController.go_to_product(products[index].id);
+                                    },
+                                    child: Container(
+                                      width:120,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10)),
+                                          image: DecorationImage(
+                                              image: NetworkImage(myOrderController.orderDetails[index].image)
+                                          )
                                       ),
                                     ),
-                                    SizedBox(width: 10,),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Container(
-                                          width: MediaQuery.of(context).size.width-155,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(products[index].title,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
-                                            ],
-                                          ),
-                                        ),
-                                        Row(
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        width: MediaQuery.of(context).size.width-155,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(App_Localization.of(context).translate("oreder_id")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                            Text(code,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                            Text(myOrderController.orderDetails[index].title,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
                                           ],
                                         ),
-                                        Container(
-                                          width: MediaQuery.of(context).size.width-155,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(App_Localization.of(context).translate("count")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                  Text(products[index].countForOrderItem==null?"1":products[index].countForOrderItem!.toString(),style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(App_Localization.of(context).translate("total")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
-                                                  Text((products[index].countForOrderItem!*products[index].price).toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.main2,fontSize: 12,overflow: TextOverflow.ellipsis),),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(App_Localization.of(context).translate("oreder_id")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                                          Text(code,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                        ],
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width-155,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(App_Localization.of(context).translate("count")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                Text(myOrderController.orderDetails[index].countForOrderItem==null?"1":myOrderController.orderDetails[index].countForOrderItem!.toString(),style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(App_Localization.of(context).translate("total")+" :  ",style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                                                Text((myOrderController.orderDetails[index].countForOrderItem!*myOrderController.orderDetails[index].price).toStringAsFixed(2)+" "+App_Localization.of(context).translate("aed"),style: TextStyle(color: App.main2,fontSize: 12,overflow: TextOverflow.ellipsis),),
+                                              ],
+                                            ),
+                                          ],
                                         ),
+                                      ),
 
 
 
 
-                                      ],
-                                    )
+                                    ],
+                                  )
 
-                                  ],
-                                ),
+                                ],
                               ),
-                            );
-                          }),
-                    )
-                  ],
-                ),
-                Positioned(child: homeController.loading.value?Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  color: AppColors.main.withOpacity(0.6),
-                  child: Center(
-                    child: CircularProgressIndicator(color: AppColors.main2,),
+                            ),
+                          );
+                        }),
                   ),
-                ):Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 0,
-                  color: AppColors.main,
-                ))
+                )
               ],
             );
           })),

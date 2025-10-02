@@ -448,75 +448,78 @@ class Home extends StatelessWidget {
     return SafeArea(
       child: Stack(
         children: [
+          homeController.loading.value?Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: App.main,
+            child: Center(
+              child: CircularProgressIndicator(color: AppColors.main2,),
+            ),
+          ):
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             color: AppColors.main,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
+            child: RefreshIndicator(
+              onRefresh: ()async{
+                await homeController.getHomeData();
+                return;
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
 
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.09+20,),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.09+20,),
 
 
-                  SizedBox(height: 10,),
-                  homeController.category.isEmpty ?
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    width: MediaQuery.of(context).size.width,
-                    color: App.main2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          App_Localization.of(context).translate("no_category_with_this_name"),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),),
-                      ],
+                    SizedBox(height: 10,),
+                    homeController.category.isEmpty ?
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery.of(context).size.width,
+                      color: App.main2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            App_Localization.of(context).translate("no_category_with_this_name"),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),),
+                        ],
+                      ),
+                    ) :
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery.of(context).size.width,
+                      color: App.main,
+                      child: Center(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                            homeController.category.length,
+                            itemBuilder: (context, index) {
+                              return _categories(homeController.category[index], context, index);
+                            }),
+                      ),
                     ),
-                  ) :
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    width: MediaQuery.of(context).size.width,
-                    color: App.main,
-                    child: Center(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                          homeController.category.length,
-                          itemBuilder: (context, index) {
-                            return _categories(homeController.category[index], context, index);
-                          }),
-                    ),
-                  ),
-                  // _header(context),
-                  _body(context),
-                  _best_sellers(context),
-                  SizedBox(height: 30),
-                  _top_brand(context),
-                  SizedBox(height: 30),
-                  _new_arrivals(context),
-                  SizedBox(height: 30),
-                ],
+                    // _header(context),
+                    _body(context),
+                    _best_sellers(context),
+                    SizedBox(height: 30),
+                    _top_brand(context),
+                    SizedBox(height: 30),
+                    _new_arrivals(context),
+                    SizedBox(height: 30),
+                  ],
+                ),
               ),
             ),
           ),
           Positioned(top: 0,child: _header(context),),
-          Positioned(child: homeController.loading.value?Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: AppColors.main.withOpacity(0.6),
-            child: Center(
-              child: CircularProgressIndicator(color: AppColors.main2,),
-            ),
-          ):Container(
-            width: MediaQuery.of(context).size.width,
-            height: 0,
-            color: AppColors.main,
-          ))
+
         ],
       ),
     );
@@ -584,6 +587,7 @@ class Home extends StatelessWidget {
             ),
           ),
           Spacer(),
+
           homeController.marqueeText.isEmpty?Center():
           Container(
             height: 30,

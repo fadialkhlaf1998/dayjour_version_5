@@ -3,6 +3,7 @@ import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/helper/store.dart';
+import 'package:dayjour_version_3/view/my_order.dart';
 import 'package:dayjour_version_3/view/policy_page.dart';
 import 'package:dayjour_version_3/view/settings.dart';
 import 'package:dayjour_version_3/view/welcome.dart';
@@ -52,7 +53,7 @@ class DrawerWidget {
                   width: 150,
                   child: GestureDetector(
                     onTap: () {
-                      homeController.go_to_my_order(context);
+                      Get.to(MyOrderView());
                     },
                     child: Row(
                       children: [

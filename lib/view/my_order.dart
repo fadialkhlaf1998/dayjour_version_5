@@ -6,6 +6,7 @@ import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/controler/my_order_controller.dart';
 import 'package:dayjour_version_3/my_model/customer_order.dart';
 import 'package:dayjour_version_3/view/home.dart';
+import 'package:dayjour_version_3/view/order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -16,8 +17,8 @@ class MyOrderView extends StatefulWidget {
   List<CustomerOrder> my_orders = <CustomerOrder>[];
   MyOrderController myOrderController = Get.put(MyOrderController());
 
-  MyOrderView(this.my_orders){
-    myOrderController.my_order.value=my_orders;
+  MyOrderView(){
+    myOrderController.getData();
   }
 
   @override
@@ -282,8 +283,7 @@ class _MyOrderViewState extends State<MyOrderView> {
 
                                             GestureDetector(
                                               onTap: (){
-                                                // myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
-                                                myOrderController.getDetailsData(myOrderController.my_order[index].id);
+
                                               },
                                               child: Container(
                                                 width: 75,
@@ -324,7 +324,8 @@ class _MyOrderViewState extends State<MyOrderView> {
                                             GestureDetector(
                                               onTap: (){
                                                 // myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
-                                                myOrderController.getDetailsData(myOrderController.my_order[index].id);
+                                                // myOrderController.getDetailsData(myOrderController.my_order[index].id);
+                                                Get.to(()=>OrderItems(myOrderController.my_order[index].id,myOrderController.my_order[index].code));
                                                 },
                                               child: Container(
                                                 width: 75,
