@@ -85,8 +85,10 @@ class HomeController extends GetxController{
   void nave_to_about_us() {
     Get.back();
   }
-  void nave_to_logout() {
-    Store.logout();
+  nave_to_logout() async{
+    Global.customer=null;
+    await Store.logout();
+    Get.offAll(Welcome());
   }
 
 
@@ -120,7 +122,7 @@ class HomeController extends GetxController{
         MyApi.getSubCategory(sub_category).then((value0){
           ApiV2.getProductsBySubCategory(value0.first.id).then((value) {
             loading.value=false;
-            Get.to(()=>CategoryView(value0, value,0,sub_Category,index,category[selected_category].title));
+            Get.to(()=>CategoryView(value0, value,0,sub_Category,index,category[selected_category].getTitle()));
           }).catchError((err){
             loading.value=false;
           });
@@ -201,89 +203,20 @@ class HomeController extends GetxController{
     marquee = value.marquee;
     marqueeText="";
     for(int i=0;i<marquee.length;i++){
-      marqueeText+=marquee[i].text+" | ";
+      marqueeText+=marquee[i].getText()+" | ";
     }
     loading(false);
     return true;
   }
 
-  // get_data(){
-  //   try{
-  //     MyApi.check_internet().then((internet) {
-  //       if (internet) {
-  //         marqueeText="";
-  //         for(int i=0;i<introController.marquee.length;i++){
-  //           if(i<introController.marquee.length-1){
-  //             marqueeText+=introController.marquee[i].text+" | ";
-  //           }else{
-  //             marqueeText+=introController.marquee[i].text;
-  //           }
-  //         }
-  //         if(introController.category.length>0){
-  //           category.clear();
-  //           category.addAll(introController.category);
-  //           loading.value=false;
-  //           if(introController.topCategory.isNotEmpty){
-  //             topCategory.clear();
-  //             topCategory.addAll(introController.topCategory);
-  //             loading.value=false;
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //           if(introController.bestSellers.isNotEmpty){
-  //             bestSellers.clear();
-  //             bestSellers.addAll(introController.bestSellers);
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //           if(introController.newArrivals.isNotEmpty){
-  //             newArrivals.clear();
-  //             newArrivals.addAll(introController.newArrivals);
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //           if(introController.specialDeals.isNotEmpty){
-  //             specialDeals.clear();
-  //             specialDeals.addAll(introController.specialDeals);
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //
-  //           if(introController.brands.isNotEmpty){
-  //             brands.clear();
-  //             brands.addAll(introController.brands);
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //           if(introController.sliders.isNotEmpty){
-  //             slider.clear();
-  //             slider.addAll(introController.sliders);
-  //           }else{
-  //             introController.get_data();
-  //             get_data();
-  //           }
-  //         }else{
-  //           introController.get_data();
-  //           get_data();
-  //         }
-  //
-  //       }else{
-  //         Get.to(NoInternet())!.then((value) {
-  //           get_data();
-  //         });
-  //       }
-  //     });
-  //   }catch (e){
-  //     print(e);
-  //     get_data();
-  //   }
-  // }
-
+  updateMarqueeData(){
+    loading(true);
+    marqueeText="";
+    for(int i=0;i<marquee.length;i++){
+      marqueeText+=marquee[i].getText()+" | ";
+    }
+    loading(false);
+  }
 
   set_bottom_bar(int index){
     selected_bottom_nav_bar.value=index;
@@ -301,7 +234,7 @@ class HomeController extends GetxController{
             MyApi.getSubCategory(sub_Category.first.id).then((sub_cate) {
               ApiV2.getProductsBySubCategory(sub_cate.first.id).then((value) {
                 loading.value=false;
-                Get.to(()=>CategoryView(sub_cate, value, 0,sub_Category,0,category[selected_category].title));
+                Get.to(()=>CategoryView(sub_cate, value, 0,sub_Category,0,category[selected_category].getTitle()));
               });
             });
 

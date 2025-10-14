@@ -96,7 +96,6 @@ class CartDiscountCode {
   final int forAll;
   final double amount;
   final double persent;
-  final int customerType;
   final int frequency;
   final int accountActivationTime;
   final List<Product> products;
@@ -112,7 +111,6 @@ class CartDiscountCode {
     required this.forAll,
     required this.amount,
     required this.persent,
-    required this.customerType,
     required this.frequency,
     required this.accountActivationTime,
     required this.products,
@@ -130,7 +128,6 @@ class CartDiscountCode {
       forAll: json['for_all'] as int,
       amount: (json['amount'] as num).toDouble(),
       persent: (json['persent'] as num).toDouble(),
-      customerType: json['customer_type'] as int,
       frequency: json['frequency'] as int,
       accountActivationTime: json['account_activation_time'] as int,
       products: List<Product>.from(
@@ -165,7 +162,6 @@ class CartDiscountCode {
       'for_all': forAll,
       'amount': amount,
       'persent': persent,
-      'customer_type': customerType,
       'frequency': frequency,
       'account_activation_time': accountActivationTime,
       'products': products,
@@ -265,8 +261,6 @@ class CartItem {
   final String description;
   final String image;
   final double price;
-  final int ratingCount;
-  final double rate;
   final String sku;
   final int shopifyId;
   final int availability;
@@ -299,8 +293,6 @@ class CartItem {
     required this.description,
     required this.image,
     required this.price,
-    required this.ratingCount,
-    required this.rate,
     required this.sku,
     required this.shopifyId,
     required this.availability,
@@ -350,8 +342,6 @@ class CartItem {
       description: json['description'] as String,
       image: json['image'] as String,
       price: (json['price'] as num).toDouble(),
-      ratingCount: json['rating_count'] as int,
-      rate: (json['rate'] as num).toDouble(),
       sku: json['sku'] as String,
       shopifyId: (json['shopify_id']?? -1) as int,
       availability: json['availability'] as int,
@@ -386,8 +376,6 @@ class CartItem {
       'description': description,
       'image': image,
       'price': price,
-      'rating_count': ratingCount,
-      'rate': rate,
       'sku': sku,
       'shopify_id': shopifyId,
       'availability': availability,

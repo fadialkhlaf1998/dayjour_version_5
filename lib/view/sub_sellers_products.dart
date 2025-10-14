@@ -7,6 +7,7 @@ import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
 import 'package:dayjour_version_3/controler/home_controller.dart';
 import 'package:dayjour_version_3/controler/products_controller.dart';
+import 'package:dayjour_version_3/controler/sub_seller_product_controller.dart';
 import 'package:dayjour_version_3/controler/wish_list_controller.dart';
 import 'package:dayjour_version_3/helper/api_v2.dart';
 import 'package:dayjour_version_3/model_v2/product.dart';
@@ -14,43 +15,23 @@ import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
+import 'package:dayjour_version_3/view/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class ProductSearch extends StatelessWidget {
-  ProductsController productsController = Get.put(ProductsController());
+class SubSellersProducts extends StatelessWidget {
+  SubSellerProductController productsController = Get.put(SubSellerProductController());
   HomeController homeController = Get.find();
   CartController cartController = Get.find();
   WishListController wishlistController = Get.find();
-  List<Product> products;
-  Global global = Global();
+  int subSellerId;
   ScrollController scrollController = ScrollController();
-  String text;
+  String sellerName;
 
-  ProductSearch(this.products,this.text){
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   productsController.my_products = products;
-    //
-    //   if (text.isNotEmpty) {
-    //     productsController.searchIcon.value = !productsController.searchIcon.value;
-    //     productsController.searchController.text = text;
-    //   }
-    //
-    //   if (productsController.my_products.length > 10) {
-    //     productsController.productCountShow.value = 10;
-    //   } else {
-    //     productsController.productCountShow.value = productsController.my_products.length;
-    //   }
-    //
-    //   productsController.fake.toggle();
-    // });
-    //todo old init
-    productsController.my_products=this.products;
-    if(text.isNotEmpty){
-      productsController.searchIcon.value=!productsController.searchIcon.value;
-      productsController.searchController.text=text;
-    }
+  SubSellersProducts(this.subSellerId,this.sellerName){
+
+    productsController.getData(subSellerId);
 
     if(productsController.my_products.length>10){
       productsController.productCountShow = 10.obs;
@@ -85,6 +66,14 @@ class ProductSearch extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 20 + MediaQuery.of(context).size.height*0.09,),
+                    productsController.loading.value?Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      color: AppColors.main.withOpacity(0.6),
+                      child: Center(
+                        child: CircularProgressIndicator(color: AppColors.main2,),
+                      ),
+                    ):
                     _body(context),
                     SizedBox(height: 20,),
                     showMoreBtn(context),
@@ -93,18 +82,7 @@ class ProductSearch extends StatelessWidget {
               ),
             ),
             Positioned(top: 0,child:_header(context),),
-            Positioned(child: productsController.loading.value?Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: AppColors.main.withOpacity(0.6),
-              child: Center(
-                child: CircularProgressIndicator(color: AppColors.main2,),
-              ),
-            ):Container(
-              width: MediaQuery.of(context).size.width,
-              height: 0,
-              color: AppColors.main,
-            ))
+
           ],
         )
         ),
@@ -139,6 +117,8 @@ class ProductSearch extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
+                    SizedBox(width: 10,),
+                    Text(sellerName),
                     SizedBox(width: 10,),
                     GestureDetector(
                       onTap: () {
@@ -243,7 +223,7 @@ class ProductSearch extends StatelessWidget {
         ApiV2.search(query).then((value) {
           productsController.loading.value=false;
           if(value.isNotEmpty){
-            productsController.my_products=this.products=value;
+            productsController.my_products=[];
           }else{
             App.error_msg(context, App_Localization.of(context).translate("fail_search"));
           }
@@ -355,7 +335,7 @@ class ProductSearch extends StatelessWidget {
       padding: const EdgeInsets.only(right: 0),
       child: GestureDetector(
         onTap: () {
-          productsController.go_to_product(index);
+          Get.off(ProductView(product.id));
         },
         child: Stack(
           children: [

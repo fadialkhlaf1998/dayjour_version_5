@@ -96,7 +96,7 @@ class OrderItems extends StatelessWidget {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(myOrderController.orderDetails[index].title,style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
+                                            Text(myOrderController.orderDetails[index].getTitle(),style: TextStyle(color: Colors.grey,fontSize: 12,overflow: TextOverflow.ellipsis,),maxLines: 2,),
                                           ],
                                         ),
                                       ),

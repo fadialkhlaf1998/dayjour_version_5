@@ -68,6 +68,31 @@ class ApiV2 {
     }
 
   }
+
+  static Future<List<Product>> getProductsBySubSeller(int subSellerId)async{
+    await checkInternet();
+    var headers = {
+      'Authorization': 'bearer '+token,
+      'Content-Type': 'application/json'
+    };
+    var request = http.Request('POST', Uri.parse(url+'/api/v2/mobile/product/get-for-sub-sellers'));
+    request.body = json.encode({
+      "id": subSellerId
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String jsonString = (await response.stream.bytesToString());
+      return ProductResponse.fromJson(jsonDecode(jsonString)).data;
+    }
+    else {
+      print(response.reasonPhrase);
+      return [];
+    }
+
+  }
   static Future<List<Product>> getProductsBySlider(int slider_id)async{
     await checkInternet();
     var headers = {

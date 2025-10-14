@@ -15,7 +15,9 @@ import 'package:dayjour_version_3/my_model/my_product.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/image_show.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
+import 'package:dayjour_version_3/view/product_search.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
+import 'package:dayjour_version_3/view/sub_sellers_products.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -328,6 +330,7 @@ class ProductView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -335,7 +338,7 @@ class ProductView extends StatelessWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.75,
                                 child: Text(
-                                  productController.myProduct!.title.toString(),
+                                  productController.myProduct!.getTitle(),
                                   overflow: TextOverflow.clip,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -344,6 +347,7 @@ class ProductView extends StatelessWidget {
                               ),
                             ],
                           ),
+
                         ],
                       ),
                       Column(
@@ -371,10 +375,49 @@ class ProductView extends StatelessWidget {
                                       ),
                               )
                             ],
-                          )
+                          ),
+
                         ],
                       ),
                     ],
+                  ),
+                  productController.myProduct!.seller_name == null?Center():
+                  GestureDetector(
+                    onTap: ()async{
+                      //todo seller products
+                      if(productController.myProduct!.sub_sellers_id != null){
+                        productController.loading(true);
+                        Get.off(SubSellersProducts(productController.myProduct!.sub_sellers_id!, ""));
+                        productController.loading(false);
+                      }
+
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          height: 1,
+                          width: Get.width*0.9,
+                          color: Colors.grey[300],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(App_Localization.of(context).translate("seller")+":",style: TextStyle(fontWeight: FontWeight.bold),),
+                            SizedBox(width: 5,),
+                            Text(productController.myProduct!.seller_name!,style: TextStyle(color: App.main2),),
+                            Spacer(),
+                            Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 17,)
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          height: 1,
+                          width: Get.width*0.9,
+                          color: Colors.grey[300],
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10),
                   Container(
@@ -510,6 +553,40 @@ class ProductView extends StatelessWidget {
             ]
           ),
         ),
+        if (productController.myProduct!.promotionalText.isNotEmpty) ...[
+          SizedBox(height: 20),
+          Column(
+            children: productController.myProduct!.promotionalText.map((textItem) {
+              final title = textItem.getTitle();
+              return Container(
+                width: Get.width * 0.9,
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: App.main2,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.campaign, color: Colors.white, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ]
       ],
     );
   }
@@ -533,7 +610,7 @@ class ProductView extends StatelessWidget {
               children: [
                 Container(
                     width: MediaQuery.of(context).size.width * 1-40,
-                    child: Html(data: productController.myProduct!.description)),
+                    child: Html(data: productController.myProduct!.getDescription())),
               ],
             ),
           ],
@@ -906,7 +983,7 @@ class ProductView extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(productController.myProduct!.recently[index].title,style: TextStyle(fontSize: 9),maxLines: 2,textAlign: TextAlign.center),
+                                    Text(productController.myProduct!.recently[index].getTitle(),style: TextStyle(fontSize: 9),maxLines: 2,textAlign: TextAlign.center),
                                   ],
                                 ),
                               ))

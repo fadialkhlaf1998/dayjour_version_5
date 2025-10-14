@@ -103,7 +103,7 @@ class Wishlist extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width*0.4,
                         child: Text(
-                          wishlistController.wishlist[index].title.toString(),
+                          wishlistController.wishlist[index].getTitle().toString(),
                           textAlign: TextAlign.center,
                           maxLines: 2,
                           style: TextStyle(

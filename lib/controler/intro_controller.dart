@@ -7,6 +7,7 @@ import 'package:dayjour_version_3/helper/store.dart';
 import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/brand.dart';
 import 'package:dayjour_version_3/my_model/category.dart';
+import 'package:dayjour_version_3/my_model/discount_code.dart';
 import 'package:dayjour_version_3/my_model/marquee.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/my_model/my_product.dart';
@@ -37,8 +38,9 @@ class IntroController extends GetxController{
 
   @override
   Future<void> onInit() async {
-    super.onInit();
     get_data();
+    super.onInit();
+
     // await Store.load_address();
   }
 
@@ -75,18 +77,7 @@ class IntroController extends GetxController{
         });
         //to wait login
         Future.delayed(Duration(milliseconds: 2000)).then((val){
-          Store.load_discount_code().then((code) {
-            if(code!="non"){
-              MyApi.discountCode(code).then((value) {
-                print(value);
-                if(value!=null){
-                  // cartController.discountCode = value;
-                  // cartController.discount.value  = value.persent.toString();
-                  // cartController.get_total();
-                }
-              });
-            }
-          });
+
         });
         ApiV2.searchSuggestions();
 
@@ -128,7 +119,14 @@ class IntroController extends GetxController{
         MyApi.check_internet().then((internet) async {
           if(internet){
             final packageInfo = await PackageInfo.fromPlatform();
-            MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) {
+            MyApi.login(info.email,info.pass,Global.firebase_token,packageInfo.version).then((value) async{
+              String code = await Store.load_discount_code();
+              if(code != "non"){
+                DiscountCode? discountCode= await MyApi.discountCode(code);
+                if(discountCode != null){
+                  Global.discountCode = discountCode.code;
+                }
+              }
               cartController.getData(null);
               wishListController.getData();
               if(value.state==200 && value.data[0].isActive == 0){

@@ -344,7 +344,7 @@ class CategoryView2 extends StatelessWidget {
                       Center(
                         child: Container(
                           child: Text(
-                            homeController.specialDeals[index].title
+                            homeController.specialDeals[index].getTitle()
                                 .toString(),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
@@ -447,7 +447,7 @@ class CategoryView2 extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      collection.title.toString(),
+                      collection.getTitle(),
                       maxLines: 2,
                       textAlign: TextAlign.left,
                       style: TextStyle(
@@ -496,7 +496,7 @@ class CategoryView2 extends StatelessWidget {
               child: Center(
                 child: Container(
                   child: Text(
-                    homeController.sub_Category[index].title.toString(),
+                    homeController.sub_Category[index].getTitle(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         color: Colors.black,

@@ -158,20 +158,20 @@ class Profile extends StatelessWidget {
                                         ),
                                       ),
                                       Divider(color: Colors.black,height: 30,),
-                                      GestureDetector(
-                                        onTap: (){
-                                          //todo notifications
-                                        },
-                                        child: myCardItem(
-                                            context,
-                                            firstIcon: Icon(Icons.notifications_active_outlined,color: App.main2,),
-                                            title: "notifications",
-                                            lastIcon: Switch(activeColor: App.main2,value: true, onChanged: (val){
-
-                                            })
-                                        ),
-                                      ),
-                                      Divider(color: Colors.black,height: 30,),
+                                      // GestureDetector(
+                                      //   onTap: (){
+                                      //     //todo notifications
+                                      //   },
+                                      //   child: myCardItem(
+                                      //       context,
+                                      //       firstIcon: Icon(Icons.notifications_active_outlined,color: App.main2,),
+                                      //       title: "notifications",
+                                      //       lastIcon: Switch(activeColor: App.main2,value: true, onChanged: (val){
+                                      //
+                                      //       })
+                                      //   ),
+                                      // ),
+                                      // Divider(color: Colors.black,height: 30,),
                                       AnimatedContainer(
                                         duration:
                                         const Duration(milliseconds: 300),
@@ -268,7 +268,7 @@ class Profile extends StatelessWidget {
                                                   Divider(color: Colors.black,height: 30,),
                                                   GestureDetector(
                                                     onTap: (){
-                                                      Get.to(PolicyPage(App_Localization.of(context).translate("faqs"), App_Localization.of(context).translate("faqs_content")));
+                                                      Get.to(()=>PolicyPage( "faqs","faq_content"));
                                                     },
                                                     child: myCardItem(
                                                         context,
@@ -284,7 +284,7 @@ class Profile extends StatelessWidget {
                                                     },
                                                     child: myCardItem(
                                                         context,
-                                                        firstIcon: SvgPicture.asset("assets/icon/whatsapp.svg",height: 25,width: 25,color: App.main2,),
+                                                        firstIcon: SvgPicture.asset("assets/icons/whatsapp.svg",height: 25,width: 25,color: App.main2,),
                                                         title: "whatsapp",
                                                         lastIcon: Icon(Icons.arrow_forward_ios,size: 15,)
                                                     ),
@@ -390,11 +390,13 @@ class Profile extends StatelessWidget {
                                     children: [
                                       SizedBox(width: 10,),
                                       SizedBox(width: 10,),
-                                      GestureDetector(onTap:(){Get.to(PolicyPage(App_Localization.of(context).translate("privacy_policy"), App_Localization.of(context).translate("privacy_policy_content")));},child: Text(App_Localization.of(context).translate("privacy_policy"),style: App.textNormal(Colors.grey, 10),)),
+                                      GestureDetector(onTap:(){
+                                        Get.to(PolicyPage('privacy_policy','privacy_policy_content'));
+                                        },child: Text(App_Localization.of(context).translate("privacy_policy"),style: App.textNormal(Colors.grey, 10),)),
                                       Text(".",style: App.textNormal(Colors.black, 10),),
-                                      GestureDetector(onTap:(){Get.to(PolicyPage(App_Localization.of(context).translate("terms_of_sale"), App_Localization.of(context).translate("terms_of_sale_content")));},child: Text(App_Localization.of(context).translate("terms_of_sale"),style: App.textNormal(Colors.grey, 10),)),
+                                      GestureDetector(onTap:(){Get.to(PolicyPage('terms_of_sale', 'terms_of_sale_content'));},child: Text(App_Localization.of(context).translate("terms_of_sale"),style: App.textNormal(Colors.grey, 10),)),
                                       Text(".",style: App.textNormal(Colors.black, 10),),
-                                      GestureDetector(onTap:(){Get.to(PolicyPage(App_Localization.of(context).translate("return_policy"), App_Localization.of(context).translate("return_policy_content")));},child: Text(App_Localization.of(context).translate("return_policy"),style: App.textNormal(Colors.grey, 10),)),
+                                      GestureDetector(onTap:(){ Get.to(PolicyPage('return_policy', 'return_policy_content'));},child: Text(App_Localization.of(context).translate("return_policy"),style: App.textNormal(Colors.grey, 10),)),
                                       SizedBox(width: 10,),
                                       SizedBox(width: 10,),
                                     ],
@@ -403,7 +405,7 @@ class Profile extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      GestureDetector(onTap: (){Get.to(PolicyPage(App_Localization.of(context).translate("shipping_policy"), App_Localization.of(context).translate("shipping_policy_content")));},child: Text(App_Localization.of(context).translate("shipping_policy"),style: App.textNormal(Colors.grey, 10),)),
+                                      GestureDetector(onTap: (){Get.to(PolicyPage('shipping_policy','shipping_policy_content'));},child: Text(App_Localization.of(context).translate("shipping_policy"),style: App.textNormal(Colors.grey, 10),)),
                                     ],
                                   )
                                 ],

@@ -206,7 +206,7 @@ class CategoryView extends StatelessWidget {
                               Container(
                                 width: MediaQuery.of(context).size.width / 4,
                                 child: Text(
-                                  productsController.category[index].title,
+                                  productsController.category[index].getTitle(),
                                   maxLines: 2,
                                   style: App.textNormal( productsController.selected_category==index?AppColors.main2:Colors.black, 12),
                                   textAlign: TextAlign.center,
@@ -252,7 +252,7 @@ class CategoryView extends StatelessWidget {
                             Container(
                               width: MediaQuery.of(context).size.width / 4,
                               child: Text(
-                                productsController.sub_categories[index].title,
+                                productsController.sub_categories[index].getTitle(),
                                 maxLines: 1,
                                 style: App.textNormal(Colors.black, 12),
                                 textAlign: TextAlign.center,
@@ -516,7 +516,7 @@ class CategoryView extends StatelessWidget {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: Text(
-                                product.title.toString(),
+                                product.getTitle(),
                                 maxLines: 2,
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 12),

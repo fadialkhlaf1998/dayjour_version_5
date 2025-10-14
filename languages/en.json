@@ -75,6 +75,7 @@
   "settings": "Settings",
   "about_us": "About Us",
   "faq": "FAQ",
+  "faqs": "FAQs",
   "log_out" : "Log Out",
   "privacy_policy":"Privacy Policy",
   "terms_of_sale": "Terms Of Sale",
@@ -275,5 +276,6 @@
   "wishlist_msg": "Successfully added to wishlist.",
   "city": "city",
   "country_region": "Country / Region",
-  "edit": "edit"
+  "edit": "edit",
+  "seller": "Seller"
 }

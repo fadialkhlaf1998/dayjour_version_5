@@ -53,7 +53,7 @@ class CartController extends GetxController{
 
   Future<bool> addOrUpdateCart(int product_id,int? option_id, int count,BuildContext context)async{
     if(Global.customer == null){
-      App.error_msg(context, "login_first");
+      App.error_msg(context, App_Localization.of(context).translate("please_login_first"));
       return false;
     }
     loading(true);
@@ -61,7 +61,9 @@ class CartController extends GetxController{
     print(result.toJson());
     if(result.succ){
       if(count > 0){
-        App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+        try{
+          App.sucss_msg(context, App_Localization.of(context).translate("cart_msg"));
+        }catch(e){}
       }
       getData(null);
     }else{
@@ -106,7 +108,7 @@ class CartController extends GetxController{
                   }else{
                     App.sucss_msg(context, App_Localization.of(context).translate("discount_code_succ"));
                   }
-
+                  getData(null);
                 }else{
                   discountCodeController.clear();
                   loading.value=false;

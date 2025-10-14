@@ -170,7 +170,7 @@ class Home extends StatelessWidget {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Text(homeController.bestSellers[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
+                                        Text(homeController.bestSellers[index].getTitle(),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
                                         App.price(context, homeController.bestSellers[index].price, homeController.bestSellers[index].offerPrice)
                                       ],
                                     ),
@@ -336,7 +336,7 @@ class Home extends StatelessWidget {
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            Text(homeController.newArrivals[index].title,maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
+                                            Text(homeController.newArrivals[index].getTitle(),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: App.textNormal(Colors.black, 12),),
                                             // Text(homeController.newArrivals[index].price.toStringAsFixed(2)+" "+ App_Localization.of(context).translate("aed"),maxLines: 2,overflow: TextOverflow.clip,textAlign: TextAlign.center,style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
                                             App.price(context, homeController.newArrivals[index].price, homeController.newArrivals[index].offerPrice)
                                           ],
@@ -652,7 +652,7 @@ class Home extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      collection.title.toString(),
+                      collection.getTitle(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
@@ -894,7 +894,7 @@ class Home extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      collection.category.toString(),
+                      collection.getTitle(),
                       style: const TextStyle(
                           fontSize: 15,
                           color: Colors.black, fontWeight: FontWeight.bold),
@@ -982,7 +982,7 @@ class SearchTextField extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions = suggestion_list.where((item) {
-      return item.title.toLowerCase().contains(query.toLowerCase());
+      return item.title.toLowerCase().contains(query.toLowerCase())||item.arTitle.toLowerCase().contains(query.toLowerCase());
     });
     return Container(
       color: AppColors.main,
@@ -994,7 +994,7 @@ class SearchTextField extends SearchDelegate<String> {
               backgroundImage: NetworkImage(suggestions.elementAt(index).image,),
             ),
             title: Text(
-              suggestions.elementAt(index).title,
+              suggestions.elementAt(index).getTitle(),
               style: TextStyle(color: AppColors.main2),
             ),
             // subtitle: Row(
@@ -1012,7 +1012,7 @@ class SearchTextField extends SearchDelegate<String> {
             //   ],
             // ),
             onTap: () {
-              query = suggestions.elementAt(index).title;
+              query = suggestions.elementAt(index).getTitle();
               close(context, query);
             },
           );

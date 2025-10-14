@@ -60,6 +60,8 @@ class Product {
   int categoryId;
   String category;
   String brand;
+  String? seller_name;
+  int? sub_sellers_id;
   var favorite=false.obs;
   var wishlistLoading=false.obs;
   var cartLoading=false.obs;
@@ -68,6 +70,7 @@ class Product {
   List<Image> images;
   List<Review> reviews;
   List<Option> options;
+  List<PromotionalText> promotionalText;
   List<Product> recently;
   Review? myReview;
   double myRate;
@@ -123,6 +126,9 @@ class Product {
     required this.myRate,
     required this.arTitle,
     required this.arDescription,
+    required this.seller_name,
+    required this.sub_sellers_id,
+    required this.promotionalText,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -153,9 +159,12 @@ class Product {
       categoryId: json['category_id'] ?? 0,
       category: json['category'] ?? '',
       brand: json['brand'] ?? '',
+      seller_name: json['seller_name'],
+      sub_sellers_id: json['sub_sellers_id'],
       images: json["images"]==null?[]: List<Image>.from(json["images"].map((x) => Image.fromMap(x))),
       reviews: json["reviews"]==null?[]: List<Review>.from(json["reviews"].map((x) => Review.fromMap(x))),
       options: json["options"]==null?[]: List<Option>.from(json["options"].map((x) => Option.fromJson(x))),
+      promotionalText: json["promotional_text"]==null?[]: List<PromotionalText>.from(json["promotional_text"].map((x) => PromotionalText.fromJson(x))),
       recently: json["recently"]==null?[]: List<Product>.from(json["recently"].map((x) => Product.fromJson(x))),
       myReview: json["my_review"]==null?null: Review.fromMap(json["my_review"]),
       myRate: (json['my_rate'] as num?)?.toDouble() ?? 0.0,
@@ -325,5 +334,44 @@ class Option {
     'position': position,
     'availability': availability,
     'main_image': mainImage,
+  };
+}
+
+class PromotionalText {
+  final int id;
+  final int productId;
+  final String title;
+  final String arTitle;
+
+
+  PromotionalText({
+    required this.id,
+    required this.productId,
+    required this.title,
+    required this.arTitle,
+  });
+
+  getTitle(){
+    if(Global.lang_code == "en"){
+      return title;
+    }else{
+      return arTitle;
+    }
+  }
+
+  factory PromotionalText.fromJson(Map<String, dynamic> json) {
+    return PromotionalText(
+      id: json['id'],
+      productId: json['product_id'],
+      title: json['title'],
+      arTitle: json['ar_title'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'product_id': productId,
+    'title': title,
+    'ar_title': arTitle,
   };
 }

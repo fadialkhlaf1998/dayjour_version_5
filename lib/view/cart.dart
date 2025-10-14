@@ -3,9 +3,11 @@ import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:dayjour_version_3/const/global.dart';
 import 'package:dayjour_version_3/controler/cart_controller.dart';
+import 'package:dayjour_version_3/model_v2/cart.dart';
 import 'package:dayjour_version_3/view/checkout.dart';
 import 'package:dayjour_version_3/view/sign_in.dart';
 import 'package:dayjour_version_3/wedgits/plz_signin_signup.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,162 +16,10 @@ import 'package:tabby_flutter_inapp_sdk/tabby_flutter_inapp_sdk.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-class Cart extends StatefulWidget {
-
-  @override
-  State<Cart> createState() => _CartState();
-}
-
-class _CartState extends State<Cart> {
+class Cart extends StatelessWidget {
 
   CartController cartController = Get.find();
 
-
-  // _CartState(){
-  //   cartController.get_total();
-  //   if(cartController.discountCode!=null){
-  //     cartController.discountCodeController.text = cartController.discountCode!.code;
-  //   }
-  // }
-
-  _autoDiscountList(BuildContext context) {
-    // return Container(
-    //   width: MediaQuery.of(context).size.width * 0.95,
-    //   child: ListView.builder(
-    //     shrinkWrap: true,
-    //     physics: const NeverScrollableScrollPhysics(),
-    //     itemCount: cartController.auto_discount.length,
-    //     itemBuilder: (context, index) {
-    //       return Column(
-    //         children: [
-    //           Container(
-    //             // height: MediaQuery.of(context).size.height * 0.18,
-    //             decoration: BoxDecoration(
-    //               color: Colors.white,
-    //               boxShadow: [
-    //                 BoxShadow(
-    //                   color: Colors.grey.withOpacity(0.5),
-    //                   spreadRadius: 1,
-    //                   blurRadius: 5,
-    //                   offset: const Offset(0, 3), // changes position of shadow
-    //                 ),
-    //               ],
-    //             ),
-    //             child: Row(
-    //               children: [
-    //                 Container(
-    //                   width: MediaQuery.of(context).size.width * 0.3,
-    //                   height: MediaQuery.of(context).size.width * 0.3,
-    //                   decoration: BoxDecoration(
-    //                     image: DecorationImage(
-    //                       fit: BoxFit.contain,
-    //                       image: NetworkImage(cartController
-    //                           .auto_discount[index].product.value.image
-    //                           .toString().replaceAll("localhost", "10.0.2.2")),
-    //                     ),
-    //                   ),
-    //                 ),
-    //                 SizedBox(width: 5),
-    //                 Container(
-    //                   width: MediaQuery.of(context).size.width * 0.62,
-    //                   //height: MediaQuery.of(context).size.height * 0.3,
-    //                   child: Column(
-    //                     children: [
-    //                       Row(
-    //                         mainAxisAlignment: MainAxisAlignment.end,
-    //                         children: [
-    //                           GestureDetector(
-    //                             onTap: () {
-    //                               //cartController.remove_from_cart(cartController.auto_discount[index]);
-    //                             },
-    //                             child: Padding(
-    //                               padding: const EdgeInsets.only(right: 5,top: 5),
-    //                               child: Icon(
-    //                                 Icons.delete,
-    //                                 color: Colors.transparent,
-    //                                 size: 20,
-    //                               ),
-    //                             ),
-    //                           )
-    //                         ],
-    //                       ),
-    //                       SizedBox(height: 4,),
-    //                       Container(
-    //                         width: MediaQuery.of(context).size.width * 0.6,
-    //                         child: Text(
-    //                           cartController.auto_discount[index].product.value.title.toString(),
-    //                           style: TextStyle(
-    //                               overflow: TextOverflow.clip,
-    //                               color: Colors.black,
-    //                               fontWeight: FontWeight.bold,
-    //                               fontSize: 11),
-    //                         ),
-    //                       ),
-    //                       SizedBox(height: 7),
-    //                       Container(
-    //                         width: MediaQuery.of(context).size.width * 0.6,
-    //                         child: Text(double.parse(cartController.auto_discount[index].price.value).toStringAsFixed(2) + " "+App_Localization.of(context).translate("aed"),
-    //                           style: TextStyle(
-    //                               color: Colors.black26,
-    //                               fontSize: 16,
-    //                               // decoration: TextDecoration.lineThrough,
-    //                               decoration: TextDecoration.lineThrough,
-    //                               decorationColor: AppColors.main2,
-    //                               decorationStyle: TextDecorationStyle.solid,
-    //                               decorationThickness: 1.5,
-    //                               fontWeight:
-    //                               FontWeight.bold),
-    //                         ),
-    //                       ),
-    //                       SizedBox(height: 10),
-    //                       Row(
-    //                         mainAxisAlignment: MainAxisAlignment.end,
-    //                         children: [
-    //                           Padding(
-    //                             padding: const EdgeInsets.only(right: 10,top: 5,bottom: 15),
-    //                             child:
-    //                             cartController.auto_discount[index].product.value.availability==0?
-    //                             Container(
-    //                               height: 34,
-    //                               width: MediaQuery.of(context).size.width * 0.35,
-    //                               decoration: BoxDecoration(
-    //                                 color: Colors.black12,
-    //                                 border: Border.all(color: App.main2),
-    //                                 borderRadius: BorderRadius.circular(10),
-    //                               ),
-    //                               child: Center(
-    //                                 child: Text(App_Localization.of(context).translate("out_stock"),style: TextStyle(color: App.main2,fontSize: 12),),
-    //                               ),
-    //                             )
-    //                                 :Container(
-    //                               height: 34,
-    //                               width: MediaQuery.of(context).size.width * 0.35,
-    //                               decoration: BoxDecoration(
-    //                                 color: AppColors.main2,
-    //                                 borderRadius: BorderRadius.circular(10),
-    //                               ),
-    //                               child: Center(
-    //                                 child: Text(cartController.auto_discount[index].quantity.value.toString()+" X "+App_Localization.of(context).translate("free"),style: TextStyle(color: Colors.white),),
-    //                               ),
-    //                             ),
-    //                           ),
-    //                         ],
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //
-    //               ],
-    //             ),
-    //           ),
-    //           const SizedBox(height: 20),
-    //         ],
-    //       );
-    //       //return _cart_item(context, index);
-    //     },
-    //   ),
-    // );
-  }
   _cart(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.95,
@@ -295,35 +145,45 @@ class _CartState extends State<Cart> {
                                     color: Colors.black12,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              cartController.addOrUpdateCart(
-                                                  elm.productId,elm.optionId,-1,context);
-                                            },
-                                            icon: Icon(
-                                              Icons.remove,
-                                              size: 20,
-                                            )),
-                                        Text(
-                                          elm.count.toString(),
-                                          style: TextStyle(fontSize: 15),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            cartController.addOrUpdateCart(
+                                                elm.productId,elm.optionId,-1,context);
+                                          },
+                                          icon: Icon(
+                                            Icons.remove,
+                                            size: 20,
+                                          )),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            _showCounterPicker(elm,context);
+                                          },
+                                          child: Container(
+                                            color: App.main2,
+                                            child: Center(
+                                              child: Text(
+                                                elm.count.toString(),
+                                                style: TextStyle(fontSize: 15,color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        IconButton(
-                                            onPressed: () {
-                                              cartController.addOrUpdateCart(
-                                                  elm.productId,elm.optionId,1,context);
-                                            },
-                                            icon: Icon(
-                                              Icons.add,
-                                              size: 20,
-                                            )),
+                                      ),
+                                      IconButton(
+                                          onPressed: () {
+                                            cartController.addOrUpdateCart(
+                                                elm.productId,elm.optionId,1,context);
+                                          },
+                                          icon: Icon(
+                                            Icons.add,
+                                            size: 20,
+                                          )),
 
-                                      ],
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -341,6 +201,114 @@ class _CartState extends State<Cart> {
           );
           //return _cart_item(context, index);
         },
+      ),
+    );
+  }
+
+  void _showCounterPicker(CartItem cartItem,BuildContext context) {
+    int selectedValue = cartItem.count;
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) => Container(
+        height: 320,
+        // color: Colors.white,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 300,
+                color: Colors.white,
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    children: [
+                      // Top bar with Done button
+
+                      Expanded(
+                        child: CupertinoPicker(
+                          itemExtent: 40,
+                          scrollController: FixedExtentScrollController(initialItem: selectedValue-1),
+                          onSelectedItemChanged: (int value) {
+                            // setState(() {
+                            //
+                            // });
+                            selectedValue = value+1;
+                          },
+                          children: List<Widget>.from(
+                            List.generate(
+                              cartItem.availability,
+                                  (index) => index + 1, // generates 1..availability
+                            ).map((number) => Center(
+                              child: Text(
+                                "$number",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            )),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          cartController.addOrUpdateCart(cartItem.productId,
+                              cartItem.optionId, selectedValue-cartItem.count, context);
+                          Get.back();
+                        },
+                        child: Container(
+                          width: Get.width*0.9,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: App.main2,
+                              borderRadius: BorderRadius.circular(25)
+                          ),
+
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.check_circle_outline,color: Colors.white,),
+                              SizedBox(width: 5,),
+                              Text(
+                                App_Localization.of(context).translate("submit"),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                    decoration: TextDecoration.none
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 0,
+              right: 10,
+              child: GestureDetector(
+                onTap: (){
+                  Get.back();
+                },
+                child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        // border: Border.all(color: Colors.black)
+                        // boxShadow: [
+                        //   App.softShadow
+                        // ]
+                    ),
+                    child: Icon(Icons.close,color: Colors.black,size: 30,)),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -396,6 +364,7 @@ class _CartState extends State<Cart> {
     //   ),
     // );
   }
+
   _total_amount(BuildContext context) {
     return Column(
       children: [
@@ -415,17 +384,17 @@ class _CartState extends State<Cart> {
         ),
 
         const SizedBox(height: 20),
-        _sub_totals(),
+        _sub_totals(context),
         const SizedBox(height: 20),
-        _shipping(),
+        _shipping(context),
         const SizedBox(height: 20),
-        _tax(),
+        _tax(context),
         const SizedBox(height: 20),
-        cartController.cart!.coupon>0?_coupon():Center(),
+        cartController.cart!.coupon>0?_coupon(context):Center(),
         cartController.cart!.coupon>0?const SizedBox(height: 20):Center(),
-        cartController.cart!.discount>0?_discount():Center(),
+        cartController.cart!.discount>0?_discount(context):Center(),
         cartController.cart!.discount>0?const SizedBox(height: 20):Center(),
-        _totals(),
+        _totals(context),
         cartController.cart!.discountCode != null&&cartController.cart!.discountErrorMsg.length > 0?
         cartController.cart!.discountErrorMsg == "you_did_not_reach_min_amount"?
         Text(
@@ -447,6 +416,7 @@ class _CartState extends State<Cart> {
       ],
     );
   }
+
   activateDicountCode(BuildContext context){
     return Container(
       width: MediaQuery.of(context).size.width*0.92,
@@ -480,7 +450,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _discount() {
+
+  _discount(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
@@ -537,7 +508,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _coupon() {
+
+  _coupon(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
@@ -594,7 +566,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _sub_totals() {
+
+  _sub_totals(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
@@ -651,7 +624,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _totals() {
+
+  _totals(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
@@ -708,7 +682,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _shipping() {
+
+  _shipping(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
@@ -775,7 +750,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _tax() {
+
+  _tax(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Row(
@@ -838,7 +814,8 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _checkout() {
+
+  _checkout(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.65,
       height: MediaQuery.of(context).size.height * 0.06,
@@ -872,6 +849,7 @@ class _CartState extends State<Cart> {
       ),
     );
   }
+
   _emptyMessage(context){
     return Container(
       width: MediaQuery.of(context).size.width / 1.5,
@@ -891,13 +869,14 @@ class _CartState extends State<Cart> {
       ),
     );
   }
-  _cart_info(){
+
+  _cart_info(BuildContext context){
     return Column(
       children: [
         // _autoDiscountList(context),
         _cart(context),
         _total_amount(context),
-        _checkout(),
+        _checkout(context),
       ],
     );
   }
@@ -946,7 +925,7 @@ class _CartState extends State<Cart> {
                     ):
                     Global.customer == null?PlzSigninSignup():
                     cartController.cart == null || cartController.cart!.cartList.isEmpty ?
-                    _emptyMessage(context) : _cart_info(),
+                    _emptyMessage(context) : _cart_info(context),
                     const SizedBox(height: 60),
                   ],
                 ),
