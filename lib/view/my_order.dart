@@ -7,6 +7,7 @@ import 'package:dayjour_version_3/controler/my_order_controller.dart';
 import 'package:dayjour_version_3/my_model/customer_order.dart';
 import 'package:dayjour_version_3/view/home.dart';
 import 'package:dayjour_version_3/view/order_item.dart';
+import 'package:dayjour_version_3/wedgits/order_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -43,42 +44,26 @@ class _MyOrderViewState extends State<MyOrderView> {
       backgroundColor: AppColors.main2,
       body:Obx((){
         return SafeArea(
-            child: Stack(
+            child: Column(
               children: [
-                Column(
-                  children: [
-                    _header(context),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom+MediaQuery.of(context).padding.top+ MediaQuery.of(context).size.height * 0.09),
-                      color: AppColors.main,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            _body1(context)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Positioned(child: myOrderController.loading.value?Container(
+                _header(context),
+                Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  color: AppColors.main.withOpacity(0.6),
-                  child: Center(
-                    child: CircularProgressIndicator(color: AppColors.main2,),
-                  ),
-                ):Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 0,
+                  height: MediaQuery.of(context).size.height - (MediaQuery.of(context).padding.bottom+MediaQuery.of(context).padding.top+ MediaQuery.of(context).size.height * 0.09),
                   color: AppColors.main,
-                ))
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _body1(context)
+                      ],
+                    ),
+                  ),
+                ),
               ],
-            ));
+            ),);
     }),
     );
   }
@@ -155,7 +140,11 @@ class _MyOrderViewState extends State<MyOrderView> {
   }
 
   _body1(BuildContext context) {
-    return myOrderController.my_order.isEmpty
+    return
+      myOrderController.loading.value?Center(
+        child: CircularProgressIndicator(color: AppColors.main2,),
+      ):
+      myOrderController.my_order.isEmpty
         ? Container(
             height: 200,
             child: Column(
@@ -230,14 +219,17 @@ class _MyOrderViewState extends State<MyOrderView> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(_date_covert(myOrderController.my_order[index].date.toString()),style: TextStyle(color: Colors.grey,fontSize: 10),),
-                                            // Text(_date_covert(DateTime.now().toString()),style: TextStyle(color: Colors.grey,fontSize: 10),),
-                                            Row(
-                                              children: [
-                                                Text(myOrderController.my_order[index].deliver==1?App_Localization.of(context).translate("completed"):myOrderController.my_order[index].deliver==-1?App_Localization.of(context).translate("refused"):App_Localization.of(context).translate("process"),style: TextStyle(color: myOrderController.my_order[index].deliver==1?Colors.green:myOrderController.my_order[index].deliver==-1?Colors.red:Colors.blue,fontSize: 10),),
-                                                SizedBox(width: 5,),
-                                                Icon(myOrderController.my_order[index].deliver==1?Icons.check_circle:myOrderController.my_order[index].deliver==-1?Icons.close:Icons.history,size: 15,color: myOrderController.my_order[index].deliver==1?Colors.green:myOrderController.my_order[index].deliver==-1?Colors.red:Colors.blue,)
-                                              ],
-                                            )
+
+                                            OrderStatusWidget(orderStatus: myOrderController.my_order[index].deliver, refundStatus: myOrderController.my_order[index].refund_status),
+                                            // myOrderController.my_order[index].refund_status == "non"?
+                                            // Row(
+                                            //   children: [
+                                            //     Text(myOrderController.my_order[index].deliver==1?App_Localization.of(context).translate("completed"):myOrderController.my_order[index].deliver==-1?App_Localization.of(context).translate("refused"):App_Localization.of(context).translate("process"),style: TextStyle(color: myOrderController.my_order[index].deliver==1?Colors.green:myOrderController.my_order[index].deliver==-1?Colors.red:Colors.blue,fontSize: 10),),
+                                            //     SizedBox(width: 5,),
+                                            //     Icon(myOrderController.my_order[index].deliver==1?Icons.check_circle:myOrderController.my_order[index].deliver==-1?Icons.close:Icons.history,size: 15,color: myOrderController.my_order[index].deliver==1?Colors.green:myOrderController.my_order[index].deliver==-1?Colors.red:Colors.blue,)
+                                            //   ],
+                                            // ):Text(App_Localization.of(context).translate("refund")+": "+myOrderController.my_order[index].refund_status,style: TextStyle(color: Colors.blue,fontSize: 11),),
+
                                           ],
                                         ),
                                         Row(
@@ -275,15 +267,12 @@ class _MyOrderViewState extends State<MyOrderView> {
                                           ],
                                         ),
 
-                                        DateTime.parse(myOrderController.my_order[index].current.toString()).isBefore(DateTime.parse(myOrderController.my_order[index].date.toString()))
-                                            &&myOrderController.my_order[index].isPaid!=1&&myOrderController.my_order[index].deliver==0?
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
-
                                             GestureDetector(
                                               onTap: (){
-
+                                                Get.to(()=>OrderItems(myOrderController.my_order[index].id,myOrderController.my_order[index].code));
                                               },
                                               child: Container(
                                                 width: 75,
@@ -298,51 +287,55 @@ class _MyOrderViewState extends State<MyOrderView> {
                                                 ),
                                               ),
                                             ),
-                                            GestureDetector(
-                                              onTap: (){
-                                                myOrderController.cancel_order(index);
-                                              },
-                                              child: Container(
-                                                width: 75,
-                                                height: 27,
-                                                decoration: BoxDecoration(
-                                                    color: App.main2,
-                                                    border: Border.all(color: App.main2),
-                                                    borderRadius: BorderRadius.circular(5)
-                                                ),
-                                                child: Center(
-                                                  child: Text(App_Localization.of(context).translate("cancel_order"),style: TextStyle(fontSize: 11,color: Colors.white),),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ):
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-
-                                            GestureDetector(
-                                              onTap: (){
-                                                // myOrderController.open_order_item(myOrderController.my_order[index].id,myOrderController.my_order[index].code);
-                                                // myOrderController.getDetailsData(myOrderController.my_order[index].id);
-                                                Get.to(()=>OrderItems(myOrderController.my_order[index].id,myOrderController.my_order[index].code));
+                                            if (DateTime.parse(myOrderController.my_order[index].current_for_refund.toString())
+                                                .isBefore(DateTime.parse(myOrderController.my_order[index].date.toString())) &&
+                                                myOrderController.my_order[index].deliver == 1 && myOrderController.my_order[index].refund_count == 0)
+                                              GestureDetector(
+                                                onTap: () {
+                                                  myOrderController.refund_order(index);
                                                 },
-                                              child: Container(
-                                                width: 75,
-                                                height: 27,
-                                                decoration: BoxDecoration(
+                                                child: Container(
+                                                  width: 75,
+                                                  height: 27,
+                                                  decoration: BoxDecoration(
                                                     color: App.main2,
                                                     border: Border.all(color: App.main2),
-                                                    borderRadius: BorderRadius.circular(5)
-                                                ),
-                                                child: Center(
-                                                  child: Text(App_Localization.of(context).translate("view_order"),style: TextStyle(fontSize: 11,color: Colors.white),),
+                                                    borderRadius: BorderRadius.circular(5),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      App_Localization.of(context).translate("refund"),
+                                                      style: const TextStyle(fontSize: 11, color: Colors.white),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
 
+                                            if (DateTime.parse(myOrderController.my_order[index].current.toString())
+                                                .isBefore(DateTime.parse(myOrderController.my_order[index].date.toString())) &&
+                                                myOrderController.my_order[index].deliver == 0)
+                                              GestureDetector(
+                                                onTap: () {
+                                                  myOrderController.cancel_order(index);
+                                                },
+                                                child: Container(
+                                                  width: 75,
+                                                  height: 27,
+                                                  decoration: BoxDecoration(
+                                                    color: App.main2,
+                                                    border: Border.all(color: App.main2),
+                                                    borderRadius: BorderRadius.circular(5),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      App_Localization.of(context).translate("cancel_order"),
+                                                      style: const TextStyle(fontSize: 11, color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                           ],
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ),

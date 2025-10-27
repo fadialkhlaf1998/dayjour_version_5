@@ -35,18 +35,13 @@ class OrderItems extends StatelessWidget {
                 _header(context),
                 Expanded(
                   child:
-                  myOrderController.detailsPageLoading.value?Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    color: AppColors.main.withOpacity(0.6),
-                    child: Center(
-                      child: CircularProgressIndicator(color: AppColors.main2,),
-                    ),
-                  ):
+
                   Container(
                     color: App.main,
                     height: MediaQuery.of(context).size.height*0.89-MediaQuery.of(context).padding.top,
-                    child: ListView.builder(
+                    child: myOrderController.detailsPageLoading.value?
+                    Center(child: CircularProgressIndicator(color: App.main2,),)
+                        :ListView.builder(
 
                         itemCount: myOrderController.orderDetails.length,
                         shrinkWrap: true,

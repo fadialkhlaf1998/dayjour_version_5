@@ -1,10 +1,12 @@
+import 'package:dayjour_version_3/app_localization.dart';
 import 'package:dayjour_version_3/const/app.dart';
 import 'package:dayjour_version_3/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class InternalHeader extends StatelessWidget {
-  const InternalHeader({super.key});
+  InternalHeader({this.title});
+  String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class InternalHeader extends StatelessWidget {
                       ),
                     ),
                   ),
+                  title==null?Center():Text(App_Localization.of(context).translate(title!),style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),)
 
 
                 ],

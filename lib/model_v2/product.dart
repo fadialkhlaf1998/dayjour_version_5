@@ -66,6 +66,7 @@ class Product {
   var wishlistLoading=false.obs;
   var cartLoading=false.obs;
   int countForOrderItem;
+  int? line_item_id;
 
   List<Image> images;
   List<Review> reviews;
@@ -129,6 +130,7 @@ class Product {
     required this.seller_name,
     required this.sub_sellers_id,
     required this.promotionalText,
+    required this.line_item_id,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -157,6 +159,7 @@ class Product {
       countForOrderItem: json['count'] ?? 0,
       favorite: json['wishlist']==null?false.obs:json['wishlist']==1?true.obs:false.obs ,
       categoryId: json['category_id'] ?? 0,
+      line_item_id: json['line_item_id'] ?? -1,
       category: json['category'] ?? '',
       brand: json['brand'] ?? '',
       seller_name: json['seller_name'],

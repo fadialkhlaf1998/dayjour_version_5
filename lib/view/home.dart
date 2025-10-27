@@ -60,6 +60,9 @@ class Home extends StatelessWidget {
       // _checkVersion(context);
     });
     return UpgradeAlert(
+      barrierDismissible: false,
+      showLater: false,
+      showIgnore: false,
       upgrader: Upgrader(
           storeController: UpgraderStoreController(
             onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),

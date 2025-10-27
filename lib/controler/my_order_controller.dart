@@ -4,6 +4,7 @@ import 'package:dayjour_version_3/model_v2/product.dart';
 import 'package:dayjour_version_3/my_model/customer_order.dart';
 import 'package:dayjour_version_3/my_model/my_api.dart';
 import 'package:dayjour_version_3/view/order_item.dart';
+import 'package:dayjour_version_3/view/refund_items.dart';
 import 'package:get/get.dart';
 
 
@@ -37,6 +38,10 @@ class MyOrderController extends GetxController{
         loading.value=false;
       });
     });
+  }
+
+  refund_order(int index){
+    Get.to(()=>RefundItems(my_order[index].id));
   }
 
 }

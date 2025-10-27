@@ -26,8 +26,11 @@ class CustomerOrder {
     required this.date,
     required this.code,
     required this.current,
+    required this.current_for_refund,
     required this.tax,
     required this.reference,
+    required this.refund_count,
+    required this.refund_status,
   });
 
   int id;
@@ -46,10 +49,13 @@ class CustomerOrder {
   double tax;
   int isPaid;
   int deliver;
+  int refund_count;
   var openCard = false.obs;
   var date ;
   var current ;
+  var current_for_refund ;
   String code;
+  String refund_status;
   String reference;
 
 
@@ -67,6 +73,8 @@ class CustomerOrder {
     country: json["country"]??"non",
     emirate: json["emirate"]??"non",
     phone: json["phone"]??"non",
+    refund_status: json["refund_status"]??"non",
+    refund_count: json["refund_count"]??0,
     details: json["details"]??"non",
     subTotal: double.parse(json["sub_total"].toString()),
     shipping: double.parse(json["shipping"].toString()),
@@ -77,7 +85,7 @@ class CustomerOrder {
     reference: json["reference"]??"",
     date: DateTime.parse(json["created_at"]),
     current: DateTime.parse(json["current"]),
-
+    current_for_refund: DateTime.parse(json["current_for_refund"]),
     code: json["code"]??"non"
   );
 

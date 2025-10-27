@@ -8,6 +8,7 @@ import 'package:dayjour_version_3/model_v2/api_result.dart';
 import 'package:dayjour_version_3/model_v2/cart.dart';
 import 'package:dayjour_version_3/model_v2/country.dart';
 import 'package:dayjour_version_3/model_v2/product.dart';
+import 'package:dayjour_version_3/model_v2/refund_item_request.dart';
 import 'package:dayjour_version_3/my_model/start_up.dart';
 import 'package:dayjour_version_3/view/no_internet.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -441,6 +442,29 @@ class ApiV2 {
       return CartResponse.fromJson(jsonDecode(jsonString)).data;
     }else {
       return null;
+    }
+  }
+
+  static Future<bool> refundRequest(int order_id,String refund_note,List<RefundItemRequest> items)async{
+    await checkInternet();
+    var headers = {
+      'Authorization': 'bearer '+token,
+      'Content-Type': 'application/json'
+    };
+    var request = http.Request('PUT', Uri.parse(url+'/api/v2/mobile/refund'));
+    request.body = json.encode({
+      "order_id": order_id,
+      "refund_note":refund_note,
+      'refund_items': items.map((item) => item.toJson()).toList(),
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var jsonString = await response.stream.bytesToString();
+      return true;
+    }else {
+      return false;
     }
   }
 
