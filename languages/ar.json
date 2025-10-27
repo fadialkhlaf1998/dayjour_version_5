@@ -274,5 +274,15 @@
   "city": "المدينة",
   "country_region": " البلد / المنطقة",
   "edit": "تعديل",
-  "seller": "البائع"
+  "seller": "البائع",
+
+  "refund": "استرجاع",
+  "how_many_items_need_to_refund": "كم عدد العناصر التي تحتاج إلى استرجاعها؟",
+  "no_qty_to_refund": "لم يتم تحديد أي كمية للاسترجاع",
+  "ok": "حسناً",
+  "enter_the_reason_here": "أدخل سببك هنا...",
+  "describe_reason": "يرجى وصف سبب طلب الاسترجاع:",
+  "missing_reason": "السبب مفقود",
+  "enter_reason_before_submit": "يرجى إدخال السبب قبل الإرسال.",
+  "refund_request_success": "لقد استلمنا طلب الاسترجاع الخاص بك. سيقوم فريقنا بمراجعته والرد عليك قريباً."
 }
